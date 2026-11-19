@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crypto price panel</title>
+<style>
+  :root{--bg:#0f1115;--fg:#e8eaed;--line:#262a33;--up:#22c55e;--dn:#ef4444;--mut:#8b929e}
+  @media (prefers-color-scheme:light){:root{--bg:#fff;--fg:#111;--line:#e5e7eb;--mut:#6b7280}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font:14px system-ui,sans-serif;padding:16px}
+  .wrap{max-width:760px;margin:0 auto}
+  .bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  input,button{font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--fg)}
+  input{flex:1;min-width:140px}
+  button{cursor:pointer}
+  .row{display:grid;grid-template-columns:1fr 110px 90px;gap:8px;padding:10px;border-bottom:1px solid var(--line);cursor:pointer}
+  .row:hover{background:rgba(127,127,127,.08)}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .up{color:var(--up)} .dn{color:var(--dn)}
+  .pill{font-size:11px;padding:3px 9px;border:1px solid var(--line);border-radius:99px;color:var(--mut)}
+  .toast{border:1px solid #f59e0b;border-radius:8px;padding:8px 10px;margin-top:6px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar">
+    <input id="q" placeholder="Search...">
+    <button id="cur">USD</button>
+    <button id="ref">Refresh</button>
+    <span class="pill" id="st">starting</span>
+  </div>
+  <div id="list"></div>
+  <div class="bar" style="margin-top:12px">
+    <input id="al" type="number" step="any" placeholder="Alert price">
+    <button id="alBtn">Set alert</button>
+  </div>
+  <div id="toasts"></div>
+</div>
+<script>
+const FX = 69.6;
+const COINS = [
+  {id:'bitcoin',sym:'BTC',name:'Bitcoin',price:63781.70,ch:-0.53},
+  {id:'ethereum',sym:'ETH',name:'Ethereum',price:2412.55,ch:1.12},
+  {id:'solana',sym:'SOL',name:'Solana',price:74.69,ch:0.42},
+  {id:'venice-ai',sym:'VVV',name:'Venice',price:22.89,ch:7.85},
+  {id:'venice-diem',sym:'DIEM',name:'Venice Diem',price:1857.31,ch:5.84}
+];
+let cur='usd', live=false, sel=COINS[0].id;
+const alerts = {};
+const $ = id => document.getElementById(id);
+const nf = (v,d)=>v.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const price = u => cur==='afn' ? nf(u*FX,0)+' AFN' : '$'+nf(u,u<1?4:2);
+
+function render(){
+  const q = $('q').value.trim().toLowerCase();
+  $('list').innerHTML = COINS.filter(c=>!q||c.sym.toLowerCase().includes(q)||c.name.toLowerCase().includes(q))
+    .map(c=>`<div class="row" data-id="${c.id}">
+      <div><b>${c.sym}</b> <span style="opacity:.6">${c.name}</span></div>
+      <div class="num">${price(c.price)}</div>
+      <div class="num ${c.ch>=0?'up':'dn'}">${c.ch>=0?'+':''}${c.ch.toFixed(2)}%</div>
+    </div>`).join('');
+  document.querySelectorAll('.row').forEach(r=>r.onclick=()=>{ sel=r.dataset.id; $('al').value=alerts[sel]?.v??''; });
+}
+
+async function liveFetch(){
+  try{
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids='
+      + COINS.map(c=>c.id).join(',') + '&vs_currencies=usd&include_24hr_change=true', {cache:'no-store'});
+    if(!r.ok) throw 0;
+    const j = await r.json();
+    COINS.forEach(c=>{ const d=j[c.id]; if(d?.usd){ c.price=d.usd; if(d.usd_24h_change!=null) c.ch=d.usd_24h_change; } });
+    live = true; $('st').textContent = 'live';
+    check(); render();
+  }catch(e){ live=false; $('st').textContent='demo mode'; }
+}
+
+function sim(){ // بێ تۆڕ: جووڵەی ساختە
+  COINS.forEach(c=>{ c.price*= 1+(Math.random()-0.48)*0.004; c.ch=Math.max(-25,Math.min(25,c.ch+(Math.random()-.5)*.1)); });
+  check(); render();
+}
+
+function check(){
+  for(const id in alerts){
+    const c = COINS.find(x=>x.id===id); if(!c) continue;
+    const a = alerts[id];
+    if(a.dir==='above' ? c.price>=a.v : c.price<=a.v){
+      const d=document.createElement('div'); d.className='toast';
+      d.textContent = `${c.sym} alert: ${price(c.price)}`;
+      $('toasts').prepend(d); setTimeout(()=>d.remove(),9000); delete alerts[id];
+    }
+  }
+}
+
+$('q').oninput = render;
+$('ref').onclick = ()=> live ? liveFetch() : sim();
+$('cur').onclick = e=>{ cur = cur==='usd'?'afn':'usd'; e.target.textContent = cur==='usd'?'USD':'AFN'; render(); };
+$('alBtn').onclick = ()=>{
+  const c = COINS.find(x=>x.id===sel), v = parseFloat($('al').value);
+  if(!c || !v) return;
+  alerts[c.id] = { v, dir: v>c.price?'above':'below' };
+  $('st').textContent = 'alert set';
+};
+
+render(); liveFetch();
+setInterval(()=> live ? liveFetch() : sim(), 15000);
+</script>
+</body>
+</html>
