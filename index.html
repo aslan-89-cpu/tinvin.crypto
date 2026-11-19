@@ -1,44 +1,146 @@
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Crypto price panel</title>
+<title>TinVin Crypto</title>
 <style>
-  :root{--bg:#0f1115;--fg:#e8eaed;--line:#262a33;--up:#22c55e;--dn:#ef4444;--mut:#8b929e}
-  @media (prefers-color-scheme:light){:root{--bg:#fff;--fg:#111;--line:#e5e7eb;--mut:#6b7280}}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font:14px system-ui,sans-serif;padding:16px}
-  .wrap{max-width:760px;margin:0 auto}
-  .bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-  input,button{font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--fg)}
-  input{flex:1;min-width:140px}
-  button{cursor:pointer}
-  .row{display:grid;grid-template-columns:1fr 110px 90px;gap:8px;padding:10px;border-bottom:1px solid var(--line);cursor:pointer}
-  .row:hover{background:rgba(127,127,127,.08)}
-  .num{text-align:right;font-variant-numeric:tabular-nums}
-  .up{color:var(--up)} .dn{color:var(--dn)}
-  .pill{font-size:11px;padding:3px 9px;border:1px solid var(--line);border-radius:99px;color:var(--mut)}
-  .toast{border:1px solid #f59e0b;border-radius:8px;padding:8px 10px;margin-top:6px;font-size:12px}
+:root{
+  --bg:#0f1115;--fg:#e8eaed;--line:#262a33;
+  --up:#22c55e;--dn:#ef4444;--mut:#8b929e;
+  --gold:#e9bd63;--panel:#171b23;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--fg);
+  font:14px system-ui,sans-serif;padding:16px
+}
+.wrap{max-width:760px;margin:0 auto}
+h2{margin:0 0 6px;font-size:23px}
+.sub{color:var(--mut);margin-bottom:20px}
+.panel{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:13px;padding:18px;margin-bottom:16px
+}
+input,button{
+  font:inherit;padding:11px 12px;border-radius:8px;
+  border:1px solid var(--line);background:transparent;color:var(--fg)
+}
+input{width:100%;margin-bottom:10px}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+.primary{
+  background:var(--gold);color:#151515;border:0;
+  font-weight:700;width:100%
+}
+.switch{
+  display:flex;gap:8px;margin-bottom:18px
+}
+.switch button{flex:1}
+.switch button.active{
+  border-color:var(--gold);color:var(--gold)
+}
+.message{font-size:13px;margin:10px 0;min-height:18px}
+.error{color:var(--dn)}
+.success{color:var(--up)}
+.hidden{display:none!important}
+.bar{
+  display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap
+}
+.bar input{flex:1;min-width:140px;margin:0}
+.row{
+  display:grid;grid-template-columns:1fr 110px 90px;
+  gap:8px;padding:10px;border-bottom:1px solid var(--line);
+  cursor:pointer
+}
+.row:hover{background:rgba(127,127,127,.08)}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.up{color:var(--up)}.dn{color:var(--dn)}
+.pill{
+  font-size:11px;padding:3px 9px;border:1px solid var(--line);
+  border-radius:99px;color:var(--mut)
+}
+.toast{
+  border:1px solid #f59e0b;border-radius:8px;
+  padding:8px 10px;margin-top:6px;font-size:12px
+}
+.account{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:15px
+}
+.account-email{color:var(--mut);font-size:12px;overflow-wrap:anywhere}
+#logout{border-color:var(--dn);color:var(--dn)}
+@media(max-width:450px){
+  body{padding:12px}
+  .row{grid-template-columns:1fr 95px 70px;font-size:12px}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="bar">
-    <input id="q" placeholder="Search...">
-    <button id="cur">USD</button>
-    <button id="ref">Refresh</button>
-    <span class="pill" id="st">starting</span>
-  </div>
-  <div id="list"></div>
-  <div class="bar" style="margin-top:12px">
-    <input id="al" type="number" step="any" placeholder="Alert price">
-    <button id="alBtn">Set alert</button>
-  </div>
-  <div id="toasts"></div>
+
+  <!-- SIGNUP / LOGIN -->
+  <section id="authScreen" class="panel">
+    <h2>TinVin Crypto</h2>
+    <div class="sub">Create your account or sign in.</div>
+
+    <div class="switch">
+      <button id="signupTab" class="active" type="button">Sign up</button>
+      <button id="loginTab" type="button">Login</button>
+    </div>
+
+    <form id="authForm">
+      <input id="email" type="email" placeholder="Email address"
+        autocomplete="email" required>
+
+      <input id="password" type="password" placeholder="Password (8–128 characters)"
+        minlength="8" maxlength="128" autocomplete="new-password" required>
+
+      <button id="authSubmit" class="primary" type="submit">
+        Create account
+      </button>
+    </form>
+
+    <div id="authMessage" class="message" aria-live="polite"></div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <main id="dashboard" class="hidden">
+
+    <div class="account">
+      <div>
+        <b>TinVin Crypto</b>
+        <div id="accountEmail" class="account-email"></div>
+      </div>
+      <button id="logout" type="button">Logout</button>
+    </div>
+
+    <div class="bar">
+      <input id="q" placeholder="Search...">
+      <button id="cur">USD</button>
+      <button id="ref">Refresh</button>
+      <span class="pill" id="st">starting</span>
+    </div>
+
+    <div id="list"></div>
+
+    <div class="bar" style="margin-top:12px">
+      <input id="al" type="number" step="any" placeholder="Alert price">
+      <button id="alBtn">Set alert</button>
+    </div>
+
+    <div id="toasts"></div>
+  </main>
+
 </div>
+
 <script>
+const API_BASE =
+  'https://tinvin-crypto-api.aslan89aslan1.workers.dev';
+
 const FX = 69.6;
+
 const COINS = [
   {id:'bitcoin',sym:'BTC',name:'Bitcoin',price:63781.70,ch:-0.53},
   {id:'ethereum',sym:'ETH',name:'Ethereum',price:2412.55,ch:1.12},
@@ -46,64 +148,314 @@ const COINS = [
   {id:'venice-ai',sym:'VVV',name:'Venice',price:22.89,ch:7.85},
   {id:'venice-diem',sym:'DIEM',name:'Venice Diem',price:1857.31,ch:5.84}
 ];
-let cur='usd', live=false, sel=COINS[0].id;
-const alerts = {};
-const $ = id => document.getElementById(id);
-const nf = (v,d)=>v.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
-const price = u => cur==='afn' ? nf(u*FX,0)+' AFN' : '$'+nf(u,u<1?4:2);
 
+let cur='usd';
+let live=false;
+let sel=COINS[0].id;
+let authMode='signup';
+
+const alerts={};
+const $=id=>document.getElementById(id);
+
+const nf=(v,d)=>v.toLocaleString('en-US',{
+  minimumFractionDigits:d,
+  maximumFractionDigits:d
+});
+
+const price=u=>cur==='afn'
+  ? nf(u*FX,0)+' AFN'
+  : '$'+nf(u,u<1?4:2);
+
+// API helper
+async function api(path,options={}){
+  const headers={
+    'Content-Type':'application/json',
+    ...(options.headers||{})
+  };
+
+  const token=localStorage.getItem('tinvin_crypto_token');
+
+  if(token){
+    headers.Authorization='Bearer '+token;
+  }
+
+  const response=await fetch(API_BASE+path,{
+    ...options,
+    headers
+  });
+
+  let data={};
+
+  try{
+    data=await response.json();
+  }catch(e){
+    throw new Error('Server returned an invalid response.');
+  }
+
+  if(!response.ok){
+    throw new Error(data.error||'Request failed.');
+  }
+
+  return data;
+}
+
+// AUTH SCREEN
+function showAuth(){
+  $('authScreen').classList.remove('hidden');
+  $('dashboard').classList.add('hidden');
+}
+
+function showDashboard(user){
+  $('authScreen').classList.add('hidden');
+  $('dashboard').classList.remove('hidden');
+  $('accountEmail').textContent=user.email||'';
+  render();
+  liveFetch();
+}
+
+function setAuthMode(mode){
+  authMode=mode;
+
+  $('signupTab').classList.toggle('active',mode==='signup');
+  $('loginTab').classList.toggle('active',mode==='login');
+
+  $('authSubmit').textContent=
+    mode==='signup'?'Create account':'Login';
+
+  $('password').autocomplete=
+    mode==='signup'?'new-password':'current-password';
+
+  $('authMessage').textContent='';
+  $('authMessage').className='message';
+}
+
+$('signupTab').onclick=()=>setAuthMode('signup');
+$('loginTab').onclick=()=>setAuthMode('login');
+
+$('authForm').onsubmit=async e=>{
+  e.preventDefault();
+
+  const email=$('email').value.trim().toLowerCase();
+  const password=$('password').value;
+
+  if(password.length<8||password.length>128){
+    $('authMessage').textContent=
+      'Password must contain 8 to 128 characters.';
+    $('authMessage').className='message error';
+    return;
+  }
+
+  const submit=$('authSubmit');
+  submit.disabled=true;
+  submit.textContent='Please wait...';
+
+  $('authMessage').textContent='';
+  $('authMessage').className='message';
+
+  try{
+    if(authMode==='signup'){
+      await api('/api/signup',{
+        method:'POST',
+        body:JSON.stringify({email,password})
+      });
+
+      $('authMessage').textContent=
+        'Account created! Signing you in...';
+      $('authMessage').className='message success';
+    }
+
+    const result=await api('/api/login',{
+      method:'POST',
+      body:JSON.stringify({email,password})
+    });
+
+    if(!result.token){
+      throw new Error('Login token was not returned.');
+    }
+
+    localStorage.setItem(
+      'tinvin_crypto_token',
+      result.token
+    );
+
+    showDashboard(result.user);
+
+  }catch(error){
+    $('authMessage').textContent=error.message;
+    $('authMessage').className='message error';
+  }finally{
+    submit.disabled=false;
+    submit.textContent=
+      authMode==='signup'?'Create account':'Login';
+  }
+};
+
+// CHECK EXISTING SESSION
+async function checkSession(){
+  const token=localStorage.getItem('tinvin_crypto_token');
+
+  if(!token){
+    showAuth();
+    return;
+  }
+
+  try{
+    const result=await api('/api/me');
+    showDashboard(result.user);
+  }catch(error){
+    localStorage.removeItem('tinvin_crypto_token');
+    showAuth();
+  }
+}
+
+// LOGOUT
+$('logout').onclick=async()=>{
+  try{
+    await api('/api/logout',{method:'POST'});
+  }catch(e){
+    // Clear local session even if server logout fails.
+  }
+
+  localStorage.removeItem('tinvin_crypto_token');
+  showAuth();
+  $('password').value='';
+  $('authMessage').textContent='You have logged out.';
+};
+
+// MARKET
 function render(){
-  const q = $('q').value.trim().toLowerCase();
-  $('list').innerHTML = COINS.filter(c=>!q||c.sym.toLowerCase().includes(q)||c.name.toLowerCase().includes(q))
-    .map(c=>`<div class="row" data-id="${c.id}">
-      <div><b>${c.sym}</b> <span style="opacity:.6">${c.name}</span></div>
-      <div class="num">${price(c.price)}</div>
-      <div class="num ${c.ch>=0?'up':'dn'}">${c.ch>=0?'+':''}${c.ch.toFixed(2)}%</div>
-    </div>`).join('');
-  document.querySelectorAll('.row').forEach(r=>r.onclick=()=>{ sel=r.dataset.id; $('al').value=alerts[sel]?.v??''; });
+  const q=$('q').value.trim().toLowerCase();
+
+  $('list').innerHTML=COINS
+    .filter(c=>
+      !q||
+      c.sym.toLowerCase().includes(q)||
+      c.name.toLowerCase().includes(q)
+    )
+    .map(c=>`
+      <div class="row" data-id="${c.id}">
+        <div>
+          <b>${c.sym}</b>
+          <span style="opacity:.6">${c.name}</span>
+        </div>
+        <div class="num">${price(c.price)}</div>
+        <div class="num ${c.ch>=0?'up':'dn'}">
+          ${c.ch>=0?'+':''}${c.ch.toFixed(2)}%
+        </div>
+      </div>
+    `).join('');
+
+  document.querySelectorAll('.row').forEach(r=>{
+    r.onclick=()=>{
+      sel=r.dataset.id;
+      $('al').value=alerts[sel]?.v??'';
+    };
+  });
 }
 
 async function liveFetch(){
   try{
-    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids='
-      + COINS.map(c=>c.id).join(',') + '&vs_currencies=usd&include_24hr_change=true', {cache:'no-store'});
-    if(!r.ok) throw 0;
-    const j = await r.json();
-    COINS.forEach(c=>{ const d=j[c.id]; if(d?.usd){ c.price=d.usd; if(d.usd_24h_change!=null) c.ch=d.usd_24h_change; } });
-    live = true; $('st').textContent = 'live';
-    check(); render();
-  }catch(e){ live=false; $('st').textContent='demo mode'; }
+    const r=await fetch(
+      'https://api.coingecko.com/api/v3/simple/price?ids='+
+      COINS.map(c=>c.id).join(',')+
+      '&vs_currencies=usd&include_24hr_change=true',
+      {cache:'no-store'}
+    );
+
+    if(!r.ok)throw new Error('Market request failed');
+
+    const j=await r.json();
+
+    COINS.forEach(c=>{
+      const d=j[c.id];
+
+      if(d?.usd){
+        c.price=d.usd;
+
+        if(d.usd_24h_change!=null){
+          c.ch=d.usd_24h_change;
+        }
+      }
+    });
+
+    live=true;
+    $('st').textContent='live';
+    check();
+    render();
+
+  }catch(e){
+    live=false;
+    $('st').textContent='demo mode';
+  }
 }
 
-function sim(){ // بێ تۆڕ: جووڵەی ساختە
-  COINS.forEach(c=>{ c.price*= 1+(Math.random()-0.48)*0.004; c.ch=Math.max(-25,Math.min(25,c.ch+(Math.random()-.5)*.1)); });
-  check(); render();
+function sim(){
+  COINS.forEach(c=>{
+    c.price*=1+(Math.random()-0.48)*0.004;
+    c.ch=Math.max(-25,Math.min(
+      25,c.ch+(Math.random()-.5)*.1
+    ));
+  });
+
+  check();
+  render();
 }
 
 function check(){
   for(const id in alerts){
-    const c = COINS.find(x=>x.id===id); if(!c) continue;
-    const a = alerts[id];
-    if(a.dir==='above' ? c.price>=a.v : c.price<=a.v){
-      const d=document.createElement('div'); d.className='toast';
-      d.textContent = `${c.sym} alert: ${price(c.price)}`;
-      $('toasts').prepend(d); setTimeout(()=>d.remove(),9000); delete alerts[id];
+    const c=COINS.find(x=>x.id===id);
+    if(!c)continue;
+
+    const a=alerts[id];
+
+    if(a.dir==='above'?c.price>=a.v:c.price<=a.v){
+      const d=document.createElement('div');
+      d.className='toast';
+      d.textContent=`${c.sym} alert: ${price(c.price)}`;
+
+      $('toasts').prepend(d);
+
+      setTimeout(()=>d.remove(),9000);
+      delete alerts[id];
     }
   }
 }
 
-$('q').oninput = render;
-$('ref').onclick = ()=> live ? liveFetch() : sim();
-$('cur').onclick = e=>{ cur = cur==='usd'?'afn':'usd'; e.target.textContent = cur==='usd'?'USD':'AFN'; render(); };
-$('alBtn').onclick = ()=>{
-  const c = COINS.find(x=>x.id===sel), v = parseFloat($('al').value);
-  if(!c || !v) return;
-  alerts[c.id] = { v, dir: v>c.price?'above':'below' };
-  $('st').textContent = 'alert set';
+$('q').oninput=render;
+
+$('ref').onclick=()=>{
+  live?liveFetch():sim();
 };
 
-render(); liveFetch();
-setInterval(()=> live ? liveFetch() : sim(), 15000);
+$('cur').onclick=e=>{
+  cur=cur==='usd'?'afn':'usd';
+  e.target.textContent=cur==='usd'?'USD':'AFN';
+  render();
+};
+
+$('alBtn').onclick=()=>{
+  const c=COINS.find(x=>x.id===sel);
+  const v=parseFloat($('al').value);
+
+  if(!c||!v||v<=0)return;
+
+  alerts[c.id]={
+    v,
+    dir:v>c.price?'above':'below'
+  };
+
+  $('st').textContent='alert set';
+};
+
+// START
+checkSession();
+
+setInterval(()=>{
+  if(!$('dashboard').classList.contains('hidden')){
+    live?liveFetch():sim();
+  }
+},15000);
+
 </script>
 </body>
 </html>
