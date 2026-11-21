@@ -64,9 +64,14 @@ input:focus,select:focus{border-color:var(--gold)}
 .toolbar select{width:auto}
 .coin-row{
   display:grid;grid-template-columns:1.5fr 1fr 1fr;
-  gap:8px;align-items:center;padding:14px 4px;
+  gap:8px;align-items:center;padding:14px 17px 14px 4px;
   border-bottom:1px solid var(--line);font-size:14px;
-  cursor:pointer;border-radius:7px;transition:background .15s
+  cursor:pointer;border-radius:7px;transition:background .15s;
+  position:relative
+}
+.coin-row::after{
+  content:"›";color:var(--mut);font-size:19px;
+  position:absolute;right:3px
 }
 .coin-row:hover{background:var(--panel2)}
 .coin-row:active{background:#252c38}
@@ -89,11 +94,6 @@ input:focus,select:focus{border-color:var(--gold)}
 footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
 
 /* COIN CHART */
-.coin-row::after{
-  content:"›";color:var(--mut);font-size:19px;
-  position:absolute;right:0
-}
-.coin-row{position:relative;padding-right:17px}
 .chart-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.78);
   z-index:20;display:flex;align-items:center;justify-content:center;
@@ -128,14 +128,17 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
 .chart-period.active{border-color:var(--gold);color:var(--gold)}
 .chart-frame-wrap{
   width:100%;height:440px;background:#10141b;
-  border:1px solid var(--line);border-radius:11px;overflow:hidden
+  border:1px solid var(--line);border-radius:11px;
+  overflow:hidden;position:relative;padding:12px
 }
-.chart-frame{width:100%;height:100%;border:0;display:block}
-.chart-note{font-size:11px;color:var(--mut);line-height:1.5;margin-top:11px}
+#coinChartCanvas{width:100%!important;height:100%!important}
 .chart-loading{
+  position:absolute;inset:0;z-index:2;
   display:flex;align-items:center;justify-content:center;
-  height:100%;color:var(--mut);font-size:13px
+  background:rgba(16,20,27,.94);color:var(--mut);
+  font-size:13px;text-align:center;padding:20px
 }
+.chart-note{font-size:11px;color:var(--mut);line-height:1.5;margin-top:11px}
 body.chart-open{overflow:hidden}
 
 @media(max-width:650px){
@@ -146,7 +149,7 @@ body.chart-open{overflow:hidden}
   .header-right .small-btn{padding:8px}
   .chart-overlay{padding:7px}
   .chart-modal{padding:12px;max-height:96vh}
-  .chart-frame-wrap{height:390px}
+  .chart-frame-wrap{height:390px;padding:8px}
 }
 @media(max-width:380px){
   .plan-grid{grid-template-columns:1fr}
@@ -251,7 +254,7 @@ body.chart-open{overflow:hidden}
       <div id="coinList"><p class="muted">Loading market data...</p></div>
     </div>
 
-    <p class="small">Tap any coin to open its price chart. Market prices are provided by external market data services and may be delayed. The market list displays up to 250 leading coins.</p>
+    <p class="small">Tap any coin to open its price chart. Market prices are provided by external market data services and may be delayed. The market list displays up to 500 leading coins.</p>
   </section>
 
   <section id="alertsTab" class="tab-content hidden">
@@ -417,22 +420,19 @@ body.chart-open{overflow:hidden}
 
     <div class="chart-frame-wrap">
       <div id="chartLoading" class="chart-loading">Loading chart...</div>
-      <iframe
-        id="tradingViewFrame"
-        class="chart-frame"
-        title="TradingView cryptocurrency chart"
-        loading="lazy"
-        allowfullscreen>
-      </iframe>
+      <canvas id="coinChartCanvas"></canvas>
     </div>
 
     <p class="chart-note">
-      Chart data is provided by TradingView. Some coins may not have a Binance trading pair. If a chart is unavailable, try another coin.
+      Historical price data is provided by CoinGecko. Chart availability depends on the historical data available for each coin.
     </p>
   </div>
 </div>
 
 <footer>TinVin Crypto · Digital asset market information</footer>
+
+<!-- Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 "use strict";
@@ -603,20 +603,12 @@ $("signupBtn").addEventListener("click", async () => {
   showMessage("signupMessage", "");
 
   if (!email || !password) {
-    showMessage(
-      "signupMessage",
-      "Enter your email and password.",
-      "error"
-    );
+    showMessage("signupMessage", "Enter your email and password.", "error");
     return;
   }
 
   if (password.length < 8) {
-    showMessage(
-      "signupMessage",
-      "Password must be at least 8 characters.",
-      "error"
-    );
+    showMessage("signupMessage", "Password must be at least 8 characters.", "error");
     return;
   }
 
@@ -633,12 +625,7 @@ $("signupBtn").addEventListener("click", async () => {
       localStorage.setItem(TOKEN_KEY, authToken);
       setLoggedIn(result.user || { email });
     } else {
-      showMessage(
-        "signupMessage",
-        "Account created. Please log in.",
-        "success"
-      );
-
+      showMessage("signupMessage", "Account created. Please log in.", "success");
       $("signupForm").classList.add("hidden");
       $("loginForm").classList.remove("hidden");
       $("loginEmail").value = email;
@@ -657,11 +644,7 @@ $("loginBtn").addEventListener("click", async () => {
   showMessage("loginMessage", "");
 
   if (!email || !password) {
-    showMessage(
-      "loginMessage",
-      "Enter your email and password.",
-      "error"
-    );
+    showMessage("loginMessage", "Enter your email and password.", "error");
     return;
   }
 
@@ -732,9 +715,7 @@ function formatPrice(value, currency) {
       maximumFractionDigits: number < 1 ? 6 : 2
     }).format(number);
   } catch {
-    return number.toLocaleString("en-US") +
-      " " +
-      currency.toUpperCase();
+    return number.toLocaleString("en-US") + " " + currency.toUpperCase();
   }
 }
 
@@ -749,11 +730,7 @@ function renderCoins() {
     const symbol = String(coin.symbol || "").toLowerCase();
     const id = String(coin.id || "").toLowerCase();
 
-    return (
-      name.includes(query) ||
-      symbol.includes(query) ||
-      id.includes(query)
-    );
+    return name.includes(query) || symbol.includes(query) || id.includes(query);
   });
 
   $("coinCount").textContent = marketCoins.length;
@@ -785,10 +762,7 @@ function renderCoins() {
 
     const price = document.createElement("div");
     price.className = "price";
-    price.textContent = formatPrice(
-      coin.current_price ?? coin.price,
-      currency
-    );
+    price.textContent = formatPrice(coin.current_price ?? coin.price, currency);
 
     const percent = Number(
       coin.price_change_percentage_24h ??
@@ -797,17 +771,13 @@ function renderCoins() {
     );
 
     const change = document.createElement("div");
-    change.className = "change " +
-      (percent >= 0 ? "up" : "down");
+    change.className = "change " + (percent >= 0 ? "up" : "down");
 
     change.textContent = Number.isFinite(percent)
       ? (percent > 0 ? "+" : "") + percent.toFixed(2) + "%"
       : "—";
 
-    /* CLICK COIN TO OPEN CHART */
-    row.addEventListener("click", () => {
-      openCoinChart(coin);
-    });
+    row.addEventListener("click", () => openCoinChart(coin));
 
     row.append(nameBox, price, change);
     fragment.appendChild(row);
@@ -823,8 +793,7 @@ async function loadMarket() {
 
   try {
     const result = await api(
-      "/api/market/coins?currency=" +
-      encodeURIComponent(currency)
+      "/api/market/coins?currency=" + encodeURIComponent(currency)
     );
 
     marketCoins = Array.isArray(result)
@@ -849,71 +818,175 @@ $("refreshBtn").addEventListener("click", loadMarket);
 $("currencySelect").addEventListener("change", loadMarket);
 $("coinSearch").addEventListener("input", renderCoins);
 
-/* TRADINGVIEW CHART */
+/* COINGECKO HISTORICAL CHART */
 
 let selectedChartCoin = null;
 let selectedChartPeriod = "1D";
+let coinChartInstance = null;
+let chartRequestNumber = 0;
 
-function getTradingViewSymbol(coin) {
-  const symbol = String(coin.symbol || "").toUpperCase();
+const chartDays = {
+  "1D": 1,
+  "7D": 7,
+  "1M": 30,
+  "12M": 365
+};
 
-  if (!/^[A-Z0-9]{2,20}$/.test(symbol)) {
-    return null;
+function destroyCoinChart() {
+  if (coinChartInstance) {
+    coinChartInstance.destroy();
+    coinChartInstance = null;
+  }
+}
+
+function chartLoading(message) {
+  $("chartLoading").textContent = message;
+  $("chartLoading").classList.remove("hidden");
+}
+
+function chartCurrencyLabel(currency) {
+  return currency === "afn" ? "AFN" : currency.toUpperCase();
+}
+
+function drawCoinChart(points, currency) {
+  if (typeof Chart === "undefined") {
+    throw new Error("Chart library could not be loaded. Check your internet connection.");
   }
 
-  /*
-    TradingView commonly uses Binance spot pairs.
-    This is a best-effort symbol mapping, not a guarantee
-    that every coin has a Binance USDT market.
-  */
-  return "BINANCE:" + symbol + "USDT";
+  const canvas = $("coinChartCanvas");
+  const ctx = canvas.getContext("2d");
+
+  destroyCoinChart();
+
+  const labels = points.map(point => new Date(point[0]));
+  const values = points.map(point => Number(point[1]));
+
+  const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+  gradient.addColorStop(0, "rgba(233,189,99,0.28)");
+  gradient.addColorStop(1, "rgba(233,189,99,0.01)");
+
+  coinChartInstance = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: "Price",
+        data: values,
+        borderColor: "#e9bd63",
+        backgroundColor: gradient,
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        pointHoverBackgroundColor: "#e9bd63",
+        fill: true,
+        tension: 0.22
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      interaction: {
+        intersect: false,
+        mode: "index"
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          displayColors: false,
+          callbacks: {
+            title(items) {
+              if (!items.length) return "";
+              const date = new Date(items[0].parsed.x);
+              return date.toLocaleString();
+            },
+            label(context) {
+              return formatPrice(context.parsed.y, currency);
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          type: "time",
+          time: {
+            displayFormats: {
+              hour: "HH:mm",
+              day: "MMM d",
+              week: "MMM d",
+              month: "MMM yyyy"
+            }
+          },
+          grid: { color: "rgba(139,146,158,0.08)" },
+          ticks: {
+            color: "#8b929e",
+            maxTicksLimit: 7,
+            maxRotation: 0
+          }
+        },
+        y: {
+          position: "right",
+          grid: { color: "rgba(139,146,158,0.10)" },
+          ticks: {
+            color: "#8b929e",
+            maxTicksLimit: 6,
+            callback(value) {
+              return formatPrice(value, currency);
+            }
+          }
+        }
+      }
+    }
+  });
 }
 
-function getChartInterval(period) {
-  const intervals = {
-    "1D": "15",
-    "7D": "60",
-    "1M": "240",
-    "12M": "D"
-  };
-
-  return intervals[period] || "15";
-}
-
-function updateTradingViewChart() {
+async function updateCoinChart() {
   if (!selectedChartCoin) return;
 
-  const symbol = getTradingViewSymbol(selectedChartCoin);
+  const requestNumber = ++chartRequestNumber;
+  const coinId = String(selectedChartCoin.id || "").trim();
 
-  if (!symbol) {
-    $("chartLoading").textContent =
-      "Chart symbol is not available for this coin.";
-    $("tradingViewFrame").src = "about:blank";
+  if (!coinId) {
+    chartLoading("This coin does not have a valid CoinGecko ID.");
     return;
   }
 
-  const interval = getChartInterval(selectedChartPeriod);
+  const currency = $("currencySelect").value;
+  const days = chartDays[selectedChartPeriod] || 1;
 
-  const url =
-    "https://www.tradingview.com/widgetembed/?" +
-    "symbol=" + encodeURIComponent(symbol) +
-    "&interval=" + encodeURIComponent(interval) +
-    "&hidesidetoolbar=0" +
-    "&symboledit=0" +
-    "&saveimage=0" +
-    "&toolbarbg=%2310141b" +
-    "&theme=dark" +
-    "&style=1" +
-    "&timezone=Etc%2FUTC" +
-    "&withdateranges=1" +
-    "&hideideas=1" +
-    "&studies=%5B%5D" +
-    "&locale=en";
+  chartLoading("Loading historical price data...");
+  destroyCoinChart();
 
-  $("chartLoading").textContent = "Loading chart...";
-  $("chartLoading").classList.remove("hidden");
+  try {
+    const query = new URLSearchParams({
+      coin_id: coinId,
+      currency,
+      days: String(days)
+    });
 
-  $("tradingViewFrame").src = url;
+    const result = await api("/api/market/chart?" + query.toString());
+
+    if (
+      requestNumber !== chartRequestNumber ||
+      !selectedChartCoin ||
+      $("chartOverlay").classList.contains("hidden")
+    ) {
+      return;
+    }
+
+    if (!Array.isArray(result.prices) || !result.prices.length) {
+      throw new Error("Historical chart data is not available for this coin.");
+    }
+
+    drawCoinChart(result.prices, currency);
+    $("chartLoading").classList.add("hidden");
+
+  } catch (error) {
+    if (requestNumber !== chartRequestNumber) return;
+
+    destroyCoinChart();
+    chartLoading(error.message || "Unable to load this chart.");
+  }
 }
 
 function openCoinChart(coin) {
@@ -943,9 +1016,7 @@ function openCoinChart(coin) {
 
   if (Number.isFinite(percent)) {
     changeElement.textContent =
-      (percent > 0 ? "+" : "") +
-      percent.toFixed(2) +
-      "% (24h)";
+      (percent > 0 ? "+" : "") + percent.toFixed(2) + "% (24h)";
 
     changeElement.className =
       "small " + (percent >= 0 ? "up" : "down");
@@ -964,35 +1035,30 @@ function openCoinChart(coin) {
   $("chartOverlay").classList.remove("hidden");
   document.body.classList.add("chart-open");
 
-  updateTradingViewChart();
+  updateCoinChart();
 }
 
 function closeCoinChart() {
+  chartRequestNumber++;
+  selectedChartCoin = null;
+
   $("chartOverlay").classList.add("hidden");
   document.body.classList.remove("chart-open");
 
-  $("tradingViewFrame").src = "about:blank";
-  selectedChartCoin = null;
+  destroyCoinChart();
 }
 
 $("closeChartBtn").addEventListener("click", closeCoinChart);
 
-$("chartOverlay").addEventListener("click", event => {
-  if (event.target === $("chartOverlay")) {
-    closeCoinChart();
-  }
-});
+/* Intentionally no outside-overlay click close.
+   The chart closes only with X or Escape. */
 
 document.addEventListener("keydown", event => {
-  if (event.key === "Escape" &&
-      !$("chartOverlay").classList.contains("hidden")) {
+  if (
+    event.key === "Escape" &&
+    !$("chartOverlay").classList.contains("hidden")
+  ) {
     closeCoinChart();
-  }
-});
-
-$("tradingViewFrame").addEventListener("load", () => {
-  if (selectedChartCoin) {
-    $("chartLoading").classList.add("hidden");
   }
 });
 
@@ -1003,13 +1069,10 @@ document.querySelectorAll(".chart-period").forEach(button => {
     selectedChartPeriod = button.dataset.period;
 
     document.querySelectorAll(".chart-period").forEach(item => {
-      item.classList.toggle(
-        "active",
-        item === button
-      );
+      item.classList.toggle("active", item === button);
     });
 
-    updateTradingViewChart();
+    updateCoinChart();
   });
 });
 
@@ -1030,8 +1093,7 @@ async function loadAlerts() {
     $("alertsList").replaceChildren();
 
     if (!alerts.length) {
-      $("alertsList").textContent =
-        "You have no alerts yet.";
+      $("alertsList").textContent = "You have no alerts yet.";
       return;
     }
 
@@ -1063,11 +1125,7 @@ async function loadAlerts() {
 
           loadAlerts();
         } catch (error) {
-          showMessage(
-            "alertMessage",
-            error.message,
-            "error"
-          );
+          showMessage("alertMessage", error.message, "error");
           remove.disabled = false;
         }
       });
@@ -1087,16 +1145,8 @@ $("addAlertBtn").addEventListener("click", async () => {
 
   showMessage("alertMessage", "");
 
-  if (
-    !coin_id ||
-    !Number.isFinite(target_price) ||
-    target_price <= 0
-  ) {
-    showMessage(
-      "alertMessage",
-      "Enter a valid coin ID and target price.",
-      "error"
-    );
+  if (!coin_id || !Number.isFinite(target_price) || target_price <= 0) {
+    showMessage("alertMessage", "Enter a valid coin ID and target price.", "error");
     return;
   }
 
@@ -1105,29 +1155,16 @@ $("addAlertBtn").addEventListener("click", async () => {
   try {
     await api("/api/alerts", {
       method: "POST",
-      body: JSON.stringify({
-        coin_id,
-        target_price,
-        direction
-      })
+      body: JSON.stringify({ coin_id, target_price, direction })
     });
 
     $("alertCoin").value = "";
     $("alertPrice").value = "";
 
-    showMessage(
-      "alertMessage",
-      "Alert created.",
-      "success"
-    );
-
+    showMessage("alertMessage", "Alert created.", "success");
     loadAlerts();
   } catch (error) {
-    showMessage(
-      "alertMessage",
-      error.message,
-      "error"
-    );
+    showMessage("alertMessage", error.message, "error");
   } finally {
     $("addAlertBtn").disabled = false;
   }
@@ -1140,14 +1177,11 @@ function showPaymentInvoice(invoice) {
 
   $("paymentDetails").classList.remove("hidden");
   $("paymentOrder").textContent = invoice.order_id;
-  $("paymentAmount").textContent =
-    invoice.amount + " " + invoice.asset;
+  $("paymentAmount").textContent = invoice.amount + " " + invoice.asset;
   $("paymentWallet").textContent = invoice.wallet_address;
-  $("paymentExpiry").textContent =
-    formatExpiry(invoice.expires_at);
+  $("paymentExpiry").textContent = formatExpiry(invoice.expires_at);
 
   $("transactionHash").value = "";
-
   showMessage("verifyMessage", "");
 }
 
@@ -1160,11 +1194,7 @@ document.querySelectorAll("[data-plan]").forEach(button => {
       b.disabled = true;
     });
 
-    showMessage(
-      "paymentMessage",
-      "Creating payment order..."
-    );
-
+    showMessage("paymentMessage", "Creating payment order...");
     $("paymentDetails").classList.add("hidden");
 
     try {
@@ -1173,15 +1203,8 @@ document.querySelectorAll("[data-plan]").forEach(button => {
         body: JSON.stringify({ plan, asset })
       });
 
-      if (
-        !invoice.order_id ||
-        !invoice.wallet_address ||
-        !invoice.amount ||
-        !invoice.asset
-      ) {
-        throw new Error(
-          "The server returned an incomplete payment order."
-        );
+      if (!invoice.order_id || !invoice.wallet_address || !invoice.amount || !invoice.asset) {
+        throw new Error("The server returned an incomplete payment order.");
       }
 
       showPaymentInvoice(invoice);
@@ -1192,11 +1215,7 @@ document.querySelectorAll("[data-plan]").forEach(button => {
         "success"
       );
     } catch (error) {
-      showMessage(
-        "paymentMessage",
-        error.message,
-        "error"
-      );
+      showMessage("paymentMessage", error.message, "error");
     } finally {
       document.querySelectorAll("[data-plan]").forEach(b => {
         b.disabled = false;
@@ -1206,9 +1225,7 @@ document.querySelectorAll("[data-plan]").forEach(button => {
 });
 
 async function copyText(value) {
-  if (!value) {
-    throw new Error("Nothing to copy.");
-  }
+  if (!value) throw new Error("Nothing to copy.");
 
   if (navigator.clipboard && window.isSecureContext) {
     await navigator.clipboard.writeText(value);
@@ -1227,75 +1244,43 @@ async function copyText(value) {
   area.remove();
 
   if (!ok) {
-    throw new Error(
-      "Copy failed. Please copy it manually."
-    );
+    throw new Error("Copy failed. Please copy it manually.");
   }
 }
 
 $("copyWalletBtn").addEventListener("click", async () => {
   try {
     await copyText(activeOrder?.wallet_address);
-
-    showMessage(
-      "verifyMessage",
-      "Wallet address copied.",
-      "success"
-    );
+    showMessage("verifyMessage", "Wallet address copied.", "success");
   } catch (error) {
-    showMessage(
-      "verifyMessage",
-      error.message,
-      "error"
-    );
+    showMessage("verifyMessage", error.message, "error");
   }
 });
 
 $("copyAmountBtn").addEventListener("click", async () => {
   try {
     await copyText(activeOrder?.amount);
-
-    showMessage(
-      "verifyMessage",
-      "Exact amount copied.",
-      "success"
-    );
+    showMessage("verifyMessage", "Exact amount copied.", "success");
   } catch (error) {
-    showMessage(
-      "verifyMessage",
-      error.message,
-      "error"
-    );
+    showMessage("verifyMessage", error.message, "error");
   }
 });
 
 $("verifyPaymentBtn").addEventListener("click", async () => {
   if (!activeOrder?.order_id) {
-    showMessage(
-      "verifyMessage",
-      "Create a payment order first.",
-      "error"
-    );
+    showMessage("verifyMessage", "Create a payment order first.", "error");
     return;
   }
 
   const tx_hash = $("transactionHash").value.trim();
 
   if (!tx_hash) {
-    showMessage(
-      "verifyMessage",
-      "Paste your transaction hash.",
-      "error"
-    );
+    showMessage("verifyMessage", "Paste your transaction hash.", "error");
     return;
   }
 
   $("verifyPaymentBtn").disabled = true;
-
-  showMessage(
-    "verifyMessage",
-    "Checking the blockchain transaction..."
-  );
+  showMessage("verifyMessage", "Checking the blockchain transaction...");
 
   try {
     const result = await api("/api/payments/verify", {
@@ -1318,11 +1303,7 @@ $("verifyPaymentBtn").addEventListener("click", async () => {
     $("paymentDetails").classList.add("hidden");
     activeOrder = null;
   } catch (error) {
-    showMessage(
-      "verifyMessage",
-      error.message,
-      "error"
-    );
+    showMessage("verifyMessage", error.message, "error");
   } finally {
     $("verifyPaymentBtn").disabled = false;
   }
@@ -1334,10 +1315,7 @@ $("analysisBtn").addEventListener("click", async () => {
   $("analysisBtn").disabled = true;
   $("analysisResult").textContent = "";
 
-  showMessage(
-    "analysisMessage",
-    "Generating market overview..."
-  );
+  showMessage("analysisMessage", "Generating market overview...");
 
   try {
     const result = await api("/api/analysis/daily", {
@@ -1353,18 +1331,9 @@ $("analysisBtn").addEventListener("click", async () => {
       "No analysis returned.";
 
     $("analysisResult").textContent = analysis;
-
-    showMessage(
-      "analysisMessage",
-      "Analysis completed.",
-      "success"
-    );
+    showMessage("analysisMessage", "Analysis completed.", "success");
   } catch (error) {
-    showMessage(
-      "analysisMessage",
-      error.message,
-      "error"
-    );
+    showMessage("analysisMessage", error.message, "error");
   } finally {
     $("analysisBtn").disabled = false;
   }
