@@ -100,6 +100,10 @@ input:focus,select:focus{
 }
 select option{background:#171b23;color:#e8eaed}
 .full{width:100%;padding:13px}
+.pw{position:relative}
+.pw input{padding-right:48px}
+.eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);
+  background:none;border:0;color:var(--mut);padding:9px 11px;font-size:18px}
 .auth-switch{text-align:center;margin-top:17px;font-size:13px;color:var(--mut)}
 .link{color:var(--accent);cursor:pointer}
 .link:hover{text-decoration:underline}
@@ -294,10 +298,11 @@ body.chart-open{overflow:hidden}
       </div>
       <div class="field">
         <label>Password</label>
-        <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password">
+        <div class="pw"><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password"><button type="button" class="eye" data-eye="loginPassword" aria-label="Show password">👁</button></div>
       </div>
       <button id="loginBtn" class="main-btn full">Login</button>
       <div id="loginMessage" class="message"></div>
+      <div class="auth-switch"><span class="link" id="showForgot">Forgot password?</span></div>
       <div class="auth-switch">Don't have an account?
         <span class="link" id="showSignup">Create account</span>
       </div>
@@ -312,13 +317,36 @@ body.chart-open{overflow:hidden}
       </div>
       <div class="field">
         <label>Password</label>
-        <input id="signupPassword" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+        <div class="pw"><input id="signupPassword" type="password" autocomplete="new-password" placeholder="At least 8 characters"><button type="button" class="eye" data-eye="signupPassword" aria-label="Show password">👁</button></div>
       </div>
       <button id="signupBtn" class="main-btn full">Create account</button>
       <div id="signupMessage" class="message"></div>
       <div class="auth-switch">Already registered?
         <span class="link" id="showLogin">Login</span>
       </div>
+    </div>
+
+    <div id="forgotForm" class="hidden">
+      <h1>Forgot password</h1>
+      <p class="muted">Enter your email and we will send you a link to reset your password.</p>
+      <div class="field">
+        <label>Email</label>
+        <input id="forgotEmail" type="email" autocomplete="email" placeholder="Your email">
+      </div>
+      <button id="forgotBtn" class="main-btn full">Send reset link</button>
+      <div id="forgotMessage" class="message"></div>
+      <div class="auth-switch"><span class="link" id="backToLogin">Back to login</span></div>
+    </div>
+
+    <div id="resetForm" class="hidden">
+      <h1>Choose a new password</h1>
+      <p class="muted">Enter your new password below.</p>
+      <div class="field">
+        <label>New password</label>
+        <div class="pw"><input id="resetPassword" type="password" autocomplete="new-password" placeholder="At least 8 characters"><button type="button" class="eye" data-eye="resetPassword" aria-label="Show password">👁</button></div>
+      </div>
+      <button id="resetBtn" class="main-btn full">Update password</button>
+      <div id="resetMessage" class="message"></div>
     </div>
   </div>
 </section>
@@ -803,6 +831,86 @@ async function logout(){
 
 $("logoutBtn").addEventListener("click",logout);
 $("accountLogoutBtn").addEventListener("click",logout);
+
+/* SHOW / HIDE PASSWORD */
+
+document.querySelectorAll("[data-eye]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const input=$(btn.dataset.eye);
+    const show=input.type==="password";
+    input.type=show?"text":"password";
+    btn.textContent=show?"🙈":"👁";
+    btn.setAttribute("aria-label",show?"Hide password":"Show password");
+  });
+});
+
+/* FORGOT / RESET PASSWORD */
+
+function showAuthForm(id){
+  ["loginForm","signupForm","forgotForm","resetForm"].forEach(f=>{
+    $(f).classList.toggle("hidden",f!==id);
+  });
+}
+
+$("showForgot").addEventListener("click",()=>{
+  $("forgotEmail").value=$("loginEmail").value;
+  showMessage("forgotMessage","");
+  showAuthForm("forgotForm");
+});
+
+$("backToLogin").addEventListener("click",()=>showAuthForm("loginForm"));
+
+$("forgotBtn").addEventListener("click",async()=>{
+  const email=$("forgotEmail").value.trim();
+  showMessage("forgotMessage","");
+
+  if(!email){
+    showMessage("forgotMessage","Enter your email.","error");
+    return;
+  }
+
+  $("forgotBtn").disabled=true;
+  try{
+    const result=await api("/api/forgot",{
+      method:"POST",
+      body:JSON.stringify({email})
+    });
+    showMessage("forgotMessage",
+      (result.message||"Reset link sent.")+" Check your inbox and spam folder.",
+      "success");
+  }catch(error){
+    showMessage("forgotMessage",error.message,"error");
+  }finally{
+    $("forgotBtn").disabled=false;
+  }
+});
+
+$("resetBtn").addEventListener("click",async()=>{
+  const password=$("resetPassword").value;
+  const token=new URLSearchParams(location.search).get("reset")||"";
+  showMessage("resetMessage","");
+
+  if(password.length<8){
+    showMessage("resetMessage","Password must be at least 8 characters.","error");
+    return;
+  }
+
+  $("resetBtn").disabled=true;
+  try{
+    const result=await api("/api/reset",{
+      method:"POST",
+      body:JSON.stringify({token,password})
+    });
+    history.replaceState(null,"",location.pathname);
+    $("resetPassword").value="";
+    showAuthForm("loginForm");
+    showMessage("loginMessage",result.message||"Password updated.","success");
+  }catch(error){
+    showMessage("resetMessage",error.message,"error");
+  }finally{
+    $("resetBtn").disabled=false;
+  }
+});
 
 /* PRICE FORMATTING */
 
@@ -1512,7 +1620,14 @@ async function restoreSession(){
   }
 }
 
-restoreSession();
+const resetToken=new URLSearchParams(location.search).get("reset");
+
+if(resetToken&&/^[a-f0-9]{64}$/.test(resetToken)){
+  setLoggedOut();
+  showAuthForm("resetForm");
+}else{
+  restoreSession();
+}
 </script>
 </body>
 </html>
