@@ -2,493 +2,742 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f1115">
 <title>TinVin Crypto</title>
 <style>
 :root{
-  --bg:#0f1115;--fg:#e8eaed;--line:#262a33;
-  --up:#22c55e;--dn:#ef4444;--mut:#8b929e;
-  --gold:#e9bd63;--panel:#171b23
+  --bg:#0f1115;
+  --panel:#171b23;
+  --panel2:#1d222c;
+  --fg:#e8eaed;
+  --mut:#8b929e;
+  --line:#262a33;
+  --gold:#e9bd63;
+  --up:#22c55e;
+  --dn:#ef4444;
+  --blue:#51b8ff;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font:14px system-ui,sans-serif;padding:16px}
-.wrap{max-width:760px;margin:0 auto}
-h2{margin:0 0 6px;font-size:23px}
-.sub{color:var(--mut);margin-bottom:20px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px;margin-bottom:16px}
-input,button,select{font:inherit;padding:11px 12px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--fg)}
-input,select{width:100%;margin-bottom:10px}
-select option{background:var(--panel)}
+body{
+  margin:0;background:var(--bg);color:var(--fg);
+  font-family:Arial,Helvetica,sans-serif;
+}
+button,input,select{font:inherit}
 button{cursor:pointer}
-button:disabled{opacity:.5;cursor:not-allowed}
-.primary{background:var(--gold);color:#151515;border:0;font-weight:700;width:100%}
-.switch{display:flex;gap:8px;margin-bottom:18px}
-.switch button{flex:1}
-.switch button.active{border-color:var(--gold);color:var(--gold)}
-.message{font-size:13px;margin:10px 0;min-height:18px}
-.error{color:var(--dn)}
-.success{color:var(--up)}
 .hidden{display:none!important}
-.bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-.bar input{flex:1;min-width:140px;margin:0}
-.row{display:grid;grid-template-columns:1fr 110px 90px;gap:8px;padding:10px;border-bottom:1px solid var(--line);cursor:pointer}
-.row:hover{background:rgba(127,127,127,.08)}
-.num{text-align:right;font-variant-numeric:tabular-nums}
+header{
+  height:66px;padding:0 18px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;background:rgba(15,17,21,.96);z-index:5;
+}
+.logo{font-size:21px;font-weight:800;letter-spacing:-.7px}
+.logo span{color:var(--gold)}
+.header-right{display:flex;align-items:center;gap:9px}
+.small-btn,.main-btn,.tab-btn{
+  border:1px solid var(--line);background:var(--panel);
+  color:var(--fg);border-radius:9px;padding:9px 12px;
+}
+.main-btn{background:var(--gold);color:#17130b;border:0;font-weight:700}
+button:disabled{opacity:.45;cursor:not-allowed}
+main{max-width:1050px;margin:auto;padding:22px 15px 60px}
+h1{font-size:25px;margin:0 0 7px}
+h2{font-size:18px;margin:0 0 14px}
+.muted{color:var(--mut)}
+.small{font-size:12px;color:var(--mut)}
+.card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:14px;padding:17px;margin-bottom:15px;
+}
+.auth-wrap{max-width:420px;margin:45px auto}
+.auth-wrap .logo{margin-bottom:24px;text-align:center;font-size:28px}
+.field{margin:12px 0}
+.field label{display:block;font-size:13px;color:var(--mut);margin-bottom:7px}
+input,select{
+  width:100%;padding:12px;border:1px solid var(--line);
+  border-radius:9px;background:#10141b;color:var(--fg);outline:none;
+}
+input:focus,select:focus{border-color:var(--gold)}
+.full{width:100%;padding:12px}
+.auth-switch{text-align:center;margin-top:17px;font-size:13px;color:var(--mut)}
+.link{color:var(--gold);cursor:pointer}
+.message{font-size:13px;margin-top:12px;line-height:1.5}
+.error{color:#ff7777}
+.success{color:var(--up)}
+.top-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0;
+}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px}
+.stat strong{display:block;font-size:21px;margin-top:8px}
+.tabs{display:flex;gap:8px;overflow:auto;margin:18px 0}
+.tab-btn{white-space:nowrap}
+.tab-btn.active{border-color:var(--gold);color:var(--gold)}
+.toolbar{display:flex;gap:9px;align-items:center;margin-bottom:13px}
+.toolbar input{flex:1;min-width:0}
+.toolbar select{width:auto}
+.coin-row{
+  display:grid;grid-template-columns:1.5fr 1fr 1fr;
+  gap:8px;align-items:center;padding:14px 4px;
+  border-bottom:1px solid var(--line);font-size:14px;
+}
+.coin-row:last-child{border:0}
+.coin-name{font-weight:700}
+.coin-symbol{font-size:11px;color:var(--mut);margin-top:4px}
+.price{text-align:right;font-weight:700}
+.change{text-align:right;font-weight:700}
 .up{color:var(--up)}
-.dn{color:var(--dn)}
-.pill{font-size:11px;padding:3px 9px;border:1px solid var(--line);border-radius:99px;color:var(--mut)}
-.account{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:15px}
-.account-email{color:var(--mut);font-size:12px;overflow-wrap:anywhere}
-#logout{border-color:var(--dn);color:var(--dn)}
-.plan{border:1px solid var(--line);border-radius:10px;padding:12px;margin:9px 0}
-.plan b{color:var(--gold)}
-.small{color:var(--mut);font-size:12px;line-height:1.5}
-.address{overflow-wrap:anywhere;word-break:break-all;background:#10141c;padding:10px;border-radius:8px}
-.copy{width:100%;margin:5px 0 12px}
-@media(max-width:450px){
- body{padding:12px}
- .row{grid-template-columns:1fr 95px 70px;font-size:12px}
+.down{color:var(--dn)}
+.notice{
+  padding:12px;border:1px solid #57472a;background:#282116;
+  border-radius:10px;color:#e9c987;font-size:13px;line-height:1.5;
+}
+.plan-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.plan{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px}
+.plan h3{font-size:15px;margin:0 0 10px}
+.plan-price{font-size:22px;font-weight:800;color:var(--gold);margin-bottom:5px}
+.plan-days{font-size:12px;color:var(--mut);margin-bottom:13px}
+.plan button{width:100%;font-size:12px}
+.alert-item{padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}
+footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
+@media(max-width:650px){
+  main{padding:17px 12px 45px}
+  .top-grid{grid-template-columns:1fr 1fr}
+  .plan-grid{grid-template-columns:1fr 1fr}
+  .coin-row{grid-template-columns:1.3fr 1fr .8fr;font-size:12px}
+  .header-right .small-btn{padding:8px}
+}
+@media(max-width:380px){
+  .plan-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-<section id="authScreen" class="panel">
-<h2>TinVin Crypto</h2>
-<div class="sub">Create your account or sign in.</div>
+<header>
+  <div class="logo">TinVin <span>Crypto</span></div>
+  <div class="header-right">
+    <span id="userLabel" class="small"></span>
+    <button id="logoutBtn" class="small-btn hidden">Logout</button>
+  </div>
+</header>
 
-<div class="switch">
-<button id="signupTab" class="active" type="button">Sign up</button>
-<button id="loginTab" type="button">Login</button>
-</div>
+<main>
+  <!-- LOGIN -->
+  <section id="authSection" class="auth-wrap">
+    <div class="logo">TinVin <span>Crypto</span></div>
+    <div class="card">
+      <div id="loginForm">
+        <h1>Welcome back</h1>
+        <p class="muted">Sign in to your TinVin Crypto account.</p>
+        <div class="field">
+          <label>Email</label>
+          <input id="loginEmail" type="email" autocomplete="email" placeholder="Your email">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password">
+        </div>
+        <button id="loginBtn" class="main-btn full">Login</button>
+        <div id="loginMessage" class="message"></div>
+        <div class="auth-switch">Don't have an account?
+          <span class="link" id="showSignup">Create account</span>
+        </div>
+      </div>
 
-<form id="authForm">
-<input id="email" type="email" placeholder="Email address" autocomplete="email" required>
-<input id="password" type="password" placeholder="Password (8–128 characters)" minlength="8" maxlength="128" autocomplete="new-password" required>
-<button id="authSubmit" class="primary" type="submit">Create account</button>
-</form>
-<div id="authMessage" class="message"></div>
-</section>
+      <div id="signupForm" class="hidden">
+        <h1>Create account</h1>
+        <p class="muted">Join TinVin Crypto.</p>
+        <div class="field">
+          <label>Email</label>
+          <input id="signupEmail" type="email" autocomplete="email" placeholder="Your email">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input id="signupPassword" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+        </div>
+        <button id="signupBtn" class="main-btn full">Create account</button>
+        <div id="signupMessage" class="message"></div>
+        <div class="auth-switch">Already registered?
+          <span class="link" id="showLogin">Login</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<main id="dashboard" class="hidden">
+  <!-- APP -->
+  <section id="appSection" class="hidden">
+    <div>
+      <h1>Crypto Dashboard</h1>
+      <p class="muted">Track cryptocurrency markets and manage your account.</p>
+    </div>
 
-<div class="account">
-<div>
-<b>TinVin Crypto</b>
-<div id="accountEmail" class="account-email"></div>
-<div id="premiumStatus" class="small"></div>
-</div>
-<button id="logout" type="button">Logout</button>
-</div>
+    <div class="top-grid">
+      <div class="stat">
+        <span class="small">Account</span>
+        <strong id="accountStatus">Free</strong>
+      </div>
+      <div class="stat">
+        <span class="small">Market coins</span>
+        <strong id="coinCount">—</strong>
+      </div>
+      <div class="stat">
+        <span class="small">Currency</span>
+        <strong id="currencyLabel">USD</strong>
+      </div>
+    </div>
 
-<section id="plans" class="panel">
-<h2>Premium</h2>
-<div class="sub">Unlock live market data, alerts and AI market analysis.</div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="marketTab">Markets</button>
+      <button class="tab-btn" data-tab="alertsTab">Price Alerts</button>
+      <button class="tab-btn" data-tab="premiumTab">Premium</button>
+      <button class="tab-btn" data-tab="aiTab">AI Analysis</button>
+      <button class="tab-btn" data-tab="accountTab">Account</button>
+    </nav>
 
-<div class="plan"><b>7 Days — $3.99</b></div>
-<div class="plan"><b>1 Month — $12.99</b></div>
-<div class="plan"><b>6 Months — $59.99</b></div>
-<div class="plan"><b>1 Year — $99.99</b></div>
+    <!-- MARKET -->
+    <section id="marketTab" class="tab-content">
+      <div class="card">
+        <div class="toolbar">
+          <input id="coinSearch" placeholder="Search coins...">
+          <select id="currencySelect">
+            <option value="usd">USD</option>
+            <option value="afn">AFN</option>
+          </select>
+          <button id="refreshBtn" class="small-btn">Refresh</button>
+        </div>
+        <div id="marketMessage" class="message muted"></div>
+        <div id="coinList">
+          <p class="muted">Loading market data...</p>
+        </div>
+      </div>
+      <p class="small">Market prices are provided by external market data services and may be delayed.</p>
+    </section>
 
-<label for="planSelect">Choose plan</label>
-<select id="planSelect">
-<option value="7days">7 Days — $3.99</option>
-<option value="1month">1 Month — $12.99</option>
-<option value="6months">6 Months — $59.99</option>
-<option value="1year">1 Year — $99.99</option>
-</select>
+    <!-- ALERTS -->
+    <section id="alertsTab" class="tab-content hidden">
+      <div class="card">
+        <h2>Create price alert</h2>
+        <div class="field">
+          <label>Coin ID (example: bitcoin)</label>
+          <input id="alertCoin" placeholder="bitcoin">
+        </div>
+        <div class="field">
+          <label>Target price (USD)</label>
+          <input id="alertPrice" type="number" min="0" step="any" placeholder="100000">
+        </div>
+        <div class="field">
+          <label>Direction</label>
+          <select id="alertDirection">
+            <option value="above">Price goes above</option>
+            <option value="below">Price goes below</option>
+          </select>
+        </div>
+        <button id="addAlertBtn" class="main-btn">Create alert</button>
+        <div id="alertMessage" class="message"></div>
+      </div>
+      <div class="card">
+        <h2>Your alerts</h2>
+        <div id="alertsList"><p class="muted">Loading alerts...</p></div>
+      </div>
+    </section>
 
-<label for="assetSelect">Payment method</label>
-<select id="assetSelect">
-<option value="TON">TON (TON Mainnet)</option>
-<option value="USDT">USDT (TON Mainnet)</option>
-</select>
+    <!-- PREMIUM -->
+    <section id="premiumTab" class="tab-content hidden">
+      <div class="card">
+        <h2>TinVin Crypto Premium</h2>
+        <p class="muted">Unlock Premium features with a subscription.</p>
+        <div class="notice">
+          Crypto payment verification is not active yet. Do not send TON or USDT to any address for a subscription until payment verification is officially enabled.
+        </div>
+        <div class="plan-grid" style="margin-top:15px">
+          <div class="plan">
+            <h3>7 Days</h3>
+            <div class="plan-price">$3.99</div>
+            <div class="plan-days">7 days access</div>
+            <button class="small-btn" disabled>Coming soon</button>
+          </div>
+          <div class="plan">
+            <h3>1 Month</h3>
+            <div class="plan-price">$12.99</div>
+            <div class="plan-days">30 days access</div>
+            <button class="small-btn" disabled>Coming soon</button>
+          </div>
+          <div class="plan">
+            <h3>6 Months</h3>
+            <div class="plan-price">$59.99</div>
+            <div class="plan-days">180 days access</div>
+            <button class="small-btn" disabled>Coming soon</button>
+          </div>
+          <div class="plan">
+            <h3>1 Year</h3>
+            <div class="plan-price">$99.99</div>
+            <div class="plan-days">365 days access</div>
+            <button class="small-btn" disabled>Coming soon</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<button id="createPayment" class="primary" type="button">Create payment request</button>
-<div id="paymentMessage" class="message"></div>
+    <!-- AI -->
+    <section id="aiTab" class="tab-content hidden">
+      <div class="card">
+        <h2>AI Daily Market Analysis</h2>
+        <p class="muted">Request an AI-generated market overview.</p>
+        <button id="analysisBtn" class="main-btn">Generate analysis</button>
+        <div id="analysisMessage" class="message"></div>
+        <div id="analysisResult" style="white-space:pre-wrap;line-height:1.7;margin-top:15px"></div>
+      </div>
+      <p class="small">AI analysis is informational only, not financial advice. It cannot guarantee future prices or profits.</p>
+    </section>
 
-<div id="invoice" class="hidden">
-<div class="small">Send the exact amount shown below to this wallet. Network: TON Mainnet only.</div>
-<h2 id="invoiceAmount"></h2>
-<div id="invoiceAsset" class="small"></div>
-<div class="small">Receiving wallet</div>
-<div id="invoiceWallet" class="address"></div>
-<button id="copyWallet" class="copy" type="button">Copy wallet address</button>
-
-<div id="invoiceMasterWrap" class="hidden">
-<div class="small">Official USDT jetton master</div>
-<div id="invoiceMaster" class="address"></div>
-</div>
-
-<div class="small" id="invoiceExpiry"></div>
-<button id="checkPayment" class="primary" type="button">I have paid — Verify payment</button>
-<div id="verifyMessage" class="message"></div>
-</div>
-</section>
-
-<section id="marketPanel" class="hidden">
-<div class="bar">
-<input id="q" placeholder="Search coins...">
-<button id="cur">USD</button>
-<button id="ref">Refresh</button>
-<span class="pill" id="st">starting</span>
-</div>
-
-<div id="list"></div>
-
-<div class="bar" style="margin-top:12px">
-<input id="al" type="number" step="any" placeholder="Alert price">
-<button id="alBtn">Set alert</button>
-</div>
-
-<div id="toasts"></div>
-<button id="analysisBtn" type="button">Daily AI analysis</button>
-<div id="analysis" class="small"></div>
-</section>
-
+    <!-- ACCOUNT -->
+    <section id="accountTab" class="tab-content hidden">
+      <div class="card">
+        <h2>Account information</h2>
+        <p>Email: <strong id="accountEmail">—</strong></p>
+        <p>Plan: <strong id="accountPlan">Free</strong></p>
+        <p>Subscription expiry: <strong id="accountExpiry">—</strong></p>
+        <button id="accountLogoutBtn" class="small-btn">Logout</button>
+      </div>
+    </section>
+  </section>
 </main>
-</div>
+
+<footer>TinVin Crypto · Digital asset market information</footer>
 
 <script>
-const API_BASE='https://tinvin-crypto-api.aslan89aslan1.workers.dev';
-const $=id=>document.getElementById(id);
+"use strict";
 
-let authMode='signup';
-let cur='usd';
-let coins=[];
-let selectedCoin='';
-let currentInvoice=null;
-let subscription=null;
+/* TinVin Crypto API */
+const API_BASE = "https://tinvin-crypto-api.aslan89aslan1.workers.dev";
+const TOKEN_KEY = "tinvin_crypto_token";
 
-const token=()=>localStorage.getItem('tinvin_crypto_token');
+let authToken = localStorage.getItem(TOKEN_KEY) || "";
+let currentUser = null;
+let marketCoins = [];
 
-async function api(path,options={}){
- const headers={
-  'Content-Type':'application/json',
-  ...(options.headers||{})
- };
+const $ = id => document.getElementById(id);
 
- if(token())headers.Authorization='Bearer '+token();
-
- const r=await fetch(API_BASE+path,{...options,headers});
- let d={};
-
- try{d=await r.json()}
- catch(e){throw new Error('Server returned invalid response.')}
-
- if(!r.ok)throw new Error(d.error||'Request failed.');
- return d;
+function showMessage(id, message, type="") {
+  const el = $(id);
+  el.textContent = message || "";
+  el.className = "message " + type;
 }
 
-function showAuth(){
- $('authScreen').classList.remove('hidden');
- $('dashboard').classList.add('hidden');
-}
+async function api(path, options={}) {
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {})
+  };
 
-function setMessage(id,msg,type=''){
- const el=$(id);
- el.textContent=msg;
- el.className='message '+type;
-}
+  if (authToken) headers.Authorization = "Bearer " + authToken;
 
-function setAuthMode(mode){
- authMode=mode;
- $('signupTab').classList.toggle('active',mode==='signup');
- $('loginTab').classList.toggle('active',mode==='login');
- $('authSubmit').textContent=mode==='signup'?'Create account':'Login';
- $('password').autocomplete=mode==='signup'?'new-password':'current-password';
- setMessage('authMessage','');
-}
-
-$('signupTab').onclick=()=>setAuthMode('signup');
-$('loginTab').onclick=()=>setAuthMode('login');
-
-$('authForm').onsubmit=async e=>{
- e.preventDefault();
-
- const email=$('email').value.trim().toLowerCase();
- const password=$('password').value;
-
- if(password.length<8||password.length>128){
-  setMessage('authMessage','Password must contain 8 to 128 characters.','error');
-  return;
- }
-
- const b=$('authSubmit');
- b.disabled=true;
- b.textContent='Please wait...';
-
- try{
-  if(authMode==='signup'){
-   await api('/api/signup',{
-    method:'POST',
-    body:JSON.stringify({email,password})
-   });
-   setMessage('authMessage','Account created. Signing in...','success');
-  }
-
-  const r=await api('/api/login',{
-   method:'POST',
-   body:JSON.stringify({email,password})
+  const response = await fetch(API_BASE + path, {
+    ...options,
+    headers
   });
 
-  localStorage.setItem('tinvin_crypto_token',r.token);
-  await openDashboard(r.user);
-
- }catch(err){
-  setMessage('authMessage',err.message,'error');
- }finally{
-  b.disabled=false;
-  b.textContent=authMode==='signup'?'Create account':'Login';
- }
-};
-
-async function openDashboard(user){
- $('authScreen').classList.add('hidden');
- $('dashboard').classList.remove('hidden');
- $('accountEmail').textContent=user.email||'';
-
- try{
-  const me=await api('/api/me');
-  subscription=me.subscription;
-
-  if(subscription){
-   $('premiumStatus').textContent=
-    'Premium active until '+new Date(subscription.expires_at).toLocaleString();
-   $('plans').classList.add('hidden');
-   $('marketPanel').classList.remove('hidden');
-   await loadMarket();
-  }else{
-   $('premiumStatus').textContent='Free account';
-   $('plans').classList.remove('hidden');
-   $('marketPanel').classList.add('hidden');
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error("The server returned an invalid response.");
   }
- }catch(e){
-  setMessage('paymentMessage',e.message,'error');
- }
+
+  if (!response.ok || data.success === false || data.error) {
+    throw new Error(data.error || data.message || "Request failed.");
+  }
+
+  return data;
 }
 
-async function checkSession(){
- if(!token()){
-  showAuth();
-  return;
- }
+function setLoggedIn(user) {
+  currentUser = user || {};
+  $("authSection").classList.add("hidden");
+  $("appSection").classList.remove("hidden");
+  $("logoutBtn").classList.remove("hidden");
 
- try{
-  const me=await api('/api/me');
-  await openDashboard(me.user);
- }catch(e){
-  localStorage.removeItem('tinvin_crypto_token');
-  showAuth();
- }
+  const email = currentUser.email || "";
+  $("userLabel").textContent = email;
+  $("accountEmail").textContent = email;
+
+  const plan = currentUser.plan || currentUser.subscription?.plan || "Free";
+  $("accountStatus").textContent = plan;
+  $("accountPlan").textContent = plan;
+
+  const expiry = currentUser.expires_at ||
+    currentUser.subscription?.expires_at || "";
+  $("accountExpiry").textContent = expiry
+    ? new Date(Number(expiry) * 1000).toLocaleString()
+    : "—";
+
+  loadMarket();
+  loadAlerts();
 }
 
-$('logout').onclick=async()=>{
- try{await api('/api/logout',{method:'POST'})}catch(e){}
- localStorage.removeItem('tinvin_crypto_token');
- showAuth();
- $('password').value='';
-};
+function setLoggedOut() {
+  authToken = "";
+  currentUser = null;
+  localStorage.removeItem(TOKEN_KEY);
+  $("authSection").classList.remove("hidden");
+  $("appSection").classList.add("hidden");
+  $("logoutBtn").classList.add("hidden");
+  $("userLabel").textContent = "";
+}
 
-$('createPayment').onclick=async()=>{
- const b=$('createPayment');
- b.disabled=true;
- b.textContent='Creating...';
- setMessage('paymentMessage','');
-
- try{
-  const r=await api('/api/payments/create',{
-   method:'POST',
-   body:JSON.stringify({
-    plan:$('planSelect').value,
-    asset:$('assetSelect').value
-   })
+function showTab(tabId) {
+  document.querySelectorAll(".tab-content").forEach(section => {
+    section.classList.toggle("hidden", section.id !== tabId);
   });
 
-  currentInvoice=r.payment;
-  $('invoice').classList.remove('hidden');
-  $('invoiceAmount').textContent=
-   currentInvoice.amount+' '+currentInvoice.asset;
-  $('invoiceAsset').textContent=
-   currentInvoice.plan+' • $'+currentInvoice.usd_price+' • '+currentInvoice.network;
-  $('invoiceWallet').textContent=currentInvoice.wallet_address;
-  $('invoiceExpiry').textContent=
-   'Expires: '+new Date(currentInvoice.expires_at).toLocaleString();
+  document.querySelectorAll(".tab-btn").forEach(button => {
+    button.classList.toggle("active", button.dataset.tab === tabId);
+  });
 
-  $('invoiceMasterWrap').classList.toggle(
-   'hidden',!currentInvoice.usdt_master
-  );
-  $('invoiceMaster').textContent=currentInvoice.usdt_master||'';
+  if (tabId === "alertsTab") loadAlerts();
+}
 
-  $('verifyMessage').textContent=
-   'Order created. Send the exact amount, then verify.';
-
-  setMessage('paymentMessage','Payment request created.','success');
-
- }catch(e){
-  setMessage('paymentMessage',e.message,'error');
- }finally{
-  b.disabled=false;
-  b.textContent='Create payment request';
- }
-};
-
-$('copyWallet').onclick=async()=>{
- if(!currentInvoice)return;
-
- try{
-  await navigator.clipboard.writeText(
-   currentInvoice.wallet_address
-  );
-  $('copyWallet').textContent='Copied';
- }catch(e){
-  setMessage(
-   'verifyMessage',
-   'Copy failed. Select and copy the wallet address manually.',
-   'error'
-  );
- }
-};
-
-$('checkPayment').onclick=async()=>{
- if(!currentInvoice)return;
-
- const b=$('checkPayment');
- b.disabled=true;
- b.textContent='Checking blockchain...';
-
- try{
-  const r=await api(
-   '/api/payments/'+encodeURIComponent(currentInvoice.order_id)
-  );
-
-  if(r.status==='paid'){
-   setMessage(
-    'verifyMessage',
-    'Payment confirmed. Premium activated!',
-    'success'
-   );
-   await checkSession();
-  }else{
-   setMessage(
-    'verifyMessage',
-    r.message||('Payment status: '+r.status)
-   );
-  }
- }catch(e){
-  setMessage('verifyMessage',e.message,'error');
- }finally{
-  b.disabled=false;
-  b.textContent='I have paid — Verify payment';
- }
-};
-
-const fmt=(v,d)=>Number(v).toLocaleString('en-US',{
- minimumFractionDigits:d,
- maximumFractionDigits:d
+document.querySelectorAll(".tab-btn").forEach(button => {
+  button.addEventListener("click", () => showTab(button.dataset.tab));
 });
 
-function price(v){
- return cur==='usd'
-  ? '$'+fmt(v,v<1?5:2)
-  : cur.toUpperCase()+' '+fmt(v,v<1?5:2);
+$("showSignup").addEventListener("click", () => {
+  $("loginForm").classList.add("hidden");
+  $("signupForm").classList.remove("hidden");
+});
+
+$("showLogin").addEventListener("click", () => {
+  $("signupForm").classList.add("hidden");
+  $("loginForm").classList.remove("hidden");
+});
+
+/* Signup */
+$("signupBtn").addEventListener("click", async () => {
+  const email = $("signupEmail").value.trim();
+  const password = $("signupPassword").value;
+
+  showMessage("signupMessage", "");
+
+  if (!email || !password) {
+    showMessage("signupMessage", "Enter your email and password.", "error");
+    return;
+  }
+
+  if (password.length < 8) {
+    showMessage("signupMessage", "Password must be at least 8 characters.", "error");
+    return;
+  }
+
+  $("signupBtn").disabled = true;
+
+  try {
+    const result = await api("/api/signup", {
+      method: "POST",
+      body: JSON.stringify({email, password})
+    });
+
+    if (result.token) {
+      authToken = result.token;
+      localStorage.setItem(TOKEN_KEY, authToken);
+      setLoggedIn(result.user || {email});
+    } else {
+      showMessage("signupMessage", "Account created. Please log in.", "success");
+      $("signupForm").classList.add("hidden");
+      $("loginForm").classList.remove("hidden");
+      $("loginEmail").value = email;
+    }
+  } catch (error) {
+    showMessage("signupMessage", error.message, "error");
+  } finally {
+    $("signupBtn").disabled = false;
+  }
+});
+
+/* Login */
+$("loginBtn").addEventListener("click", async () => {
+  const email = $("loginEmail").value.trim();
+  const password = $("loginPassword").value;
+
+  showMessage("loginMessage", "");
+
+  if (!email || !password) {
+    showMessage("loginMessage", "Enter your email and password.", "error");
+    return;
+  }
+
+  $("loginBtn").disabled = true;
+
+  try {
+    const result = await api("/api/login", {
+      method: "POST",
+      body: JSON.stringify({email, password})
+    });
+
+    if (!result.token) throw new Error("Login response did not include a token.");
+
+    authToken = result.token;
+    localStorage.setItem(TOKEN_KEY, authToken);
+
+    let user = result.user || {email};
+    try {
+      const me = await api("/api/me");
+      user = me.user || me;
+    } catch {}
+
+    setLoggedIn(user);
+  } catch (error) {
+    showMessage("loginMessage", error.message, "error");
+  } finally {
+    $("loginBtn").disabled = false;
+  }
+});
+
+/* Logout */
+async function logout() {
+  try {
+    if (authToken) {
+      await api("/api/logout", {method:"POST", body:JSON.stringify({})});
+    }
+  } catch {}
+  setLoggedOut();
 }
 
-async function loadMarket(){
- $('st').textContent='loading';
+$("logoutBtn").addEventListener("click", logout);
+$("accountLogoutBtn").addEventListener("click", logout);
 
- try{
-  const r=await api(
-   '/api/market/coins?currency='+cur+'&page=1'
-  );
+/* Market */
+function formatPrice(value, currency) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "—";
 
-  coins=r.coins||[];
-  render();
-  $('st').textContent='live CoinGecko';
-
- }catch(e){
-  $('st').textContent='error';
-  $('list').textContent=e.message;
- }
+  return new Intl.NumberFormat("en-US", {
+    style:"currency",
+    currency:currency.toUpperCase(),
+    maximumFractionDigits:number < 1 ? 6 : 2
+  }).format(number);
 }
 
-function render(){
- const q=$('q').value.trim().toLowerCase();
+function renderCoins() {
+  const query = $("coinSearch").value.trim().toLowerCase();
+  const currency = $("currencySelect").value;
 
- $('list').innerHTML=coins
-  .filter(c=>
-   !q||
-   c.name.toLowerCase().includes(q)||
-   c.symbol.toLowerCase().includes(q)
-  )
-  .map(c=>`
-   <div class="row" data-id="${c.id}">
-    <div>
-     <b>${c.symbol.toUpperCase()}</b>
-     <span style="opacity:.6">${c.name}</span>
-    </div>
-    <div class="num">${price(c.current_price||0)}</div>
-    <div class="num ${(c.price_change_percentage_24h||0)>=0?'up':'dn'}">
-     ${(c.price_change_percentage_24h||0)>=0?'+':''}${Number(c.price_change_percentage_24h||0).toFixed(2)}%
-    </div>
-   </div>
-  `).join('');
-
- document.querySelectorAll('.row').forEach(el=>{
-  el.onclick=()=>{
-   selectedCoin=el.dataset.id;
-   $('al').value='';
-  };
- });
-}
-
-$('q').oninput=render;
-$('ref').onclick=loadMarket;
-
-$('cur').onclick=()=>{
- cur=cur==='usd'?'eur':'usd';
- $('cur').textContent=cur.toUpperCase();
- loadMarket();
-};
-
-$('alBtn').onclick=async()=>{
- const v=Number($('al').value);
-
- if(!selectedCoin||!Number.isFinite(v)||v<=0){
-  $('toasts').textContent='Select a coin and enter a valid target price.';
-  return;
- }
-
- try{
-  await api('/api/alerts',{
-   method:'POST',
-   body:JSON.stringify({
-    coin_id:selectedCoin,
-    target_price:v,
-    direction:'above'
-   })
+  const filtered = marketCoins.filter(coin => {
+    const name = String(coin.name || "").toLowerCase();
+    const symbol = String(coin.symbol || "").toLowerCase();
+    const id = String(coin.id || "").toLowerCase();
+    return name.includes(query) || symbol.includes(query) || id.includes(query);
   });
 
-  $('toasts').textContent='Price alert saved.';
- }catch(e){
-  $('toasts').textContent=e.message;
- }
-};
+  $("coinCount").textContent = marketCoins.length;
+  $("currencyLabel").textContent = currency.toUpperCase();
 
-$('analysisBtn').onclick=async()=>{
- $('analysis').textContent='Generating analysis...';
+  if (!filtered.length) {
+    $("coinList").textContent = "No coins found.";
+    return;
+  }
 
- try{
-  const r=await api('/api/analysis/daily');
-  $('analysis').textContent=r.analysis;
- }catch(e){
-  $('analysis').textContent=e.message;
- }
-};
+  const fragment = document.createDocumentFragment();
 
-checkSession();
+  filtered.forEach(coin => {
+    const row = document.createElement("div");
+    row.className = "coin-row";
+
+    const nameBox = document.createElement("div");
+    const name = document.createElement("div");
+    name.className = "coin-name";
+    name.textContent = coin.name || coin.id || "Unknown";
+
+    const symbol = document.createElement("div");
+    symbol.className = "coin-symbol";
+    symbol.textContent = String(coin.symbol || "").toUpperCase();
+
+    nameBox.append(name, symbol);
+
+    const price = document.createElement("div");
+    price.className = "price";
+    price.textContent = formatPrice(
+      coin.current_price ?? coin.price,
+      currency
+    );
+
+    const change = document.createElement("div");
+    const percent = Number(
+      coin.price_change_percentage_24h ??
+      coin.change_24h ??
+      coin.change
+    );
+
+    change.className = "change " +
+      (percent >= 0 ? "up" : "down");
+
+    change.textContent = Number.isFinite(percent)
+      ? (percent > 0 ? "+" : "") + percent.toFixed(2) + "%"
+      : "—";
+
+    row.append(nameBox, price, change);
+    fragment.appendChild(row);
+  });
+
+  $("coinList").replaceChildren(fragment);
+}
+
+async function loadMarket() {
+  $("marketMessage").textContent = "Loading market data...";
+  const currency = $("currencySelect").value;
+
+  try {
+    const result = await api(
+      "/api/market/coins?currency=" + encodeURIComponent(currency)
+    );
+
+    marketCoins = Array.isArray(result)
+      ? result
+      : (result.coins || result.data || []);
+
+    renderCoins();
+    $("marketMessage").textContent = "Market data updated.";
+  } catch (error) {
+    $("marketMessage").textContent = error.message;
+    if (!marketCoins.length) {
+      $("coinList").textContent = "Could not load market data.";
+    }
+  }
+}
+
+$("refreshBtn").addEventListener("click", loadMarket);
+$("currencySelect").addEventListener("change", loadMarket);
+$("coinSearch").addEventListener("input", renderCoins);
+
+/* Alerts */
+async function loadAlerts() {
+  if (!authToken) return;
+
+  $("alertsList").textContent = "Loading alerts...";
+
+  try {
+    const result = await api("/api/alerts");
+    const alerts = Array.isArray(result)
+      ? result
+      : (result.alerts || result.data || []);
+
+    $("alertsList").replaceChildren();
+
+    if (!alerts.length) {
+      $("alertsList").textContent = "You have no alerts yet.";
+      return;
+    }
+
+    alerts.forEach(alert => {
+      const item = document.createElement("div");
+      item.className = "alert-item";
+
+      const description = document.createElement("span");
+      description.textContent =
+        `${alert.coin_id || alert.coin || "Coin"} · ` +
+        `${alert.direction || "above"} · ` +
+        `${alert.target_price ?? alert.price ?? ""}`;
+
+      const remove = document.createElement("button");
+      remove.className = "small-btn";
+      remove.style.float = "right";
+      remove.textContent = "Delete";
+
+      remove.addEventListener("click", async () => {
+        try {
+          await api("/api/alerts/" + encodeURIComponent(alert.id), {
+            method:"DELETE"
+          });
+          loadAlerts();
+        } catch (error) {
+          showMessage("alertMessage", error.message, "error");
+        }
+      });
+
+      item.append(description, remove);
+      $("alertsList").appendChild(item);
+    });
+  } catch (error) {
+    $("alertsList").textContent = error.message;
+  }
+}
+
+$("addAlertBtn").addEventListener("click", async () => {
+  const coin_id = $("alertCoin").value.trim().toLowerCase();
+  const target_price = Number($("alertPrice").value);
+  const direction = $("alertDirection").value;
+
+  showMessage("alertMessage", "");
+
+  if (!coin_id || !Number.isFinite(target_price) || target_price <= 0) {
+    showMessage("alertMessage", "Enter a valid coin ID and target price.", "error");
+    return;
+  }
+
+  $("addAlertBtn").disabled = true;
+
+  try {
+    await api("/api/alerts", {
+      method:"POST",
+      body:JSON.stringify({coin_id, target_price, direction})
+    });
+
+    $("alertCoin").value = "";
+    $("alertPrice").value = "";
+    showMessage("alertMessage", "Alert created.", "success");
+    loadAlerts();
+  } catch (error) {
+    showMessage("alertMessage", error.message, "error");
+  } finally {
+    $("addAlertBtn").disabled = false;
+  }
+});
+
+/* AI analysis */
+$("analysisBtn").addEventListener("click", async () => {
+  $("analysisBtn").disabled = true;
+  $("analysisResult").textContent = "";
+  showMessage("analysisMessage", "Generating analysis...");
+
+  try {
+    const result = await api("/api/analysis/daily", {
+      method:"POST",
+      body:JSON.stringify({})
+    });
+
+    const analysis =
+      result.analysis ||
+      result.text ||
+      result.result ||
+      result.message ||
+      "The server did not return analysis text.";
+
+    $("analysisResult").textContent = analysis;
+    showMessage("analysisMessage", "Analysis completed.", "success");
+  } catch (error) {
+    showMessage("analysisMessage", error.message, "error");
+  } finally {
+    $("analysisBtn").disabled = false;
+  }
+});
+
+/* Restore session */
+async function restoreSession() {
+  if (!authToken) {
+    setLoggedOut();
+    return;
+  }
+
+  try {
+    const result = await api("/api/me");
+    const user = result.user || result;
+    setLoggedIn(user);
+  } catch {
+    setLoggedOut();
+  }
+}
+
+restoreSession();
 </script>
 </body>
 </html>
