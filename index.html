@@ -23,405 +23,175 @@
   --glass-shadow:0 12px 40px rgba(0,0,0,.22);
   --glass-blur:blur(18px) saturate(145%);
 }
-
 *{box-sizing:border-box}
-
 html{scroll-behavior:smooth}
-
 body{
-  margin:0;
-  min-height:100vh;
+  margin:0;min-height:100vh;
   background:
     radial-gradient(ellipse at 12% 5%,rgba(81,184,255,.12),transparent 35%),
     radial-gradient(ellipse at 88% 18%,color-mix(in srgb,var(--accent) 13%,transparent),transparent 36%),
     radial-gradient(ellipse at 50% 100%,rgba(124,92,220,.10),transparent 42%),
     var(--bg);
-  color:var(--fg);
-  font-family:Arial,Helvetica,sans-serif;
+  color:var(--fg);font-family:Arial,Helvetica,sans-serif;
   background-attachment:fixed;
 }
-
 button,input,select{font:inherit}
 button{cursor:pointer}
 .hidden{display:none!important}
-
 header{
-  min-height:66px;
-  padding:0 18px;
-  border-bottom:1px solid var(--line);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  position:sticky;
-  top:0;
-  background:rgba(11,16,32,.72);
-  backdrop-filter:var(--glass-blur);
-  -webkit-backdrop-filter:var(--glass-blur);
+  min-height:66px;padding:0 18px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  position:sticky;top:0;background:rgba(11,16,32,.72);
+  backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
   z-index:5;
 }
-
-.logo{
-  font-size:21px;
-  font-weight:800;
-  letter-spacing:-.7px;
-}
-
+.logo{font-size:21px;font-weight:800;letter-spacing:-.7px}
 .logo span{color:var(--accent)}
-
-.header-right{
-  display:flex;
-  align-items:center;
-  gap:9px;
-}
-
+.header-right{display:flex;align-items:center;gap:9px}
 .small-btn,.main-btn,.tab-btn{
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.055);
-  color:var(--fg);
-  border-radius:11px;
-  padding:10px 13px;
+  border:1px solid var(--line);background:rgba(255,255,255,.055);
+  color:var(--fg);border-radius:11px;padding:10px 13px;
   transition:background .2s,border-color .2s,transform .2s,box-shadow .2s;
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
 }
-
 .small-btn:hover,.tab-btn:hover{
   border-color:var(--accent);
   background:color-mix(in srgb,var(--accent) 12%,transparent);
 }
-
 .main-btn{
-  background:linear-gradient(
-    135deg,
+  background:linear-gradient(135deg,
     color-mix(in srgb,var(--accent) 95%,white),
-    color-mix(in srgb,var(--accent) 75%,#8b6b35)
-  );
+    color-mix(in srgb,var(--accent) 75%,#8b6b35));
   color:#17130b;
   border:1px solid color-mix(in srgb,var(--accent) 70%,white);
   font-weight:800;
   box-shadow:0 5px 20px color-mix(in srgb,var(--accent) 15%,transparent);
 }
-
 .main-btn:hover{
   transform:translateY(-1px);
   box-shadow:0 8px 25px color-mix(in srgb,var(--accent) 24%,transparent);
 }
-
-button:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-  transform:none!important;
-}
-
-main{
-  max-width:1050px;
-  margin:auto;
-  padding:25px 15px 60px;
-}
-
+button:disabled{opacity:.45;cursor:not-allowed;transform:none!important}
+main{max-width:1050px;margin:auto;padding:25px 15px 60px}
 h1{font-size:25px;margin:0 0 7px}
 h2{font-size:18px;margin:0 0 14px}
 h3{color:var(--fg)}
 p{line-height:1.55}
 .muted{color:var(--mut)}
 .small{font-size:12px;color:var(--mut)}
-
 .card{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:17px;
-  padding:18px;
-  margin-bottom:15px;
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:17px;padding:18px;margin-bottom:15px;
   box-shadow:var(--glass-shadow);
-  backdrop-filter:var(--glass-blur);
-  -webkit-backdrop-filter:var(--glass-blur);
+  backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
 }
-
-.auth-wrap{
-  max-width:420px;
-  margin:45px auto;
-}
-
-.auth-wrap .logo{
-  margin-bottom:24px;
-  text-align:center;
-  font-size:28px;
-}
-
+.auth-wrap{max-width:420px;margin:45px auto}
+.auth-wrap .logo{margin-bottom:24px;text-align:center;font-size:28px}
 .field{margin:12px 0}
-
-.field label{
-  display:block;
-  font-size:13px;
-  color:var(--mut);
-  margin-bottom:7px;
-}
-
+.field label{display:block;font-size:13px;color:var(--mut);margin-bottom:7px}
 input,select{
-  width:100%;
-  padding:12px;
-  border:1px solid var(--line);
-  border-radius:11px;
-  background:rgba(9,14,27,.65);
-  color:var(--fg);
-  outline:none;
-  transition:border-color .2s,box-shadow .2s,background .2s;
+  width:100%;padding:12px;border:1px solid var(--line);
+  border-radius:11px;background:rgba(9,14,27,.65);color:var(--fg);
+  outline:none;transition:border-color .2s,box-shadow .2s,background .2s;
 }
-
 input:focus,select:focus{
   border-color:var(--accent);
   box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 14%,transparent);
   background:rgba(9,14,27,.85);
 }
-
-select option{
-  background:#171b23;
-  color:#e8eaed;
-}
-
+select option{background:#171b23;color:#e8eaed}
 .full{width:100%;padding:13px}
-
-.auth-switch{
-  text-align:center;
-  margin-top:17px;
-  font-size:13px;
-  color:var(--mut);
-}
-
-.link{
-  color:var(--accent);
-  cursor:pointer;
-}
-
+.auth-switch{text-align:center;margin-top:17px;font-size:13px;color:var(--mut)}
+.link{color:var(--accent);cursor:pointer}
 .link:hover{text-decoration:underline}
-
-.message{
-  font-size:13px;
-  margin-top:12px;
-  line-height:1.5;
-  overflow-wrap:anywhere;
-}
-
+.message{font-size:13px;margin-top:12px;line-height:1.5;overflow-wrap:anywhere}
 .error{color:#ff7777}
 .success{color:var(--up)}
-
 .dashboard-heading{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:16px;
-  flex-wrap:wrap;
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;
 }
-
 .dashboard-heading p{margin-top:5px}
-
-.top-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin:20px 0;
-}
-
+.top-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
 .stat{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:15px;
-  padding:16px;
-  box-shadow:var(--glass-shadow);
-  backdrop-filter:var(--glass-blur);
-  -webkit-backdrop-filter:var(--glass-blur);
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:15px;padding:16px;box-shadow:var(--glass-shadow);
+  backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
 }
-
-.stat strong{
-  display:block;
-  font-size:21px;
-  margin-top:8px;
-}
-
-.tabs{
-  display:flex;
-  gap:8px;
-  overflow:auto;
-  margin:18px 0;
-  padding:3px 1px 8px;
-  scrollbar-width:thin;
-}
-
+.stat strong{display:block;font-size:21px;margin-top:8px}
+.tabs{display:flex;gap:8px;overflow:auto;margin:18px 0;padding:3px 1px 8px;scrollbar-width:thin}
 .tab-btn{white-space:nowrap}
-
 .tab-btn.active{
-  border-color:var(--accent);
-  color:var(--accent);
+  border-color:var(--accent);color:var(--accent);
   background:color-mix(in srgb,var(--accent) 13%,transparent);
   box-shadow:0 0 18px color-mix(in srgb,var(--accent) 10%,transparent);
 }
-
-.toolbar{
-  display:flex;
-  gap:9px;
-  align-items:center;
-  margin-bottom:13px;
-}
-
+.toolbar{display:flex;gap:9px;align-items:center;margin-bottom:13px}
 .toolbar input{flex:1;min-width:0}
 .toolbar select{width:auto}
-
 .coin-row{
-  display:grid;
-  grid-template-columns:1.5fr 1fr 1fr;
-  gap:8px;
-  align-items:center;
-  padding:14px 17px 14px 4px;
-  border-bottom:1px solid var(--line);
-  font-size:14px;
-  cursor:pointer;
-  border-radius:9px;
-  transition:background .15s;
-  position:relative;
+  display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:8px;
+  align-items:center;padding:14px 17px 14px 4px;
+  border-bottom:1px solid var(--line);font-size:14px;cursor:pointer;
+  border-radius:9px;transition:background .15s;position:relative;
 }
-
-.coin-row::after{
-  content:"›";
-  color:var(--mut);
-  font-size:19px;
-  position:absolute;
-  right:3px;
-}
-
+.coin-row::after{content:"›";color:var(--mut);font-size:19px;position:absolute;right:3px}
 .coin-row:hover{background:rgba(255,255,255,.055)}
 .coin-row:active{background:rgba(255,255,255,.09)}
 .coin-row:last-child{border:0}
-
 .coin-name{font-weight:700}
 .coin-symbol{font-size:11px;color:var(--mut);margin-top:4px}
 .price,.change{text-align:right;font-weight:700}
 .up{color:var(--up)}
 .down{color:var(--dn)}
-
 .notice{
-  padding:12px;
-  border:1px solid rgba(233,189,99,.25);
-  background:rgba(233,189,99,.08);
-  border-radius:12px;
-  color:#e9c987;
-  font-size:13px;
-  line-height:1.5;
+  padding:12px;border:1px solid rgba(233,189,99,.25);
+  background:rgba(233,189,99,.08);border-radius:12px;
+  color:#e9c987;font-size:13px;line-height:1.5;
   backdrop-filter:blur(10px);
 }
-
-.plan-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-}
-
+.plan-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .plan{
-  background:var(--panel2);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:15px;
-  backdrop-filter:var(--glass-blur);
+  background:var(--panel2);border:1px solid var(--line);
+  border-radius:14px;padding:15px;backdrop-filter:var(--glass-blur);
   -webkit-backdrop-filter:var(--glass-blur);
   transition:border-color .2s,transform .2s;
 }
-
-.plan:hover{
-  border-color:var(--accent);
-  transform:translateY(-2px);
-}
-
+.plan:hover{border-color:var(--accent);transform:translateY(-2px)}
 .plan h3{font-size:15px;margin:0 0 10px}
-.plan-price{
-  font-size:22px;
-  font-weight:800;
-  color:var(--accent);
-  margin-bottom:5px;
-}
-
+.plan-price{font-size:22px;font-weight:800;color:var(--accent);margin-bottom:5px}
 .plan-days{font-size:12px;color:var(--mut);margin-bottom:13px}
 .plan button{width:100%;font-size:12px}
-
-.alert-item{
-  padding:12px 0;
-  border-bottom:1px solid var(--line);
-  font-size:13px;
-}
-
+.alert-item{padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}
 .payment-box{
-  background:rgba(9,14,27,.45);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:15px;
-  margin-top:15px;
+  background:rgba(9,14,27,.45);border:1px solid var(--line);
+  border-radius:14px;padding:15px;margin-top:15px;
   backdrop-filter:var(--glass-blur);
-  -webkit-backdrop-filter:var(--glass-blur);
 }
-
 .payment-value{
-  font-size:14px;
-  overflow-wrap:anywhere;
-  word-break:break-word;
-  color:var(--accent);
-  margin:8px 0;
+  font-size:14px;overflow-wrap:anywhere;word-break:break-word;
+  color:var(--accent);margin:8px 0;
 }
-
 .copy-btn{margin-top:5px}
-
-footer{
-  text-align:center;
-  color:var(--mut);
-  font-size:12px;
-  padding:20px;
-}
+footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
 
 /* THEME PICKER */
-
 .theme-area{
-  display:flex;
-  align-items:center;
-  gap:11px;
-  flex-wrap:wrap;
-  margin-top:14px;
-  padding:11px 13px;
-  width:max-content;
-  max-width:100%;
-  background:rgba(255,255,255,.035);
-  border:1px solid var(--line);
-  border-radius:13px;
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
+  display:flex;align-items:center;gap:11px;flex-wrap:wrap;
+  margin-top:14px;padding:11px 13px;width:max-content;max-width:100%;
+  background:rgba(255,255,255,.035);border:1px solid var(--line);
+  border-radius:13px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
 }
-
-.theme-label{
-  font-size:12px;
-  color:var(--mut);
-}
-
-.theme-options{
-  display:flex;
-  gap:9px;
-  align-items:center;
-}
-
+.theme-label{font-size:12px;color:var(--mut)}
+.theme-options{display:flex;gap:9px;align-items:center}
 .theme-dot{
-  width:25px;
-  height:25px;
-  padding:0;
-  border-radius:50%;
+  width:25px;height:25px;padding:0;border-radius:50%;
   border:2px solid rgba(255,255,255,.35);
   box-shadow:0 2px 9px rgba(0,0,0,.3);
   transition:transform .2s,outline .2s;
 }
-
 .theme-dot:hover{transform:scale(1.15)}
-
-.theme-dot.active{
-  outline:2px solid var(--fg);
-  outline-offset:3px;
-  transform:scale(1.08);
-}
-
+.theme-dot.active{outline:2px solid var(--fg);outline-offset:3px;transform:scale(1.08)}
 .theme-dot[data-theme="blue"]{background:#51b8ff}
 .theme-dot[data-theme="purple"]{background:#a78bfa}
 .theme-dot[data-theme="pink"]{background:#ec4899}
@@ -429,135 +199,64 @@ footer{
 .theme-dot[data-theme="gold"]{background:#e9bd63}
 
 /* UPGRADE BUTTON */
-
 .upgrade-btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:11px 16px;
   border:1px solid color-mix(in srgb,var(--accent) 65%,transparent);
-  border-radius:12px;
-  background:color-mix(in srgb,var(--accent) 10%,transparent);
-  color:var(--accent);
-  font-weight:800;
+  border-radius:12px;background:color-mix(in srgb,var(--accent) 10%,transparent);
+  color:var(--accent);font-weight:800;
   box-shadow:0 5px 22px color-mix(in srgb,var(--accent) 10%,transparent);
   transition:all .2s;
 }
-
 .upgrade-btn:hover{
   background:color-mix(in srgb,var(--accent) 18%,transparent);
   transform:translateY(-2px);
 }
 
 /* COIN CHART */
-
 .chart-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.78);
-  z-index:20;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:14px;
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
+  position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:20;
+  display:flex;align-items:center;justify-content:center;padding:14px;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
 }
-
 .chart-modal{
-  width:100%;
-  max-width:950px;
-  max-height:94vh;
-  overflow:auto;
-  background:rgba(20,25,38,.88);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:17px;
-  box-shadow:0 20px 70px rgba(0,0,0,.5);
-  backdrop-filter:blur(22px);
-  -webkit-backdrop-filter:blur(22px);
+  width:100%;max-width:950px;max-height:94vh;overflow:auto;
+  background:rgba(20,25,38,.88);border:1px solid var(--line);
+  border-radius:18px;padding:17px;box-shadow:0 20px 70px rgba(0,0,0,.5);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
 }
-
-.chart-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  margin-bottom:13px;
-}
-
+.chart-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:13px}
 .chart-title{font-size:19px;font-weight:800}
 .chart-subtitle{font-size:12px;color:var(--mut);margin-top:5px}
-
 .chart-close{
-  border:1px solid var(--line);
-  background:var(--panel2);
-  color:var(--fg);
-  border-radius:10px;
-  padding:9px 13px;
-  font-size:18px;
+  border:1px solid var(--line);background:var(--panel2);color:var(--fg);
+  border-radius:10px;padding:9px 13px;font-size:18px;
 }
-
 .chart-close:hover{border-color:var(--accent)}
-
-.chart-info{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin:12px 0;
-  flex-wrap:wrap;
-}
-
+.chart-info{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0;flex-wrap:wrap}
 .chart-price{font-size:21px;font-weight:800}
 .chart-periods{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
-
 .chart-period{
-  background:var(--panel2);
-  border:1px solid var(--line);
-  color:var(--fg);
-  border-radius:9px;
-  padding:8px 13px;
-  font-size:12px;
+  background:var(--panel2);border:1px solid var(--line);color:var(--fg);
+  border-radius:9px;padding:8px 13px;font-size:12px;
 }
-
 .chart-period.active{
-  border-color:var(--accent);
-  color:var(--accent);
+  border-color:var(--accent);color:var(--accent);
   background:color-mix(in srgb,var(--accent) 12%,transparent);
 }
-
 .chart-frame-wrap{
-  width:100%;
-  height:440px;
-  background:rgba(9,14,27,.55);
-  border:1px solid var(--line);
-  border-radius:13px;
-  overflow:hidden;
-  position:relative;
-  padding:12px;
+  width:100%;height:440px;background:rgba(9,14,27,.55);
+  border:1px solid var(--line);border-radius:13px;overflow:hidden;
+  position:relative;padding:12px;
 }
-
 #coinChartCanvas{width:100%!important;height:100%!important}
-
 .chart-loading{
-  position:absolute;
-  inset:0;
-  z-index:2;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(16,20,27,.94);
-  color:var(--mut);
-  font-size:13px;
-  text-align:center;
-  padding:20px;
+  position:absolute;inset:0;z-index:2;display:flex;align-items:center;
+  justify-content:center;background:rgba(16,20,27,.94);
+  color:var(--mut);font-size:13px;text-align:center;padding:20px;
 }
-
 .chart-note{font-size:11px;color:var(--mut);line-height:1.5;margin-top:11px}
 body.chart-open{overflow:hidden}
-
 @media(max-width:650px){
   main{padding:18px 12px 45px}
   .top-grid{grid-template-columns:1fr 1fr}
@@ -570,7 +269,6 @@ body.chart-open{overflow:hidden}
   .dashboard-heading{display:block}
   .upgrade-btn{margin-top:12px}
 }
-
 @media(max-width:380px){
   .plan-grid{grid-template-columns:1fr}
   .chart-frame-wrap{height:340px}
@@ -580,7 +278,6 @@ body.chart-open{overflow:hidden}
 </head>
 
 <body>
-
 <header>
   <div class="logo">TinVin <span>Crypto</span></div>
   <div class="header-right">
@@ -590,28 +287,22 @@ body.chart-open{overflow:hidden}
 </header>
 
 <main>
-
 <section id="authSection" class="auth-wrap">
   <div class="logo">TinVin <span>Crypto</span></div>
   <div class="card">
-
     <div id="loginForm">
       <h1>Welcome back</h1>
       <p class="muted">Sign in to your TinVin Crypto account.</p>
-
       <div class="field">
         <label>Email</label>
         <input id="loginEmail" type="email" autocomplete="email" placeholder="Your email">
       </div>
-
       <div class="field">
         <label>Password</label>
         <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password">
       </div>
-
       <button id="loginBtn" class="main-btn full">Login</button>
       <div id="loginMessage" class="message"></div>
-
       <div class="auth-switch">Don't have an account?
         <span class="link" id="showSignup">Create account</span>
       </div>
@@ -620,39 +311,30 @@ body.chart-open{overflow:hidden}
     <div id="signupForm" class="hidden">
       <h1>Create account</h1>
       <p class="muted">Join TinVin Crypto.</p>
-
       <div class="field">
         <label>Email</label>
         <input id="signupEmail" type="email" autocomplete="email" placeholder="Your email">
       </div>
-
       <div class="field">
         <label>Password</label>
         <input id="signupPassword" type="password" autocomplete="new-password" placeholder="At least 8 characters">
       </div>
-
       <button id="signupBtn" class="main-btn full">Create account</button>
       <div id="signupMessage" class="message"></div>
-
       <div class="auth-switch">Already registered?
         <span class="link" id="showLogin">Login</span>
       </div>
     </div>
-
   </div>
 </section>
 
 <section id="appSection" class="hidden">
-
   <div class="dashboard-heading">
     <div>
       <h1>Crypto Dashboard</h1>
       <p class="muted">Track cryptocurrency markets and manage your account.</p>
     </div>
-
-    <button id="upgradeTopBtn" class="upgrade-btn">
-      ♛ Upgrade to Premium
-    </button>
+    <button id="upgradeTopBtn" class="upgrade-btn">♛ Upgrade to Premium</button>
   </div>
 
   <div class="theme-area">
@@ -691,28 +373,23 @@ body.chart-open{overflow:hidden}
         </select>
         <button id="refreshBtn" class="small-btn">Refresh</button>
       </div>
-
       <div id="marketMessage" class="message muted"></div>
       <div id="coinList"><p class="muted">Loading market data...</p></div>
     </div>
-
     <p class="small">Tap any coin to open its price chart. Market prices are provided by external market data services and may be delayed. The market list displays up to 500 leading coins.</p>
   </section>
 
   <section id="alertsTab" class="tab-content hidden">
     <div class="card">
       <h2>Create price alert</h2>
-
       <div class="field">
         <label>Coin ID (example: bitcoin)</label>
         <input id="alertCoin" placeholder="bitcoin">
       </div>
-
       <div class="field">
         <label>Target price (USD)</label>
         <input id="alertPrice" type="number" min="0" step="any" placeholder="100000">
       </div>
-
       <div class="field">
         <label>Direction</label>
         <select id="alertDirection">
@@ -720,11 +397,9 @@ body.chart-open{overflow:hidden}
           <option value="below">Price goes below</option>
         </select>
       </div>
-
       <button id="addAlertBtn" class="main-btn">Create alert</button>
       <div id="alertMessage" class="message"></div>
     </div>
-
     <div class="card">
       <h2>Your alerts</h2>
       <div id="alertsList"><p class="muted">Loading alerts...</p></div>
@@ -735,11 +410,9 @@ body.chart-open{overflow:hidden}
     <div class="card">
       <h2>TinVin Crypto Premium</h2>
       <p class="muted">Choose a subscription and pay using TON or USDT on TON Mainnet.</p>
-
       <div class="notice">
         Important: Do not send payment until you have created an order and checked its exact amount and destination address. Blockchain payments cannot normally be reversed.
       </div>
-
       <div class="field">
         <label>Payment network</label>
         <select id="paymentAsset">
@@ -747,64 +420,46 @@ body.chart-open{overflow:hidden}
           <option value="USDT">USDT (TON network)</option>
         </select>
       </div>
-
       <div class="plan-grid">
         <div class="plan">
-          <h3>7 Days</h3>
-          <div class="plan-price">$3.99</div>
+          <h3>7 Days</h3><div class="plan-price">$3.99</div>
           <div class="plan-days">7 days access</div>
           <button class="main-btn" data-plan="7days">Choose plan</button>
         </div>
-
         <div class="plan">
-          <h3>1 Month</h3>
-          <div class="plan-price">$12.99</div>
+          <h3>1 Month</h3><div class="plan-price">$12.99</div>
           <div class="plan-days">30 days access</div>
           <button class="main-btn" data-plan="1month">Choose plan</button>
         </div>
-
         <div class="plan">
-          <h3>6 Months</h3>
-          <div class="plan-price">$59.99</div>
+          <h3>6 Months</h3><div class="plan-price">$59.99</div>
           <div class="plan-days">180 days access</div>
           <button class="main-btn" data-plan="6months">Choose plan</button>
         </div>
-
         <div class="plan">
-          <h3>1 Year</h3>
-          <div class="plan-price">$99.99</div>
+          <h3>1 Year</h3><div class="plan-price">$99.99</div>
           <div class="plan-days">365 days access</div>
           <button class="main-btn" data-plan="1year">Choose plan</button>
         </div>
       </div>
-
       <div id="paymentMessage" class="message"></div>
-
       <div id="paymentDetails" class="payment-box hidden">
         <h2>Payment instructions</h2>
-
         <p class="small">Order ID</p>
         <div id="paymentOrder" class="payment-value"></div>
-
         <p class="small">Send exactly this amount</p>
         <div id="paymentAmount" class="payment-value"></div>
-
         <p class="small">Destination wallet</p>
         <div id="paymentWallet" class="payment-value"></div>
-
         <button id="copyWalletBtn" class="small-btn copy-btn">Copy wallet address</button>
         <button id="copyAmountBtn" class="small-btn copy-btn">Copy exact amount</button>
-
         <p class="small" style="margin-top:15px">After sending the payment, paste its transaction hash below.</p>
-
         <div class="field">
           <label>Transaction Hash</label>
           <input id="transactionHash" placeholder="Paste transaction hash">
         </div>
-
         <button id="verifyPaymentBtn" class="main-btn full">Verify payment</button>
         <div id="verifyMessage" class="message"></div>
-
         <p class="small">Order expires: <span id="paymentExpiry">—</span></p>
       </div>
     </div>
@@ -814,13 +469,10 @@ body.chart-open{overflow:hidden}
     <div class="card">
       <h2>AI Daily Market Analysis</h2>
       <p class="muted">Request a daily market overview.</p>
-
       <button id="analysisBtn" class="main-btn">Generate analysis</button>
       <div id="analysisMessage" class="message"></div>
-
       <div id="analysisResult" style="white-space:pre-wrap;line-height:1.7;margin-top:15px"></div>
     </div>
-
     <p class="small">Market analysis is informational only, not financial advice. It cannot guarantee future prices or profits.</p>
   </section>
 
@@ -833,15 +485,11 @@ body.chart-open{overflow:hidden}
       <button id="accountLogoutBtn" class="small-btn">Logout</button>
     </div>
   </section>
-
 </section>
 </main>
 
-<!-- COIN CHART WINDOW -->
-
 <div id="chartOverlay" class="chart-overlay hidden">
   <div class="chart-modal" role="dialog" aria-modal="true" aria-label="Coin price chart">
-
     <div class="chart-header">
       <div>
         <div id="chartCoinName" class="chart-title">Coin Chart</div>
@@ -849,27 +497,21 @@ body.chart-open{overflow:hidden}
       </div>
       <button id="closeChartBtn" class="chart-close" aria-label="Close chart">✕</button>
     </div>
-
     <div class="chart-info">
       <div id="chartCoinPrice" class="chart-price">—</div>
       <div id="chartCoinChange" class="small">—</div>
     </div>
-
     <div class="chart-periods">
       <button class="chart-period active" data-period="1D">1D</button>
       <button class="chart-period" data-period="7D">7D</button>
       <button class="chart-period" data-period="1M">1M</button>
       <button class="chart-period" data-period="12M">1Y</button>
     </div>
-
     <div class="chart-frame-wrap">
       <div id="chartLoading" class="chart-loading">Loading chart...</div>
       <canvas id="coinChartCanvas"></canvas>
     </div>
-
-    <p class="chart-note">
-      Historical price data is provided by CoinGecko. Chart availability depends on the historical data available for each coin.
-    </p>
+    <p class="chart-note">Historical price data is provided by CoinGecko. Chart availability depends on the historical data available for each coin.</p>
   </div>
 </div>
 
@@ -897,25 +539,28 @@ let currentUser = null;
 let marketCoins = [];
 let activeOrder = null;
 
+/* CHART VARIABLES MUST BE DECLARED BEFORE applyTheme() */
+let selectedChartCoin = null;
+let selectedChartPeriod = "1D";
+let coinChartInstance = null;
+let chartRequestNumber = 0;
+
 const $ = id => document.getElementById(id);
 
 /* THEMES */
 
-function applyTheme(name, save = true){
-  if(!THEMES[name]) name = "gold";
+function applyTheme(name,save=true){
+  if(!THEMES[name]) name="gold";
 
   document.documentElement.style.setProperty("--accent",THEMES[name]);
 
   document.querySelectorAll(".theme-dot").forEach(button=>{
-    button.classList.toggle("active",button.dataset.theme === name);
+    button.classList.toggle("active",button.dataset.theme===name);
   });
 
   if(save){
-    try{
-      localStorage.setItem(THEME_KEY,name);
-    }catch(error){
-      console.warn("Theme preference could not be saved.");
-    }
+    try{localStorage.setItem(THEME_KEY,name)}
+    catch(error){console.warn("Theme preference could not be saved.")}
   }
 
   if(coinChartInstance && selectedChartCoin){
@@ -924,133 +569,103 @@ function applyTheme(name, save = true){
 }
 
 document.querySelectorAll(".theme-dot").forEach(button=>{
-  button.addEventListener("click",()=>{
-    applyTheme(button.dataset.theme);
-  });
+  button.addEventListener("click",()=>applyTheme(button.dataset.theme));
 });
 
-let savedTheme = "gold";
-
-try{
-  savedTheme = localStorage.getItem(THEME_KEY) || "gold";
-}catch(error){}
-
+let savedTheme="gold";
+try{savedTheme=localStorage.getItem(THEME_KEY)||"gold"}catch(error){}
 applyTheme(savedTheme,false);
 
 /* GENERAL FUNCTIONS */
 
 function showMessage(id,message,type=""){
-  const el = $(id);
-  el.textContent = message || "";
-  el.className = "message " + type;
+  const el=$(id);
+  el.textContent=message||"";
+  el.className="message "+type;
 }
 
 async function api(path,options={}){
-  const headers = {
+  const headers={
     "Content-Type":"application/json",
-    ...(options.headers || {})
+    ...(options.headers||{})
   };
 
-  if(authToken){
-    headers.Authorization = "Bearer " + authToken;
-  }
+  if(authToken) headers.Authorization="Bearer "+authToken;
 
-  const response = await fetch(API_BASE + path,{
+  const response=await fetch(API_BASE+path,{
     ...options,
     headers
   });
 
   let data;
+  try{data=await response.json()}
+  catch{throw new Error("The server returned an invalid response.")}
 
-  try{
-    data = await response.json();
-  }catch{
-    throw new Error("The server returned an invalid response.");
+  if(!response.ok||data.success===false||data.error){
+    throw new Error(data.error||data.message||"Request failed.");
   }
-
-  if(!response.ok || data.success === false || data.error){
-    throw new Error(data.error || data.message || "Request failed.");
-  }
-
   return data;
 }
 
 function readablePlan(plan){
-  const names = {
+  const names={
     "7days":"7 Days",
     "1month":"1 Month",
     "6months":"6 Months",
     "1year":"1 Year",
     "Free":"Free"
   };
-
-  return names[plan] || plan || "Free";
+  return names[plan]||plan||"Free";
 }
 
 function formatExpiry(raw){
-  if(!raw) return "—";
-
-  const num = Number(raw);
-
-  if(Number.isFinite(num) && num > 0){
-    const ms = num > 1e12 ? num : num * 1000;
+  if(!raw)return "—";
+  const num=Number(raw);
+  if(Number.isFinite(num)&&num>0){
+    const ms=num>1e12?num:num*1000;
     return new Date(ms).toLocaleString();
   }
-
-  const date = new Date(raw);
-
-  return Number.isNaN(date.getTime())
-    ? String(raw)
-    : date.toLocaleString();
+  const date=new Date(raw);
+  return Number.isNaN(date.getTime())?String(raw):date.toLocaleString();
 }
 
 /* LOGIN STATE */
 
 function setLoggedIn(user){
-  currentUser = user || {};
-
+  currentUser=user||{};
   $("authSection").classList.add("hidden");
   $("appSection").classList.remove("hidden");
   $("logoutBtn").classList.remove("hidden");
 
-  const email = currentUser.email || "";
+  const email=currentUser.email||"";
+  $("userLabel").textContent=email;
+  $("accountEmail").textContent=email;
 
-  $("userLabel").textContent = email;
-  $("accountEmail").textContent = email;
-
-  const plan = readablePlan(
-    currentUser.plan ||
-    currentUser.subscription?.plan ||
-    "Free"
+  const plan=readablePlan(
+    currentUser.plan||currentUser.subscription?.plan||"Free"
   );
+  $("accountStatus").textContent=plan;
+  $("accountPlan").textContent=plan;
 
-  $("accountStatus").textContent = plan;
-  $("accountPlan").textContent = plan;
-
-  const expiry =
-    currentUser.expires_at ||
-    currentUser.subscription?.expires_at ||
-    "";
-
-  $("accountExpiry").textContent = formatExpiry(expiry);
+  const expiry=currentUser.expires_at||
+    currentUser.subscription?.expires_at||"";
+  $("accountExpiry").textContent=formatExpiry(expiry);
 
   loadMarket();
   loadAlerts();
 }
 
 function setLoggedOut(){
-  authToken = "";
-  currentUser = null;
-  activeOrder = null;
-
+  authToken="";
+  currentUser=null;
+  activeOrder=null;
   localStorage.removeItem(TOKEN_KEY);
 
   $("authSection").classList.remove("hidden");
   $("appSection").classList.add("hidden");
   $("logoutBtn").classList.add("hidden");
-  $("userLabel").textContent = "";
+  $("userLabel").textContent="";
   $("paymentDetails").classList.add("hidden");
-
   closeCoinChart();
 }
 
@@ -1058,32 +673,21 @@ function setLoggedOut(){
 
 function showTab(tabId){
   document.querySelectorAll(".tab-content").forEach(section=>{
-    section.classList.toggle("hidden",section.id !== tabId);
+    section.classList.toggle("hidden",section.id!==tabId);
   });
-
   document.querySelectorAll(".tab-btn").forEach(button=>{
-    button.classList.toggle("active",button.dataset.tab === tabId);
+    button.classList.toggle("active",button.dataset.tab===tabId);
   });
-
-  if(tabId === "alertsTab"){
-    loadAlerts();
-  }
+  if(tabId==="alertsTab")loadAlerts();
 }
 
 document.querySelectorAll(".tab-btn").forEach(button=>{
-  button.addEventListener("click",()=>{
-    showTab(button.dataset.tab);
-  });
+  button.addEventListener("click",()=>showTab(button.dataset.tab));
 });
-
-/* UPGRADE BUTTON */
 
 $("upgradeTopBtn").addEventListener("click",()=>{
   showTab("premiumTab");
-  $("premiumTab").scrollIntoView({
-    behavior:"smooth",
-    block:"start"
-  });
+  $("premiumTab").scrollIntoView({behavior:"smooth",block:"start"});
 });
 
 /* AUTH FORMS */
@@ -1099,84 +703,76 @@ $("showLogin").addEventListener("click",()=>{
 });
 
 $("signupBtn").addEventListener("click",async()=>{
-  const email = $("signupEmail").value.trim();
-  const password = $("signupPassword").value;
-
+  const email=$("signupEmail").value.trim();
+  const password=$("signupPassword").value;
   showMessage("signupMessage","");
 
-  if(!email || !password){
+  if(!email||!password){
     showMessage("signupMessage","Enter your email and password.","error");
     return;
   }
-
-  if(password.length < 8){
+  if(password.length<8){
     showMessage("signupMessage","Password must be at least 8 characters.","error");
     return;
   }
 
-  $("signupBtn").disabled = true;
-
+  $("signupBtn").disabled=true;
   try{
-    const result = await api("/api/signup",{
+    const result=await api("/api/signup",{
       method:"POST",
       body:JSON.stringify({email,password})
     });
 
     if(result.token){
-      authToken = result.token;
+      authToken=result.token;
       localStorage.setItem(TOKEN_KEY,authToken);
-      setLoggedIn(result.user || {email});
+      setLoggedIn(result.user||{email});
     }else{
       showMessage("signupMessage","Account created. Please log in.","success");
       $("signupForm").classList.add("hidden");
       $("loginForm").classList.remove("hidden");
-      $("loginEmail").value = email;
+      $("loginEmail").value=email;
     }
   }catch(error){
     showMessage("signupMessage",error.message,"error");
   }finally{
-    $("signupBtn").disabled = false;
+    $("signupBtn").disabled=false;
   }
 });
 
 $("loginBtn").addEventListener("click",async()=>{
-  const email = $("loginEmail").value.trim();
-  const password = $("loginPassword").value;
-
+  const email=$("loginEmail").value.trim();
+  const password=$("loginPassword").value;
   showMessage("loginMessage","");
 
-  if(!email || !password){
+  if(!email||!password){
     showMessage("loginMessage","Enter your email and password.","error");
     return;
   }
 
-  $("loginBtn").disabled = true;
-
+  $("loginBtn").disabled=true;
   try{
-    const result = await api("/api/login",{
+    const result=await api("/api/login",{
       method:"POST",
       body:JSON.stringify({email,password})
     });
 
-    if(!result.token){
-      throw new Error("Login response did not include a token.");
-    }
+    if(!result.token)throw new Error("Login response did not include a token.");
 
-    authToken = result.token;
+    authToken=result.token;
     localStorage.setItem(TOKEN_KEY,authToken);
 
-    let user = result.user || {email};
-
+    let user=result.user||{email};
     try{
-      const me = await api("/api/me");
-      user = me.user || me;
-    }catch{}
+      const me=await api("/api/me");
+      user=me.user||me;
+    }catch(error){}
 
     setLoggedIn(user);
   }catch(error){
     showMessage("loginMessage",error.message,"error");
   }finally{
-    $("loginBtn").disabled = false;
+    $("loginBtn").disabled=false;
   }
 });
 
@@ -1188,8 +784,7 @@ async function logout(){
         body:JSON.stringify({})
       });
     }
-  }catch{}
-
+  }catch(error){}
   setLoggedOut();
 }
 
@@ -1199,97 +794,80 @@ $("accountLogoutBtn").addEventListener("click",logout);
 /* PRICE FORMATTING */
 
 function formatPrice(value,currency){
-  const number = Number(value);
+  const number=Number(value);
+  if(!Number.isFinite(number))return "—";
 
-  if(!Number.isFinite(number)) return "—";
-
-  if(currency === "usdt"){
-    return "$" +
-      number.toLocaleString("en-US",{
-        minimumFractionDigits:2,
-        maximumFractionDigits:number < 1 ? 6 : 2
-      }) +
-      " USDT";
+  if(currency==="usdt"){
+    return "$"+number.toLocaleString("en-US",{
+      minimumFractionDigits:2,
+      maximumFractionDigits:number<1?6:2
+    })+" USDT";
   }
 
   try{
     return new Intl.NumberFormat("en-US",{
       style:"currency",
       currency:currency.toUpperCase(),
-      maximumFractionDigits:number < 1 ? 6 : 2
+      maximumFractionDigits:number<1?6:2
     }).format(number);
   }catch{
-    return number.toLocaleString("en-US") + " " + currency.toUpperCase();
+    return number.toLocaleString("en-US")+" "+currency.toUpperCase();
   }
 }
 
 /* MARKET COINS */
 
 function renderCoins(){
-  const query = $("coinSearch").value.trim().toLowerCase();
-  const currency = $("currencySelect").value;
+  const query=$("coinSearch").value.trim().toLowerCase();
+  const currency=$("currencySelect").value;
 
-  const filtered = marketCoins.filter(coin=>{
-    const name = String(coin.name || "").toLowerCase();
-    const symbol = String(coin.symbol || "").toLowerCase();
-    const id = String(coin.id || "").toLowerCase();
-
-    return name.includes(query) ||
-      symbol.includes(query) ||
-      id.includes(query);
+  const filtered=marketCoins.filter(coin=>{
+    const name=String(coin.name||"").toLowerCase();
+    const symbol=String(coin.symbol||"").toLowerCase();
+    const id=String(coin.id||"").toLowerCase();
+    return name.includes(query)||symbol.includes(query)||id.includes(query);
   });
 
-  $("coinCount").textContent = marketCoins.length;
-  $("currencyLabel").textContent = currency.toUpperCase();
+  $("coinCount").textContent=marketCoins.length;
+  $("currencyLabel").textContent=currency.toUpperCase();
 
   if(!filtered.length){
-    $("coinList").textContent = "No coins found.";
+    $("coinList").textContent="No coins found.";
     return;
   }
 
-  const fragment = document.createDocumentFragment();
+  const fragment=document.createDocumentFragment();
 
   filtered.forEach(coin=>{
-    const row = document.createElement("div");
-    row.className = "coin-row";
-    row.title = "Open " + (coin.name || coin.symbol || "coin") + " chart";
+    const row=document.createElement("div");
+    row.className="coin-row";
+    row.title="Open "+(coin.name||coin.symbol||"coin")+" chart";
 
-    const nameBox = document.createElement("div");
+    const nameBox=document.createElement("div");
+    const name=document.createElement("div");
+    name.className="coin-name";
+    name.textContent=coin.name||coin.id||"Unknown";
 
-    const name = document.createElement("div");
-    name.className = "coin-name";
-    name.textContent = coin.name || coin.id || "Unknown";
-
-    const symbol = document.createElement("div");
-    symbol.className = "coin-symbol";
-    symbol.textContent = String(coin.symbol || "").toUpperCase();
-
+    const symbol=document.createElement("div");
+    symbol.className="coin-symbol";
+    symbol.textContent=String(coin.symbol||"").toUpperCase();
     nameBox.append(name,symbol);
 
-    const price = document.createElement("div");
-    price.className = "price";
-    price.textContent = formatPrice(
-      coin.current_price ?? coin.price,
-      currency
+    const price=document.createElement("div");
+    price.className="price";
+    price.textContent=formatPrice(coin.current_price??coin.price,currency);
+
+    const percent=Number(
+      coin.price_change_percentage_24h??coin.change_24h??coin.change
     );
 
-    const percent = Number(
-      coin.price_change_percentage_24h ??
-      coin.change_24h ??
-      coin.change
-    );
+    const change=document.createElement("div");
+    change.className="change "+(percent>=0?"up":"down");
+    change.textContent=Number.isFinite(percent)
+      ?(percent>0?"+":"")+percent.toFixed(2)+"%"
+      :"—";
 
-    const change = document.createElement("div");
-    change.className = "change " + (percent >= 0 ? "up" : "down");
-
-    change.textContent = Number.isFinite(percent)
-      ? (percent > 0 ? "+" : "") + percent.toFixed(2) + "%"
-      : "—";
-
-    row.addEventListener("click",()=>{
-      openCoinChart(coin);
-    });
-
+    row.addEventListener("click",()=>openCoinChart(coin));
     row.append(nameBox,price,change);
     fragment.appendChild(row);
   });
@@ -1298,29 +876,25 @@ function renderCoins(){
 }
 
 async function loadMarket(){
-  $("marketMessage").textContent = "Loading market data...";
-
-  const currency = $("currencySelect").value;
+  $("marketMessage").textContent="Loading market data...";
+  const currency=$("currencySelect").value;
 
   try{
-    const result = await api(
-      "/api/market/coins?currency=" + encodeURIComponent(currency)
+    const result=await api(
+      "/api/market/coins?currency="+encodeURIComponent(currency)
     );
 
-    marketCoins = Array.isArray(result)
-      ? result
-      : (result.coins || result.data || []);
+    marketCoins=Array.isArray(result)
+      ?result
+      :(result.coins||result.data||[]);
 
     renderCoins();
-
-    $("marketMessage").textContent =
+    $("marketMessage").textContent=
       `Market data updated. ${marketCoins.length} coins loaded.`;
   }catch(error){
-    $("marketMessage").textContent = error.message;
-
+    $("marketMessage").textContent=error.message;
     if(!marketCoins.length){
-      $("coinList").textContent =
-        "Could not load market data. Please try again.";
+      $("coinList").textContent="Could not load market data. Please try again.";
     }
   }
 }
@@ -1329,53 +903,48 @@ $("refreshBtn").addEventListener("click",loadMarket);
 $("currencySelect").addEventListener("change",loadMarket);
 $("coinSearch").addEventListener("input",renderCoins);
 
-/* COINGECKO HISTORICAL CHART */
+/* COIN CHART */
 
-let selectedChartCoin = null;
-let selectedChartPeriod = "1D";
-let coinChartInstance = null;
-let chartRequestNumber = 0;
-
-const chartDays = {
-  "1D":1,
-  "7D":7,
-  "1M":30,
-  "12M":365
-};
+const chartDays={"1D":1,"7D":7,"1M":30,"12M":365};
 
 function destroyCoinChart(){
   if(coinChartInstance){
     coinChartInstance.destroy();
-    coinChartInstance = null;
+    coinChartInstance=null;
   }
 }
 
 function chartLoading(message){
-  $("chartLoading").textContent = message;
+  $("chartLoading").textContent=message;
   $("chartLoading").classList.remove("hidden");
 }
 
 function drawCoinChart(points,currency){
-  if(typeof Chart === "undefined"){
+  if(typeof Chart==="undefined"){
     throw new Error("Chart library could not be loaded. Check your internet connection.");
   }
 
-  const canvas = $("coinChartCanvas");
-  const ctx = canvas.getContext("2d");
-
+  const canvas=$("coinChartCanvas");
+  const ctx=canvas.getContext("2d");
   destroyCoinChart();
 
-  const labels = points.map(point=>new Date(point[0]));
-  const values = points.map(point=>Number(point[1]));
+  const labels=points.map(point=>{
+    const date=new Date(point[0]);
+    return date.toLocaleString([],{
+      month:"short",day:"numeric",
+      hour:"2-digit",minute:"2-digit"
+    });
+  });
+  const values=points.map(point=>Number(point[1]));
 
-  const accent = getComputedStyle(document.documentElement)
-    .getPropertyValue("--accent").trim() || "#e9bd63";
+  const accent=getComputedStyle(document.documentElement)
+    .getPropertyValue("--accent").trim()||"#e9bd63";
 
-  const gradient = ctx.createLinearGradient(0,0,0,400);
-  gradient.addColorStop(0,accent + "48");
-  gradient.addColorStop(1,accent + "03");
+  const gradient=ctx.createLinearGradient(0,0,0,400);
+  gradient.addColorStop(0,accent+"48");
+  gradient.addColorStop(1,accent+"03");
 
-  coinChartInstance = new Chart(ctx,{
+  coinChartInstance=new Chart(ctx,{
     type:"line",
     data:{
       labels,
@@ -1396,19 +965,14 @@ function drawCoinChart(points,currency){
       responsive:true,
       maintainAspectRatio:false,
       animation:false,
-      interaction:{
-        intersect:false,
-        mode:"index"
-      },
+      interaction:{intersect:false,mode:"index"},
       plugins:{
         legend:{display:false},
         tooltip:{
           displayColors:false,
           callbacks:{
             title(items){
-              if(!items.length) return "";
-              const date = new Date(items[0].parsed.x);
-              return date.toLocaleString();
+              return items.length?items[0].label:"";
             },
             label(context){
               return formatPrice(context.parsed.y,currency);
@@ -1418,20 +982,13 @@ function drawCoinChart(points,currency){
       },
       scales:{
         x:{
-          type:"time",
-          time:{
-            displayFormats:{
-              hour:"HH:mm",
-              day:"MMM d",
-              week:"MMM d",
-              month:"MMM yyyy"
-            }
-          },
+          type:"category",
           grid:{color:"rgba(139,146,158,0.08)"},
           ticks:{
             color:"#8b929e",
             maxTicksLimit:7,
-            maxRotation:0
+            maxRotation:0,
+            autoSkip:true
           }
         },
         y:{
@@ -1440,9 +997,7 @@ function drawCoinChart(points,currency){
           ticks:{
             color:"#8b929e",
             maxTicksLimit:6,
-            callback(value){
-              return formatPrice(value,currency);
-            }
+            callback(value){return formatPrice(value,currency)}
           }
         }
       }
@@ -1451,136 +1006,116 @@ function drawCoinChart(points,currency){
 }
 
 async function updateCoinChart(){
-  if(!selectedChartCoin) return;
+  if(!selectedChartCoin)return;
 
-  const requestNumber = ++chartRequestNumber;
-  const coinId = String(selectedChartCoin.id || "").trim();
+  const requestNumber=++chartRequestNumber;
+  const coinId=String(selectedChartCoin.id||"").trim();
 
   if(!coinId){
     chartLoading("This coin does not have a valid CoinGecko ID.");
     return;
   }
 
-  const currency = $("currencySelect").value;
-  const days = chartDays[selectedChartPeriod] || 1;
+  const currency=$("currencySelect").value;
+  const days=chartDays[selectedChartPeriod]||1;
 
   chartLoading("Loading historical price data...");
   destroyCoinChart();
 
   try{
-    const query = new URLSearchParams({
+    const query=new URLSearchParams({
       coin_id:coinId,
       currency,
       days:String(days)
     });
 
-    const result = await api("/api/market/chart?" + query.toString());
+    const result=await api("/api/market/chart?"+query.toString());
 
     if(
-      requestNumber !== chartRequestNumber ||
-      !selectedChartCoin ||
+      requestNumber!==chartRequestNumber||
+      !selectedChartCoin||
       $("chartOverlay").classList.contains("hidden")
-    ){
-      return;
-    }
+    )return;
 
-    if(!Array.isArray(result.prices) || !result.prices.length){
+    if(!Array.isArray(result.prices)||!result.prices.length){
       throw new Error("Historical chart data is not available for this coin.");
     }
 
     drawCoinChart(result.prices,currency);
     $("chartLoading").classList.add("hidden");
-
   }catch(error){
-    if(requestNumber !== chartRequestNumber) return;
-
+    if(requestNumber!==chartRequestNumber)return;
     destroyCoinChart();
-    chartLoading(error.message || "Unable to load this chart.");
+    chartLoading(error.message||"Unable to load this chart.");
   }
 }
 
 function openCoinChart(coin){
-  selectedChartCoin = coin;
-  selectedChartPeriod = "1D";
+  selectedChartCoin=coin;
+  selectedChartPeriod="1D";
 
-  const name = coin.name || coin.id || "Cryptocurrency";
-  const symbol = String(coin.symbol || "").toUpperCase();
-  const currency = $("currencySelect").value;
+  const name=coin.name||coin.id||"Cryptocurrency";
+  const symbol=String(coin.symbol||"").toUpperCase();
+  const currency=$("currencySelect").value;
 
-  $("chartCoinName").textContent = name;
-  $("chartCoinSymbol").textContent =
-    symbol ? symbol + " · Price chart" : "Price chart";
+  $("chartCoinName").textContent=name;
+  $("chartCoinSymbol").textContent=symbol
+    ?symbol+" · Price chart"
+    :"Price chart";
 
-  $("chartCoinPrice").textContent = formatPrice(
-    coin.current_price ?? coin.price,
-    currency
+  $("chartCoinPrice").textContent=formatPrice(
+    coin.current_price??coin.price,currency
   );
 
-  const percent = Number(
-    coin.price_change_percentage_24h ??
-    coin.change_24h ??
-    coin.change
+  const percent=Number(
+    coin.price_change_percentage_24h??coin.change_24h??coin.change
   );
 
-  const changeElement = $("chartCoinChange");
-
+  const changeElement=$("chartCoinChange");
   if(Number.isFinite(percent)){
-    changeElement.textContent =
-      (percent > 0 ? "+" : "") + percent.toFixed(2) + "% (24h)";
-
-    changeElement.className =
-      "small " + (percent >= 0 ? "up" : "down");
+    changeElement.textContent=
+      (percent>0?"+":"")+percent.toFixed(2)+"% (24h)";
+    changeElement.className="small "+(percent>=0?"up":"down");
   }else{
-    changeElement.textContent = "24h change unavailable";
-    changeElement.className = "small";
+    changeElement.textContent="24h change unavailable";
+    changeElement.className="small";
   }
 
   document.querySelectorAll(".chart-period").forEach(button=>{
     button.classList.toggle(
-      "active",
-      button.dataset.period === selectedChartPeriod
+      "active",button.dataset.period===selectedChartPeriod
     );
   });
 
   $("chartOverlay").classList.remove("hidden");
   document.body.classList.add("chart-open");
-
   updateCoinChart();
 }
 
 function closeCoinChart(){
   chartRequestNumber++;
-  selectedChartCoin = null;
-
+  selectedChartCoin=null;
   $("chartOverlay").classList.add("hidden");
   document.body.classList.remove("chart-open");
-
   destroyCoinChart();
 }
 
 $("closeChartBtn").addEventListener("click",closeCoinChart);
 
-/* Chart closes only with X or Escape. */
-
 document.addEventListener("keydown",event=>{
-  if(
-    event.key === "Escape" &&
-    !$("chartOverlay").classList.contains("hidden")
-  ){
+  if(event.key==="Escape"&&!$("chartOverlay").classList.contains("hidden")){
     closeCoinChart();
   }
 });
 
 document.querySelectorAll(".chart-period").forEach(button=>{
   button.addEventListener("click",()=>{
-    if(!selectedChartCoin) return;
-
-    selectedChartPeriod = button.dataset.period;
+    if(!selectedChartCoin)return;
+    selectedChartPeriod=button.dataset.period;
 
     document.querySelectorAll(".chart-period").forEach(item=>{
-      item.classList.toggle("active",item === button);
+      item.classList.toggle("active",item===button);
     });
-
     updateCoinChart();
   });
 });
@@ -1588,54 +1123,48 @@ document.querySelectorAll(".chart-period").forEach(button=>{
 /* PRICE ALERTS */
 
 async function loadAlerts(){
-  if(!authToken) return;
-
-  $("alertsList").textContent = "Loading alerts...";
+  if(!authToken)return;
+  $("alertsList").textContent="Loading alerts...";
 
   try{
-    const result = await api("/api/alerts");
-
-    const alerts = Array.isArray(result)
-      ? result
-      : (result.alerts || result.data || []);
+    const result=await api("/api/alerts");
+    const alerts=Array.isArray(result)
+      ?result
+      :(result.alerts||result.data||[]);
 
     $("alertsList").replaceChildren();
 
     if(!alerts.length){
-      $("alertsList").textContent = "You have no alerts yet.";
+      $("alertsList").textContent="You have no alerts yet.";
       return;
     }
 
     alerts.forEach(alert=>{
-      const item = document.createElement("div");
-      item.className = "alert-item";
+      const item=document.createElement("div");
+      item.className="alert-item";
 
-      const description = document.createElement("span");
+      const description=document.createElement("span");
+      description.textContent=
+        `${alert.coin_id||"Coin"} · ${alert.direction||"above"} · `+
+        `${alert.target_price??""}`+
+        (alert.triggered?" · Triggered":"");
 
-      description.textContent =
-        `${alert.coin_id || "Coin"} · ` +
-        `${alert.direction || "above"} · ` +
-        `${alert.target_price ?? ""}` +
-        (alert.triggered ? " · Triggered" : "");
-
-      const remove = document.createElement("button");
-      remove.className = "small-btn";
-      remove.style.float = "right";
-      remove.textContent = "Delete";
+      const remove=document.createElement("button");
+      remove.className="small-btn";
+      remove.style.float="right";
+      remove.textContent="Delete";
 
       remove.addEventListener("click",async()=>{
-        remove.disabled = true;
-
+        remove.disabled=true;
         try{
           await api(
-            "/api/alerts/" + encodeURIComponent(alert.id),
+            "/api/alerts/"+encodeURIComponent(alert.id),
             {method:"DELETE"}
           );
-
           loadAlerts();
         }catch(error){
           showMessage("alertMessage",error.message,"error");
-          remove.disabled = false;
+          remove.disabled=false;
         }
       });
 
@@ -1643,86 +1172,78 @@ async function loadAlerts(){
       $("alertsList").appendChild(item);
     });
   }catch(error){
-    $("alertsList").textContent = error.message;
+    $("alertsList").textContent=error.message;
   }
 }
 
 $("addAlertBtn").addEventListener("click",async()=>{
-  const coin_id = $("alertCoin").value.trim().toLowerCase();
-  const target_price = Number($("alertPrice").value);
-  const direction = $("alertDirection").value;
+  const coin_id=$("alertCoin").value.trim().toLowerCase();
+  const target_price=Number($("alertPrice").value);
+  const direction=$("alertDirection").value;
 
   showMessage("alertMessage","");
 
-  if(!coin_id || !Number.isFinite(target_price) || target_price <= 0){
+  if(!coin_id||!Number.isFinite(target_price)||target_price<=0){
     showMessage("alertMessage","Enter a valid coin ID and target price.","error");
     return;
   }
 
-  $("addAlertBtn").disabled = true;
-
+  $("addAlertBtn").disabled=true;
   try{
     await api("/api/alerts",{
       method:"POST",
       body:JSON.stringify({coin_id,target_price,direction})
     });
 
-    $("alertCoin").value = "";
-    $("alertPrice").value = "";
-
+    $("alertCoin").value="";
+    $("alertPrice").value="";
     showMessage("alertMessage","Alert created.","success");
     loadAlerts();
   }catch(error){
     showMessage("alertMessage",error.message,"error");
   }finally{
-    $("addAlertBtn").disabled = false;
+    $("addAlertBtn").disabled=false;
   }
 });
 
 /* PREMIUM PAYMENT */
 
 function showPaymentInvoice(invoice){
-  activeOrder = invoice;
-
+  activeOrder=invoice;
   $("paymentDetails").classList.remove("hidden");
-  $("paymentOrder").textContent = invoice.order_id;
-  $("paymentAmount").textContent = invoice.amount + " " + invoice.asset;
-  $("paymentWallet").textContent = invoice.wallet_address;
-  $("paymentExpiry").textContent = formatExpiry(invoice.expires_at);
-
-  $("transactionHash").value = "";
+  $("paymentOrder").textContent=invoice.order_id;
+  $("paymentAmount").textContent=invoice.amount+" "+invoice.asset;
+  $("paymentWallet").textContent=invoice.wallet_address;
+  $("paymentExpiry").textContent=formatExpiry(invoice.expires_at);
+  $("transactionHash").value="";
   showMessage("verifyMessage","");
 }
 
 document.querySelectorAll("[data-plan]").forEach(button=>{
   button.addEventListener("click",async()=>{
-    const plan = button.dataset.plan;
-    const asset = $("paymentAsset").value;
+    const plan=button.dataset.plan;
+    const asset=$("paymentAsset").value;
 
-    document.querySelectorAll("[data-plan]").forEach(b=>{
-      b.disabled = true;
-    });
-
+    document.querySelectorAll("[data-plan]").forEach(b=>b.disabled=true);
     showMessage("paymentMessage","Creating payment order...");
     $("paymentDetails").classList.add("hidden");
 
     try{
-      const invoice = await api("/api/payments/create",{
+      const invoice=await api("/api/payments/create",{
         method:"POST",
         body:JSON.stringify({plan,asset})
       });
 
       if(
-        !invoice.order_id ||
-        !invoice.wallet_address ||
-        !invoice.amount ||
+        !invoice.order_id||
+        !invoice.wallet_address||
+        !invoice.amount||
         !invoice.asset
       ){
         throw new Error("The server returned an incomplete payment order.");
       }
 
       showPaymentInvoice(invoice);
-
       showMessage(
         "paymentMessage",
         "Payment order created. Check the amount and wallet carefully.",
@@ -1731,35 +1252,30 @@ document.querySelectorAll("[data-plan]").forEach(button=>{
     }catch(error){
       showMessage("paymentMessage",error.message,"error");
     }finally{
-      document.querySelectorAll("[data-plan]").forEach(b=>{
-        b.disabled = false;
-      });
+      document.querySelectorAll("[data-plan]").forEach(b=>b.disabled=false);
     }
   });
 });
 
 async function copyText(value){
-  if(!value) throw new Error("Nothing to copy.");
+  if(!value)throw new Error("Nothing to copy.");
 
-  if(navigator.clipboard && window.isSecureContext){
-    await navigator.clipboard.writeText(value);
+  if(navigator.clipboard&&window.isSecureContext){
+    await navigator.clipboard.writeText(String(value));
     return;
   }
 
-  const area = document.createElement("textarea");
-  area.value = value;
-  area.style.position = "fixed";
-  area.style.opacity = "0";
-
+  const area=document.createElement("textarea");
+  area.value=String(value);
+  area.style.position="fixed";
+  area.style.opacity="0";
   document.body.appendChild(area);
   area.select();
 
-  const ok = document.execCommand("copy");
+  const ok=document.execCommand("copy");
   area.remove();
 
-  if(!ok){
-    throw new Error("Copy failed. Please copy it manually.");
-  }
+  if(!ok)throw new Error("Copy failed. Please copy it manually.");
 }
 
 $("copyWalletBtn").addEventListener("click",async()=>{
@@ -1786,18 +1302,17 @@ $("verifyPaymentBtn").addEventListener("click",async()=>{
     return;
   }
 
-  const tx_hash = $("transactionHash").value.trim();
-
+  const tx_hash=$("transactionHash").value.trim();
   if(!tx_hash){
     showMessage("verifyMessage","Paste your transaction hash.","error");
     return;
   }
 
-  $("verifyPaymentBtn").disabled = true;
+  $("verifyPaymentBtn").disabled=true;
   showMessage("verifyMessage","Checking the blockchain transaction...");
 
   try{
-    const result = await api("/api/payments/verify",{
+    const result=await api("/api/payments/verify",{
       method:"POST",
       body:JSON.stringify({
         order_id:activeOrder.order_id,
@@ -1807,49 +1322,47 @@ $("verifyPaymentBtn").addEventListener("click",async()=>{
 
     showMessage(
       "verifyMessage",
-      result.message || "Payment verified.",
+      result.message||"Payment verified.",
       "success"
     );
 
-    const me = await api("/api/me");
-    setLoggedIn(me.user || me);
-
+    const me=await api("/api/me");
+    setLoggedIn(me.user||me);
     $("paymentDetails").classList.add("hidden");
-    activeOrder = null;
+    activeOrder=null;
   }catch(error){
     showMessage("verifyMessage",error.message,"error");
   }finally{
-    $("verifyPaymentBtn").disabled = false;
+    $("verifyPaymentBtn").disabled=false;
   }
 });
 
 /* DAILY MARKET ANALYSIS */
 
 $("analysisBtn").addEventListener("click",async()=>{
-  $("analysisBtn").disabled = true;
-  $("analysisResult").textContent = "";
-
+  $("analysisBtn").disabled=true;
+  $("analysisResult").textContent="";
   showMessage("analysisMessage","Generating market overview...");
 
   try{
-    const result = await api("/api/analysis/daily",{
+    const result=await api("/api/analysis/daily",{
       method:"POST",
       body:JSON.stringify({})
     });
 
-    const analysis =
-      result.analysis ||
-      result.text ||
-      result.result ||
-      result.message ||
+    const analysis=
+      result.analysis||
+      result.text||
+      result.result||
+      result.message||
       "No analysis returned.";
 
-    $("analysisResult").textContent = analysis;
+    $("analysisResult").textContent=analysis;
     showMessage("analysisMessage","Analysis completed.","success");
   }catch(error){
     showMessage("analysisMessage",error.message,"error");
   }finally{
-    $("analysisBtn").disabled = false;
+    $("analysisBtn").disabled=false;
   }
 });
 
@@ -1862,15 +1375,14 @@ async function restoreSession(){
   }
 
   try{
-    const result = await api("/api/me");
-    setLoggedIn(result.user || result);
-  }catch{
+    const result=await api("/api/me");
+    setLoggedIn(result.user||result);
+  }catch(error){
     setLoggedOut();
   }
 }
 
 restoreSession();
 </script>
-
 </body>
 </html>
