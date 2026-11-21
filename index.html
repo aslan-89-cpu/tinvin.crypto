@@ -1,21 +1,20 @@
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0f1115">
+<meta name="theme-color" content="#080d1c">
 <title>TinVin Crypto</title>
 
 <style>
 :root{
-  --bg:#0b1020;
+  --bg:#080d1c;
   --panel:rgba(23,27,35,.62);
   --panel2:rgba(29,34,44,.48);
   --fg:#e8eaed;
   --mut:#a0a8b7;
   --line:rgba(255,255,255,.10);
-  --accent:#e9bd63;
+  --accent:#fbbf24;
   --gold:var(--accent);
   --up:#22c55e;
   --dn:#ef4444;
@@ -41,7 +40,7 @@ button{cursor:pointer}
 header{
   min-height:66px;padding:0 18px;border-bottom:1px solid var(--line);
   display:flex;align-items:center;justify-content:space-between;gap:12px;
-  position:sticky;top:0;background:rgba(11,16,32,.72);
+  position:sticky;top:0;background:rgba(8,13,28,.72);
   backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
   z-index:5;
 }
@@ -175,10 +174,10 @@ select option{background:#171b23;color:#e8eaed}
 .copy-btn{margin-top:5px}
 footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
 
-/* THEME PICKER */
+/* THEME PICKER (now inside Account tab) */
 .theme-area{
   display:flex;align-items:center;gap:11px;flex-wrap:wrap;
-  margin-top:14px;padding:11px 13px;width:max-content;max-width:100%;
+  margin-top:16px;padding:11px 13px;width:max-content;max-width:100%;
   background:rgba(255,255,255,.035);border:1px solid var(--line);
   border-radius:13px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
 }
@@ -192,11 +191,6 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
 }
 .theme-dot:hover{transform:scale(1.15)}
 .theme-dot.active{outline:2px solid var(--fg);outline-offset:3px;transform:scale(1.08)}
-.theme-dot[data-theme="blue"]{background:#51b8ff}
-.theme-dot[data-theme="purple"]{background:#a78bfa}
-.theme-dot[data-theme="pink"]{background:#ec4899}
-.theme-dot[data-theme="red"]{background:#ef4444}
-.theme-dot[data-theme="gold"]{background:#e9bd63}
 
 /* UPGRADE BUTTON */
 .upgrade-btn{
@@ -256,6 +250,7 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
   color:var(--mut);font-size:13px;text-align:center;padding:20px;
 }
 .chart-note{font-size:11px;color:var(--mut);line-height:1.5;margin-top:11px}
+.pred-box{line-height:1.6}
 body.chart-open{overflow:hidden}
 @media(max-width:650px){
   main{padding:18px 12px 45px}
@@ -337,17 +332,6 @@ body.chart-open{overflow:hidden}
     <button id="upgradeTopBtn" class="upgrade-btn">♛ Upgrade to Premium</button>
   </div>
 
-  <div class="theme-area">
-    <span class="theme-label">Dashboard theme</span>
-    <div class="theme-options">
-      <button class="theme-dot" data-theme="blue" title="Sky Blue" aria-label="Sky Blue"></button>
-      <button class="theme-dot" data-theme="purple" title="Purple" aria-label="Purple"></button>
-      <button class="theme-dot" data-theme="pink" title="Pink" aria-label="Pink"></button>
-      <button class="theme-dot" data-theme="red" title="Red" aria-label="Red"></button>
-      <button class="theme-dot" data-theme="gold" title="Gold" aria-label="Gold"></button>
-    </div>
-  </div>
-
   <div class="top-grid">
     <div class="stat"><span class="small">Account</span><strong id="accountStatus">Free</strong></div>
     <div class="stat"><span class="small">Market coins</span><strong id="coinCount">—</strong></div>
@@ -356,6 +340,7 @@ body.chart-open{overflow:hidden}
 
   <nav class="tabs">
     <button class="tab-btn active" data-tab="marketTab">Markets</button>
+    <button class="tab-btn" data-tab="signalsTab">Up / Down ♛</button>
     <button class="tab-btn" data-tab="alertsTab">Price Alerts</button>
     <button class="tab-btn" data-tab="premiumTab">Premium</button>
     <button class="tab-btn" data-tab="aiTab">AI Analysis</button>
@@ -377,6 +362,17 @@ body.chart-open{overflow:hidden}
       <div id="coinList"><p class="muted">Loading market data...</p></div>
     </div>
     <p class="small">Tap any coin to open its price chart. Market prices are provided by external market data services and may be delayed. The market list displays up to 500 leading coins.</p>
+  </section>
+
+  <section id="signalsTab" class="tab-content hidden">
+    <div class="card">
+      <h2>Coins expected to go up or down</h2>
+      <p class="muted">Premium only. Based on momentum across the top 500 coins.</p>
+      <button id="signalsBtn" class="main-btn">Analyze 500 coins</button>
+      <div id="signalsMessage" class="message"></div>
+      <div id="signalsResult"></div>
+    </div>
+    <p class="small">Estimates only. Not financial advice. Predictions cannot guarantee future prices or profits.</p>
   </section>
 
   <section id="alertsTab" class="tab-content hidden">
@@ -409,7 +405,7 @@ body.chart-open{overflow:hidden}
   <section id="premiumTab" class="tab-content hidden">
     <div class="card">
       <h2>TinVin Crypto Premium</h2>
-      <p class="muted">Choose a subscription and pay using TON or USDT on TON Mainnet.</p>
+      <p class="muted">Premium unlocks price predictions and the list of coins expected to go up or down. Pay using TON or USDT on TON Mainnet.</p>
       <div class="notice">
         Important: Do not send payment until you have created an order and checked its exact amount and destination address. Blockchain payments cannot normally be reversed.
       </div>
@@ -468,7 +464,7 @@ body.chart-open{overflow:hidden}
   <section id="aiTab" class="tab-content hidden">
     <div class="card">
       <h2>AI Daily Market Analysis</h2>
-      <p class="muted">Request a daily market overview.</p>
+      <p class="muted">Request a daily market overview (Premium).</p>
       <button id="analysisBtn" class="main-btn">Generate analysis</button>
       <div id="analysisMessage" class="message"></div>
       <div id="analysisResult" style="white-space:pre-wrap;line-height:1.7;margin-top:15px"></div>
@@ -482,7 +478,21 @@ body.chart-open{overflow:hidden}
       <p>Email: <strong id="accountEmail">—</strong></p>
       <p>Plan: <strong id="accountPlan">Free</strong></p>
       <p>Subscription expiry: <strong id="accountExpiry">—</strong></p>
-      <button id="accountLogoutBtn" class="small-btn">Logout</button>
+
+      <div class="theme-area">
+        <span class="theme-label">Dashboard theme</span>
+        <div class="theme-options">
+          <button class="theme-dot" data-theme="blue" title="Sky Blue" aria-label="Sky Blue"></button>
+          <button class="theme-dot" data-theme="purple" title="Purple" aria-label="Purple"></button>
+          <button class="theme-dot" data-theme="pink" title="Pink" aria-label="Pink"></button>
+          <button class="theme-dot" data-theme="red" title="Red" aria-label="Red"></button>
+          <button class="theme-dot" data-theme="gold" title="Gold" aria-label="Gold"></button>
+        </div>
+      </div>
+
+      <div style="margin-top:18px">
+        <button id="accountLogoutBtn" class="small-btn">Logout</button>
+      </div>
     </div>
   </section>
 </section>
@@ -511,13 +521,14 @@ body.chart-open{overflow:hidden}
       <div id="chartLoading" class="chart-loading">Loading chart...</div>
       <canvas id="coinChartCanvas"></canvas>
     </div>
-    <p class="chart-note">Historical price data is provided by CoinGecko. Chart availability depends on the historical data available for each coin.</p>
+    <div id="predBox" class="payment-box pred-box small"></div>
+    <p class="chart-note">Historical price data is provided by CoinGecko. Chart is green when the price rose over the selected period and red when it fell. Predictions are estimates, not financial advice.</p>
   </div>
 </div>
 
 <footer>TinVin Crypto · Digital asset market information</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
 
 <script>
 "use strict";
@@ -527,11 +538,11 @@ const TOKEN_KEY = "tinvin_crypto_token";
 const THEME_KEY = "tinvin_crypto_theme";
 
 const THEMES = {
-  blue:"#51b8ff",
+  blue:"#38bdf8",
   purple:"#a78bfa",
-  pink:"#ec4899",
-  red:"#ef4444",
-  gold:"#e9bd63"
+  pink:"#f472b6",
+  red:"#fb7185",
+  gold:"#fbbf24"
 };
 
 let authToken = localStorage.getItem(TOKEN_KEY) || "";
@@ -562,13 +573,10 @@ function applyTheme(name,save=true){
     try{localStorage.setItem(THEME_KEY,name)}
     catch(error){console.warn("Theme preference could not be saved.")}
   }
-
-  if(coinChartInstance && selectedChartCoin){
-    updateCoinChart();
-  }
 }
 
 document.querySelectorAll(".theme-dot").forEach(button=>{
+  button.style.background=THEMES[button.dataset.theme];
   button.addEventListener("click",()=>applyTheme(button.dataset.theme));
 });
 
@@ -627,6 +635,11 @@ function formatExpiry(raw){
   }
   const date=new Date(raw);
   return Number.isNaN(date.getTime())?String(raw):date.toLocaleString();
+}
+
+function isPremium(){
+  return !!(currentUser&&currentUser.plan&&currentUser.plan!=="Free"&&
+    Number(currentUser.expires_at)>Date.now()/1000);
 }
 
 /* LOGIN STATE */
@@ -903,6 +916,117 @@ $("refreshBtn").addEventListener("click",loadMarket);
 $("currencySelect").addEventListener("change",loadMarket);
 $("coinSearch").addEventListener("input",renderCoins);
 
+/* SIGNALS: COINS EXPECTED TO GO UP / DOWN (PREMIUM) */
+
+function signalList(title,arr,cls){
+  const box=document.createElement("div");
+  const h=document.createElement("h3");
+  h.className=cls;
+  h.textContent=title;
+  box.appendChild(h);
+
+  arr.forEach(s=>{
+    const row=document.createElement("div");
+    row.className="coin-row";
+
+    const n=document.createElement("div");
+    n.className="coin-name";
+    n.textContent=s.name+" ("+s.symbol+")";
+
+    const p=document.createElement("div");
+    p.className="price";
+    p.textContent=formatPrice(s.price,"usd");
+
+    const c=document.createElement("div");
+    c.className="change "+(s.change_24h>=0?"up":"down");
+    c.textContent=(s.change_24h>0?"+":"")+Number(s.change_24h).toFixed(2)+"%";
+
+    row.append(n,p,c);
+    row.addEventListener("click",()=>openCoinChart({
+      id:s.id,
+      name:s.name,
+      symbol:s.symbol,
+      current_price:s.price,
+      price_change_percentage_24h:s.change_24h
+    }));
+    box.appendChild(row);
+  });
+
+  return box;
+}
+
+$("signalsBtn").addEventListener("click",async()=>{
+  if(!isPremium()){
+    showMessage("signalsMessage","Premium subscription required.","error");
+    showTab("premiumTab");
+    return;
+  }
+
+  $("signalsBtn").disabled=true;
+  showMessage("signalsMessage","Analyzing...");
+
+  try{
+    const d=await api("/api/market/signals");
+    $("signalsResult").replaceChildren(
+      signalList("📈 Likely to go UP",d.rising||[],"up"),
+      signalList("📉 Likely to go DOWN",d.falling||[],"down")
+    );
+    showMessage(
+      "signalsMessage",
+      `Analyzed ${d.analyzed} coins. Not financial advice.`,
+      "success"
+    );
+  }catch(error){
+    showMessage("signalsMessage",error.message,"error");
+  }finally{
+    $("signalsBtn").disabled=false;
+  }
+});
+
+/* PREDICTION INSIDE THE CHART WINDOW (PREMIUM) */
+
+async function loadPrediction(){
+  const box=$("predBox");
+  const coin=selectedChartCoin;
+  if(!coin)return;
+
+  if(!isPremium()){
+    box.textContent="♛ Premium: upgrade to see if this coin is expected to go up or down.";
+    return;
+  }
+
+  box.textContent="Calculating prediction...";
+
+  try{
+    const d=await api(
+      "/api/market/predict?coin_id="+encodeURIComponent(coin.id)+
+      "&currency=usd&days=1"
+    );
+    if(selectedChartCoin!==coin)return;
+
+    const p=d.prediction;
+    const up=p.change_pct>=0;
+
+    const title=document.createElement("div");
+    title.className=d.signal==="neutral"?"":(up?"up":"down");
+    title.style.fontWeight="800";
+    title.style.fontSize="15px";
+    title.textContent=
+      (d.signal==="neutral"?"➡️ Sideways":up?"📈 Likely UP":"📉 Likely DOWN")+
+      " tomorrow ("+(up?"+":"")+p.change_pct+"%)";
+
+    const detail=document.createElement("div");
+    detail.className="small";
+    detail.textContent=
+      `Expected $${p.expected} · Range $${p.low} – $${p.high} · `+
+      `Chance of rising ${p.probability_up_estimate_pct}%. Not financial advice.`;
+
+    box.replaceChildren(title,detail);
+  }catch(error){
+    if(selectedChartCoin===coin)box.textContent=error.message;
+  }
+}
+
 /* COIN CHART */
 
 const chartDays={"1D":1,"7D":7,"1M":30,"12M":365};
@@ -937,12 +1061,12 @@ function drawCoinChart(points,currency){
   });
   const values=points.map(point=>Number(point[1]));
 
-  const accent=getComputedStyle(document.documentElement)
-    .getPropertyValue("--accent").trim()||"#e9bd63";
+  /* GREEN when price rose over the period, RED when it fell */
+  const lineColor=values[values.length-1]>=values[0]?"#22c55e":"#ef4444";
 
   const gradient=ctx.createLinearGradient(0,0,0,400);
-  gradient.addColorStop(0,accent+"48");
-  gradient.addColorStop(1,accent+"03");
+  gradient.addColorStop(0,lineColor+"55");
+  gradient.addColorStop(1,lineColor+"05");
 
   coinChartInstance=new Chart(ctx,{
     type:"line",
@@ -951,12 +1075,12 @@ function drawCoinChart(points,currency){
       datasets:[{
         label:"Price",
         data:values,
-        borderColor:accent,
+        borderColor:lineColor,
         backgroundColor:gradient,
         borderWidth:2,
         pointRadius:0,
         pointHoverRadius:4,
-        pointHoverBackgroundColor:accent,
+        pointHoverBackgroundColor:lineColor,
         fill:true,
         tension:.22
       }]
@@ -1090,6 +1214,7 @@ function openCoinChart(coin){
   $("chartOverlay").classList.remove("hidden");
   document.body.classList.add("chart-open");
   updateCoinChart();
+  loadPrediction();
 }
 
 function closeCoinChart(){
@@ -1350,14 +1475,19 @@ $("analysisBtn").addEventListener("click",async()=>{
       body:JSON.stringify({})
     });
 
-    const analysis=
-      result.analysis||
-      result.text||
-      result.result||
-      result.message||
-      "No analysis returned.";
+    const a=result.analysis||{};
+    const lines=[a.title||"Market Overview",""];
 
-    $("analysisResult").textContent=analysis;
+    (a.leaders||[]).forEach(c=>{
+      const ch=Number(c.change_24h)||0;
+      lines.push(
+        `${c.symbol}   $${Number(c.price).toLocaleString("en-US")}   `+
+        `${ch>=0?"+":""}${ch.toFixed(2)}%`
+      );
+    });
+
+    lines.push("",a.summary||"",a.disclaimer||"");
+    $("analysisResult").textContent=lines.join("\n");
     showMessage("analysisMessage","Analysis completed.","success");
   }catch(error){
     showMessage("analysisMessage",error.message,"error");
