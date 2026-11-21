@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0f1115">
 <title>TinVin Crypto</title>
+
 <style>
 :root{
   --bg:#0f1115;--panel:#171b23;--panel2:#1d222c;
@@ -64,8 +65,11 @@ input:focus,select:focus{border-color:var(--gold)}
 .coin-row{
   display:grid;grid-template-columns:1.5fr 1fr 1fr;
   gap:8px;align-items:center;padding:14px 4px;
-  border-bottom:1px solid var(--line);font-size:14px
+  border-bottom:1px solid var(--line);font-size:14px;
+  cursor:pointer;border-radius:7px;transition:background .15s
 }
+.coin-row:hover{background:var(--panel2)}
+.coin-row:active{background:#252c38}
 .coin-row:last-child{border:0}
 .coin-name{font-weight:700}
 .coin-symbol{font-size:11px;color:var(--mut);margin-top:4px}
@@ -83,16 +87,74 @@ input:focus,select:focus{border-color:var(--gold)}
 .payment-value{font-size:14px;overflow-wrap:anywhere;word-break:break-word;color:var(--gold);margin:8px 0}
 .copy-btn{margin-top:5px}
 footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
+
+/* COIN CHART */
+.coin-row::after{
+  content:"›";color:var(--mut);font-size:19px;
+  position:absolute;right:0
+}
+.coin-row{position:relative;padding-right:17px}
+.chart-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.78);
+  z-index:20;display:flex;align-items:center;justify-content:center;
+  padding:14px
+}
+.chart-modal{
+  width:100%;max-width:950px;max-height:94vh;overflow:auto;
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:16px;padding:17px
+}
+.chart-header{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;margin-bottom:13px
+}
+.chart-title{font-size:19px;font-weight:800}
+.chart-subtitle{font-size:12px;color:var(--mut);margin-top:5px}
+.chart-close{
+  border:1px solid var(--line);background:var(--panel2);
+  color:var(--fg);border-radius:9px;padding:9px 13px;
+  font-size:18px
+}
+.chart-info{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin:12px 0;flex-wrap:wrap
+}
+.chart-price{font-size:21px;font-weight:800}
+.chart-periods{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+.chart-period{
+  background:var(--panel2);border:1px solid var(--line);
+  color:var(--fg);border-radius:8px;padding:8px 13px;font-size:12px
+}
+.chart-period.active{border-color:var(--gold);color:var(--gold)}
+.chart-frame-wrap{
+  width:100%;height:440px;background:#10141b;
+  border:1px solid var(--line);border-radius:11px;overflow:hidden
+}
+.chart-frame{width:100%;height:100%;border:0;display:block}
+.chart-note{font-size:11px;color:var(--mut);line-height:1.5;margin-top:11px}
+.chart-loading{
+  display:flex;align-items:center;justify-content:center;
+  height:100%;color:var(--mut);font-size:13px
+}
+body.chart-open{overflow:hidden}
+
 @media(max-width:650px){
   main{padding:17px 12px 45px}
   .top-grid{grid-template-columns:1fr 1fr}
   .plan-grid{grid-template-columns:1fr 1fr}
   .coin-row{grid-template-columns:1.3fr 1fr .8fr;font-size:12px}
   .header-right .small-btn{padding:8px}
+  .chart-overlay{padding:7px}
+  .chart-modal{padding:12px;max-height:96vh}
+  .chart-frame-wrap{height:390px}
 }
-@media(max-width:380px){.plan-grid{grid-template-columns:1fr}}
+@media(max-width:380px){
+  .plan-grid{grid-template-columns:1fr}
+  .chart-frame-wrap{height:340px}
+}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -107,19 +169,24 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
 <section id="authSection" class="auth-wrap">
   <div class="logo">TinVin <span>Crypto</span></div>
   <div class="card">
+
     <div id="loginForm">
       <h1>Welcome back</h1>
       <p class="muted">Sign in to your TinVin Crypto account.</p>
+
       <div class="field">
         <label>Email</label>
         <input id="loginEmail" type="email" autocomplete="email" placeholder="Your email">
       </div>
+
       <div class="field">
         <label>Password</label>
         <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password">
       </div>
+
       <button id="loginBtn" class="main-btn full">Login</button>
       <div id="loginMessage" class="message"></div>
+
       <div class="auth-switch">Don't have an account?
         <span class="link" id="showSignup">Create account</span>
       </div>
@@ -128,20 +195,25 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
     <div id="signupForm" class="hidden">
       <h1>Create account</h1>
       <p class="muted">Join TinVin Crypto.</p>
+
       <div class="field">
         <label>Email</label>
         <input id="signupEmail" type="email" autocomplete="email" placeholder="Your email">
       </div>
+
       <div class="field">
         <label>Password</label>
         <input id="signupPassword" type="password" autocomplete="new-password" placeholder="At least 8 characters">
       </div>
+
       <button id="signupBtn" class="main-btn full">Create account</button>
       <div id="signupMessage" class="message"></div>
+
       <div class="auth-switch">Already registered?
         <span class="link" id="showLogin">Login</span>
       </div>
     </div>
+
   </div>
 </section>
 
@@ -174,23 +246,28 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
         </select>
         <button id="refreshBtn" class="small-btn">Refresh</button>
       </div>
+
       <div id="marketMessage" class="message muted"></div>
       <div id="coinList"><p class="muted">Loading market data...</p></div>
     </div>
-    <p class="small">Market prices are provided by external market data services and may be delayed. The market list displays up to 250 leading coins.</p>
+
+    <p class="small">Tap any coin to open its price chart. Market prices are provided by external market data services and may be delayed. The market list displays up to 250 leading coins.</p>
   </section>
 
   <section id="alertsTab" class="tab-content hidden">
     <div class="card">
       <h2>Create price alert</h2>
+
       <div class="field">
         <label>Coin ID (example: bitcoin)</label>
         <input id="alertCoin" placeholder="bitcoin">
       </div>
+
       <div class="field">
         <label>Target price (USD)</label>
         <input id="alertPrice" type="number" min="0" step="any" placeholder="100000">
       </div>
+
       <div class="field">
         <label>Direction</label>
         <select id="alertDirection">
@@ -198,9 +275,11 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
           <option value="below">Price goes below</option>
         </select>
       </div>
+
       <button id="addAlertBtn" class="main-btn">Create alert</button>
       <div id="alertMessage" class="message"></div>
     </div>
+
     <div class="card">
       <h2>Your alerts</h2>
       <div id="alertsList"><p class="muted">Loading alerts...</p></div>
@@ -231,18 +310,21 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
           <div class="plan-days">7 days access</div>
           <button class="main-btn" data-plan="7days">Choose plan</button>
         </div>
+
         <div class="plan">
           <h3>1 Month</h3>
           <div class="plan-price">$12.99</div>
           <div class="plan-days">30 days access</div>
           <button class="main-btn" data-plan="1month">Choose plan</button>
         </div>
+
         <div class="plan">
           <h3>6 Months</h3>
           <div class="plan-price">$59.99</div>
           <div class="plan-days">180 days access</div>
           <button class="main-btn" data-plan="6months">Choose plan</button>
         </div>
+
         <div class="plan">
           <h3>1 Year</h3>
           <div class="plan-price">$99.99</div>
@@ -255,21 +337,29 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
 
       <div id="paymentDetails" class="payment-box hidden">
         <h2>Payment instructions</h2>
+
         <p class="small">Order ID</p>
         <div id="paymentOrder" class="payment-value"></div>
+
         <p class="small">Send exactly this amount</p>
         <div id="paymentAmount" class="payment-value"></div>
+
         <p class="small">Destination wallet</p>
         <div id="paymentWallet" class="payment-value"></div>
+
         <button id="copyWalletBtn" class="small-btn copy-btn">Copy wallet address</button>
         <button id="copyAmountBtn" class="small-btn copy-btn">Copy exact amount</button>
+
         <p class="small" style="margin-top:15px">After sending the payment, paste its transaction hash below.</p>
+
         <div class="field">
           <label>Transaction Hash</label>
           <input id="transactionHash" placeholder="Paste transaction hash">
         </div>
+
         <button id="verifyPaymentBtn" class="main-btn full">Verify payment</button>
         <div id="verifyMessage" class="message"></div>
+
         <p class="small">Order expires: <span id="paymentExpiry">—</span></p>
       </div>
     </div>
@@ -279,10 +369,13 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
     <div class="card">
       <h2>AI Daily Market Analysis</h2>
       <p class="muted">Request a daily market overview.</p>
+
       <button id="analysisBtn" class="main-btn">Generate analysis</button>
       <div id="analysisMessage" class="message"></div>
+
       <div id="analysisResult" style="white-space:pre-wrap;line-height:1.7;margin-top:15px"></div>
     </div>
+
     <p class="small">Market analysis is informational only, not financial advice. It cannot guarantee future prices or profits.</p>
   </section>
 
@@ -297,6 +390,47 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
   </section>
 </section>
 </main>
+
+<!-- COIN CHART WINDOW -->
+<div id="chartOverlay" class="chart-overlay hidden">
+  <div class="chart-modal" role="dialog" aria-modal="true" aria-label="Coin price chart">
+
+    <div class="chart-header">
+      <div>
+        <div id="chartCoinName" class="chart-title">Coin Chart</div>
+        <div id="chartCoinSymbol" class="chart-subtitle">Price chart</div>
+      </div>
+      <button id="closeChartBtn" class="chart-close" aria-label="Close chart">✕</button>
+    </div>
+
+    <div class="chart-info">
+      <div id="chartCoinPrice" class="chart-price">—</div>
+      <div id="chartCoinChange" class="small">—</div>
+    </div>
+
+    <div class="chart-periods">
+      <button class="chart-period active" data-period="1D">1D</button>
+      <button class="chart-period" data-period="7D">7D</button>
+      <button class="chart-period" data-period="1M">1M</button>
+      <button class="chart-period" data-period="12M">1Y</button>
+    </div>
+
+    <div class="chart-frame-wrap">
+      <div id="chartLoading" class="chart-loading">Loading chart...</div>
+      <iframe
+        id="tradingViewFrame"
+        class="chart-frame"
+        title="TradingView cryptocurrency chart"
+        loading="lazy"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <p class="chart-note">
+      Chart data is provided by TradingView. Some coins may not have a Binance trading pair. If a chart is unavailable, try another coin.
+    </p>
+  </div>
+</div>
 
 <footer>TinVin Crypto · Digital asset market information</footer>
 
@@ -422,6 +556,8 @@ function setLoggedOut() {
   $("logoutBtn").classList.add("hidden");
   $("userLabel").textContent = "";
   $("paymentDetails").classList.add("hidden");
+
+  closeCoinChart();
 }
 
 function showTab(tabId) {
@@ -602,6 +738,8 @@ function formatPrice(value, currency) {
   }
 }
 
+/* MARKET COINS */
+
 function renderCoins() {
   const query = $("coinSearch").value.trim().toLowerCase();
   const currency = $("currencySelect").value;
@@ -631,6 +769,7 @@ function renderCoins() {
   filtered.forEach(coin => {
     const row = document.createElement("div");
     row.className = "coin-row";
+    row.title = "Open " + (coin.name || coin.symbol || "coin") + " chart";
 
     const nameBox = document.createElement("div");
 
@@ -664,6 +803,11 @@ function renderCoins() {
     change.textContent = Number.isFinite(percent)
       ? (percent > 0 ? "+" : "") + percent.toFixed(2) + "%"
       : "—";
+
+    /* CLICK COIN TO OPEN CHART */
+    row.addEventListener("click", () => {
+      openCoinChart(coin);
+    });
 
     row.append(nameBox, price, change);
     fragment.appendChild(row);
@@ -704,6 +848,172 @@ async function loadMarket() {
 $("refreshBtn").addEventListener("click", loadMarket);
 $("currencySelect").addEventListener("change", loadMarket);
 $("coinSearch").addEventListener("input", renderCoins);
+
+/* TRADINGVIEW CHART */
+
+let selectedChartCoin = null;
+let selectedChartPeriod = "1D";
+
+function getTradingViewSymbol(coin) {
+  const symbol = String(coin.symbol || "").toUpperCase();
+
+  if (!/^[A-Z0-9]{2,20}$/.test(symbol)) {
+    return null;
+  }
+
+  /*
+    TradingView commonly uses Binance spot pairs.
+    This is a best-effort symbol mapping, not a guarantee
+    that every coin has a Binance USDT market.
+  */
+  return "BINANCE:" + symbol + "USDT";
+}
+
+function getChartInterval(period) {
+  const intervals = {
+    "1D": "15",
+    "7D": "60",
+    "1M": "240",
+    "12M": "D"
+  };
+
+  return intervals[period] || "15";
+}
+
+function updateTradingViewChart() {
+  if (!selectedChartCoin) return;
+
+  const symbol = getTradingViewSymbol(selectedChartCoin);
+
+  if (!symbol) {
+    $("chartLoading").textContent =
+      "Chart symbol is not available for this coin.";
+    $("tradingViewFrame").src = "about:blank";
+    return;
+  }
+
+  const interval = getChartInterval(selectedChartPeriod);
+
+  const url =
+    "https://www.tradingview.com/widgetembed/?" +
+    "symbol=" + encodeURIComponent(symbol) +
+    "&interval=" + encodeURIComponent(interval) +
+    "&hidesidetoolbar=0" +
+    "&symboledit=0" +
+    "&saveimage=0" +
+    "&toolbarbg=%2310141b" +
+    "&theme=dark" +
+    "&style=1" +
+    "&timezone=Etc%2FUTC" +
+    "&withdateranges=1" +
+    "&hideideas=1" +
+    "&studies=%5B%5D" +
+    "&locale=en";
+
+  $("chartLoading").textContent = "Loading chart...";
+  $("chartLoading").classList.remove("hidden");
+
+  $("tradingViewFrame").src = url;
+}
+
+function openCoinChart(coin) {
+  selectedChartCoin = coin;
+  selectedChartPeriod = "1D";
+
+  const name = coin.name || coin.id || "Cryptocurrency";
+  const symbol = String(coin.symbol || "").toUpperCase();
+  const currency = $("currencySelect").value;
+
+  $("chartCoinName").textContent = name;
+  $("chartCoinSymbol").textContent =
+    symbol ? symbol + " · Price chart" : "Price chart";
+
+  $("chartCoinPrice").textContent = formatPrice(
+    coin.current_price ?? coin.price,
+    currency
+  );
+
+  const percent = Number(
+    coin.price_change_percentage_24h ??
+    coin.change_24h ??
+    coin.change
+  );
+
+  const changeElement = $("chartCoinChange");
+
+  if (Number.isFinite(percent)) {
+    changeElement.textContent =
+      (percent > 0 ? "+" : "") +
+      percent.toFixed(2) +
+      "% (24h)";
+
+    changeElement.className =
+      "small " + (percent >= 0 ? "up" : "down");
+  } else {
+    changeElement.textContent = "24h change unavailable";
+    changeElement.className = "small";
+  }
+
+  document.querySelectorAll(".chart-period").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.period === selectedChartPeriod
+    );
+  });
+
+  $("chartOverlay").classList.remove("hidden");
+  document.body.classList.add("chart-open");
+
+  updateTradingViewChart();
+}
+
+function closeCoinChart() {
+  $("chartOverlay").classList.add("hidden");
+  document.body.classList.remove("chart-open");
+
+  $("tradingViewFrame").src = "about:blank";
+  selectedChartCoin = null;
+}
+
+$("closeChartBtn").addEventListener("click", closeCoinChart);
+
+$("chartOverlay").addEventListener("click", event => {
+  if (event.target === $("chartOverlay")) {
+    closeCoinChart();
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" &&
+      !$("chartOverlay").classList.contains("hidden")) {
+    closeCoinChart();
+  }
+});
+
+$("tradingViewFrame").addEventListener("load", () => {
+  if (selectedChartCoin) {
+    $("chartLoading").classList.add("hidden");
+  }
+});
+
+document.querySelectorAll(".chart-period").forEach(button => {
+  button.addEventListener("click", () => {
+    if (!selectedChartCoin) return;
+
+    selectedChartPeriod = button.dataset.period;
+
+    document.querySelectorAll(".chart-period").forEach(item => {
+      item.classList.toggle(
+        "active",
+        item === button
+      );
+    });
+
+    updateTradingViewChart();
+  });
+});
+
+/* PRICE ALERTS */
 
 async function loadAlerts() {
   if (!authToken) return;
