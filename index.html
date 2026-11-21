@@ -9,140 +9,557 @@
 
 <style>
 :root{
-  --bg:#0f1115;--panel:#171b23;--panel2:#1d222c;
-  --fg:#e8eaed;--mut:#8b929e;--line:#262a33;
-  --gold:#e9bd63;--up:#22c55e;--dn:#ef4444;--blue:#51b8ff;
+  --bg:#0b1020;
+  --panel:rgba(23,27,35,.62);
+  --panel2:rgba(29,34,44,.48);
+  --fg:#e8eaed;
+  --mut:#a0a8b7;
+  --line:rgba(255,255,255,.10);
+  --accent:#e9bd63;
+  --gold:var(--accent);
+  --up:#22c55e;
+  --dn:#ef4444;
+  --blue:#51b8ff;
+  --glass-shadow:0 12px 40px rgba(0,0,0,.22);
+  --glass-blur:blur(18px) saturate(145%);
 }
+
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:Arial,Helvetica,sans-serif}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse at 12% 5%,rgba(81,184,255,.12),transparent 35%),
+    radial-gradient(ellipse at 88% 18%,color-mix(in srgb,var(--accent) 13%,transparent),transparent 36%),
+    radial-gradient(ellipse at 50% 100%,rgba(124,92,220,.10),transparent 42%),
+    var(--bg);
+  color:var(--fg);
+  font-family:Arial,Helvetica,sans-serif;
+  background-attachment:fixed;
+}
+
 button,input,select{font:inherit}
 button{cursor:pointer}
 .hidden{display:none!important}
+
 header{
-  height:66px;padding:0 18px;border-bottom:1px solid var(--line);
-  display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;background:rgba(15,17,21,.96);z-index:5
+  min-height:66px;
+  padding:0 18px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  position:sticky;
+  top:0;
+  background:rgba(11,16,32,.72);
+  backdrop-filter:var(--glass-blur);
+  -webkit-backdrop-filter:var(--glass-blur);
+  z-index:5;
 }
-.logo{font-size:21px;font-weight:800;letter-spacing:-.7px}
-.logo span{color:var(--gold)}
-.header-right{display:flex;align-items:center;gap:9px}
+
+.logo{
+  font-size:21px;
+  font-weight:800;
+  letter-spacing:-.7px;
+}
+
+.logo span{color:var(--accent)}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
 .small-btn,.main-btn,.tab-btn{
-  border:1px solid var(--line);background:var(--panel);
-  color:var(--fg);border-radius:9px;padding:9px 12px
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.055);
+  color:var(--fg);
+  border-radius:11px;
+  padding:10px 13px;
+  transition:background .2s,border-color .2s,transform .2s,box-shadow .2s;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
 }
-.main-btn{background:var(--gold);color:#17130b;border:0;font-weight:700}
-button:disabled{opacity:.45;cursor:not-allowed}
-main{max-width:1050px;margin:auto;padding:22px 15px 60px}
+
+.small-btn:hover,.tab-btn:hover{
+  border-color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 12%,transparent);
+}
+
+.main-btn{
+  background:linear-gradient(
+    135deg,
+    color-mix(in srgb,var(--accent) 95%,white),
+    color-mix(in srgb,var(--accent) 75%,#8b6b35)
+  );
+  color:#17130b;
+  border:1px solid color-mix(in srgb,var(--accent) 70%,white);
+  font-weight:800;
+  box-shadow:0 5px 20px color-mix(in srgb,var(--accent) 15%,transparent);
+}
+
+.main-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 25px color-mix(in srgb,var(--accent) 24%,transparent);
+}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none!important;
+}
+
+main{
+  max-width:1050px;
+  margin:auto;
+  padding:25px 15px 60px;
+}
+
 h1{font-size:25px;margin:0 0 7px}
 h2{font-size:18px;margin:0 0 14px}
+h3{color:var(--fg)}
+p{line-height:1.55}
 .muted{color:var(--mut)}
 .small{font-size:12px;color:var(--mut)}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:17px;margin-bottom:15px}
-.auth-wrap{max-width:420px;margin:45px auto}
-.auth-wrap .logo{margin-bottom:24px;text-align:center;font-size:28px}
-.field{margin:12px 0}
-.field label{display:block;font-size:13px;color:var(--mut);margin-bottom:7px}
-input,select{
-  width:100%;padding:12px;border:1px solid var(--line);
-  border-radius:9px;background:#10141b;color:var(--fg);outline:none
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:18px;
+  margin-bottom:15px;
+  box-shadow:var(--glass-shadow);
+  backdrop-filter:var(--glass-blur);
+  -webkit-backdrop-filter:var(--glass-blur);
 }
-input:focus,select:focus{border-color:var(--gold)}
-.full{width:100%;padding:12px}
-.auth-switch{text-align:center;margin-top:17px;font-size:13px;color:var(--mut)}
-.link{color:var(--gold);cursor:pointer}
-.message{font-size:13px;margin-top:12px;line-height:1.5;overflow-wrap:anywhere}
+
+.auth-wrap{
+  max-width:420px;
+  margin:45px auto;
+}
+
+.auth-wrap .logo{
+  margin-bottom:24px;
+  text-align:center;
+  font-size:28px;
+}
+
+.field{margin:12px 0}
+
+.field label{
+  display:block;
+  font-size:13px;
+  color:var(--mut);
+  margin-bottom:7px;
+}
+
+input,select{
+  width:100%;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:rgba(9,14,27,.65);
+  color:var(--fg);
+  outline:none;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+}
+
+input:focus,select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 14%,transparent);
+  background:rgba(9,14,27,.85);
+}
+
+select option{
+  background:#171b23;
+  color:#e8eaed;
+}
+
+.full{width:100%;padding:13px}
+
+.auth-switch{
+  text-align:center;
+  margin-top:17px;
+  font-size:13px;
+  color:var(--mut);
+}
+
+.link{
+  color:var(--accent);
+  cursor:pointer;
+}
+
+.link:hover{text-decoration:underline}
+
+.message{
+  font-size:13px;
+  margin-top:12px;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+
 .error{color:#ff7777}
 .success{color:var(--up)}
-.top-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px}
-.stat strong{display:block;font-size:21px;margin-top:8px}
-.tabs{display:flex;gap:8px;overflow:auto;margin:18px 0}
+
+.dashboard-heading{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+
+.dashboard-heading p{margin-top:5px}
+
+.top-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:20px 0;
+}
+
+.stat{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:16px;
+  box-shadow:var(--glass-shadow);
+  backdrop-filter:var(--glass-blur);
+  -webkit-backdrop-filter:var(--glass-blur);
+}
+
+.stat strong{
+  display:block;
+  font-size:21px;
+  margin-top:8px;
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  margin:18px 0;
+  padding:3px 1px 8px;
+  scrollbar-width:thin;
+}
+
 .tab-btn{white-space:nowrap}
-.tab-btn.active{border-color:var(--gold);color:var(--gold)}
-.toolbar{display:flex;gap:9px;align-items:center;margin-bottom:13px}
+
+.tab-btn.active{
+  border-color:var(--accent);
+  color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 13%,transparent);
+  box-shadow:0 0 18px color-mix(in srgb,var(--accent) 10%,transparent);
+}
+
+.toolbar{
+  display:flex;
+  gap:9px;
+  align-items:center;
+  margin-bottom:13px;
+}
+
 .toolbar input{flex:1;min-width:0}
 .toolbar select{width:auto}
+
 .coin-row{
-  display:grid;grid-template-columns:1.5fr 1fr 1fr;
-  gap:8px;align-items:center;padding:14px 17px 14px 4px;
-  border-bottom:1px solid var(--line);font-size:14px;
-  cursor:pointer;border-radius:7px;transition:background .15s;
-  position:relative
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  gap:8px;
+  align-items:center;
+  padding:14px 17px 14px 4px;
+  border-bottom:1px solid var(--line);
+  font-size:14px;
+  cursor:pointer;
+  border-radius:9px;
+  transition:background .15s;
+  position:relative;
 }
+
 .coin-row::after{
-  content:"›";color:var(--mut);font-size:19px;
-  position:absolute;right:3px
+  content:"›";
+  color:var(--mut);
+  font-size:19px;
+  position:absolute;
+  right:3px;
 }
-.coin-row:hover{background:var(--panel2)}
-.coin-row:active{background:#252c38}
+
+.coin-row:hover{background:rgba(255,255,255,.055)}
+.coin-row:active{background:rgba(255,255,255,.09)}
 .coin-row:last-child{border:0}
+
 .coin-name{font-weight:700}
 .coin-symbol{font-size:11px;color:var(--mut);margin-top:4px}
 .price,.change{text-align:right;font-weight:700}
-.up{color:var(--up)}.down{color:var(--dn)}
-.notice{padding:12px;border:1px solid #57472a;background:#282116;border-radius:10px;color:#e9c987;font-size:13px;line-height:1.5}
-.plan-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.plan{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px}
+.up{color:var(--up)}
+.down{color:var(--dn)}
+
+.notice{
+  padding:12px;
+  border:1px solid rgba(233,189,99,.25);
+  background:rgba(233,189,99,.08);
+  border-radius:12px;
+  color:#e9c987;
+  font-size:13px;
+  line-height:1.5;
+  backdrop-filter:blur(10px);
+}
+
+.plan-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.plan{
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:15px;
+  backdrop-filter:var(--glass-blur);
+  -webkit-backdrop-filter:var(--glass-blur);
+  transition:border-color .2s,transform .2s;
+}
+
+.plan:hover{
+  border-color:var(--accent);
+  transform:translateY(-2px);
+}
+
 .plan h3{font-size:15px;margin:0 0 10px}
-.plan-price{font-size:22px;font-weight:800;color:var(--gold);margin-bottom:5px}
+.plan-price{
+  font-size:22px;
+  font-weight:800;
+  color:var(--accent);
+  margin-bottom:5px;
+}
+
 .plan-days{font-size:12px;color:var(--mut);margin-bottom:13px}
 .plan button{width:100%;font-size:12px}
-.alert-item{padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}
-.payment-box{background:#10141b;border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:15px}
-.payment-value{font-size:14px;overflow-wrap:anywhere;word-break:break-word;color:var(--gold);margin:8px 0}
+
+.alert-item{
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+  font-size:13px;
+}
+
+.payment-box{
+  background:rgba(9,14,27,.45);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:15px;
+  margin-top:15px;
+  backdrop-filter:var(--glass-blur);
+  -webkit-backdrop-filter:var(--glass-blur);
+}
+
+.payment-value{
+  font-size:14px;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  color:var(--accent);
+  margin:8px 0;
+}
+
 .copy-btn{margin-top:5px}
-footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
+
+footer{
+  text-align:center;
+  color:var(--mut);
+  font-size:12px;
+  padding:20px;
+}
+
+/* THEME PICKER */
+
+.theme-area{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  flex-wrap:wrap;
+  margin-top:14px;
+  padding:11px 13px;
+  width:max-content;
+  max-width:100%;
+  background:rgba(255,255,255,.035);
+  border:1px solid var(--line);
+  border-radius:13px;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+
+.theme-label{
+  font-size:12px;
+  color:var(--mut);
+}
+
+.theme-options{
+  display:flex;
+  gap:9px;
+  align-items:center;
+}
+
+.theme-dot{
+  width:25px;
+  height:25px;
+  padding:0;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.35);
+  box-shadow:0 2px 9px rgba(0,0,0,.3);
+  transition:transform .2s,outline .2s;
+}
+
+.theme-dot:hover{transform:scale(1.15)}
+
+.theme-dot.active{
+  outline:2px solid var(--fg);
+  outline-offset:3px;
+  transform:scale(1.08);
+}
+
+.theme-dot[data-theme="blue"]{background:#51b8ff}
+.theme-dot[data-theme="purple"]{background:#a78bfa}
+.theme-dot[data-theme="pink"]{background:#ec4899}
+.theme-dot[data-theme="red"]{background:#ef4444}
+.theme-dot[data-theme="gold"]{background:#e9bd63}
+
+/* UPGRADE BUTTON */
+
+.upgrade-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:11px 16px;
+  border:1px solid color-mix(in srgb,var(--accent) 65%,transparent);
+  border-radius:12px;
+  background:color-mix(in srgb,var(--accent) 10%,transparent);
+  color:var(--accent);
+  font-weight:800;
+  box-shadow:0 5px 22px color-mix(in srgb,var(--accent) 10%,transparent);
+  transition:all .2s;
+}
+
+.upgrade-btn:hover{
+  background:color-mix(in srgb,var(--accent) 18%,transparent);
+  transform:translateY(-2px);
+}
 
 /* COIN CHART */
+
 .chart-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.78);
-  z-index:20;display:flex;align-items:center;justify-content:center;
-  padding:14px
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.78);
+  z-index:20;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
 }
+
 .chart-modal{
-  width:100%;max-width:950px;max-height:94vh;overflow:auto;
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:16px;padding:17px
+  width:100%;
+  max-width:950px;
+  max-height:94vh;
+  overflow:auto;
+  background:rgba(20,25,38,.88);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:17px;
+  box-shadow:0 20px 70px rgba(0,0,0,.5);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
 }
+
 .chart-header{
-  display:flex;justify-content:space-between;align-items:center;
-  gap:12px;margin-bottom:13px
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:13px;
 }
+
 .chart-title{font-size:19px;font-weight:800}
 .chart-subtitle{font-size:12px;color:var(--mut);margin-top:5px}
+
 .chart-close{
-  border:1px solid var(--line);background:var(--panel2);
-  color:var(--fg);border-radius:9px;padding:9px 13px;
-  font-size:18px
+  border:1px solid var(--line);
+  background:var(--panel2);
+  color:var(--fg);
+  border-radius:10px;
+  padding:9px 13px;
+  font-size:18px;
 }
+
+.chart-close:hover{border-color:var(--accent)}
+
 .chart-info{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:10px;margin:12px 0;flex-wrap:wrap
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:12px 0;
+  flex-wrap:wrap;
 }
+
 .chart-price{font-size:21px;font-weight:800}
 .chart-periods{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+
 .chart-period{
-  background:var(--panel2);border:1px solid var(--line);
-  color:var(--fg);border-radius:8px;padding:8px 13px;font-size:12px
+  background:var(--panel2);
+  border:1px solid var(--line);
+  color:var(--fg);
+  border-radius:9px;
+  padding:8px 13px;
+  font-size:12px;
 }
-.chart-period.active{border-color:var(--gold);color:var(--gold)}
+
+.chart-period.active{
+  border-color:var(--accent);
+  color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 12%,transparent);
+}
+
 .chart-frame-wrap{
-  width:100%;height:440px;background:#10141b;
-  border:1px solid var(--line);border-radius:11px;
-  overflow:hidden;position:relative;padding:12px
+  width:100%;
+  height:440px;
+  background:rgba(9,14,27,.55);
+  border:1px solid var(--line);
+  border-radius:13px;
+  overflow:hidden;
+  position:relative;
+  padding:12px;
 }
+
 #coinChartCanvas{width:100%!important;height:100%!important}
+
 .chart-loading{
-  position:absolute;inset:0;z-index:2;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(16,20,27,.94);color:var(--mut);
-  font-size:13px;text-align:center;padding:20px
+  position:absolute;
+  inset:0;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(16,20,27,.94);
+  color:var(--mut);
+  font-size:13px;
+  text-align:center;
+  padding:20px;
 }
+
 .chart-note{font-size:11px;color:var(--mut);line-height:1.5;margin-top:11px}
 body.chart-open{overflow:hidden}
 
 @media(max-width:650px){
-  main{padding:17px 12px 45px}
+  main{padding:18px 12px 45px}
   .top-grid{grid-template-columns:1fr 1fr}
   .plan-grid{grid-template-columns:1fr 1fr}
   .coin-row{grid-template-columns:1.3fr 1fr .8fr;font-size:12px}
@@ -150,10 +567,14 @@ body.chart-open{overflow:hidden}
   .chart-overlay{padding:7px}
   .chart-modal{padding:12px;max-height:96vh}
   .chart-frame-wrap{height:390px;padding:8px}
+  .dashboard-heading{display:block}
+  .upgrade-btn{margin-top:12px}
 }
+
 @media(max-width:380px){
   .plan-grid{grid-template-columns:1fr}
   .chart-frame-wrap{height:340px}
+  .theme-area{width:100%;justify-content:space-between}
 }
 </style>
 </head>
@@ -169,6 +590,7 @@ body.chart-open{overflow:hidden}
 </header>
 
 <main>
+
 <section id="authSection" class="auth-wrap">
   <div class="logo">TinVin <span>Crypto</span></div>
   <div class="card">
@@ -221,8 +643,28 @@ body.chart-open{overflow:hidden}
 </section>
 
 <section id="appSection" class="hidden">
-  <h1>Crypto Dashboard</h1>
-  <p class="muted">Track cryptocurrency markets and manage your account.</p>
+
+  <div class="dashboard-heading">
+    <div>
+      <h1>Crypto Dashboard</h1>
+      <p class="muted">Track cryptocurrency markets and manage your account.</p>
+    </div>
+
+    <button id="upgradeTopBtn" class="upgrade-btn">
+      ♛ Upgrade to Premium
+    </button>
+  </div>
+
+  <div class="theme-area">
+    <span class="theme-label">Dashboard theme</span>
+    <div class="theme-options">
+      <button class="theme-dot" data-theme="blue" title="Sky Blue" aria-label="Sky Blue"></button>
+      <button class="theme-dot" data-theme="purple" title="Purple" aria-label="Purple"></button>
+      <button class="theme-dot" data-theme="pink" title="Pink" aria-label="Pink"></button>
+      <button class="theme-dot" data-theme="red" title="Red" aria-label="Red"></button>
+      <button class="theme-dot" data-theme="gold" title="Gold" aria-label="Gold"></button>
+    </div>
+  </div>
 
   <div class="top-grid">
     <div class="stat"><span class="small">Account</span><strong id="accountStatus">Free</strong></div>
@@ -391,10 +833,12 @@ body.chart-open{overflow:hidden}
       <button id="accountLogoutBtn" class="small-btn">Logout</button>
     </div>
   </section>
+
 </section>
 </main>
 
 <!-- COIN CHART WINDOW -->
+
 <div id="chartOverlay" class="chart-overlay hidden">
   <div class="chart-modal" role="dialog" aria-modal="true" aria-label="Coin price chart">
 
@@ -431,7 +875,6 @@ body.chart-open{overflow:hidden}
 
 <footer>TinVin Crypto · Digital asset market information</footer>
 
-<!-- Chart.js library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
@@ -439,6 +882,15 @@ body.chart-open{overflow:hidden}
 
 const API_BASE = "https://tinvin-crypto-api.aslan89aslan1.workers.dev";
 const TOKEN_KEY = "tinvin_crypto_token";
+const THEME_KEY = "tinvin_crypto_theme";
+
+const THEMES = {
+  blue:"#51b8ff",
+  purple:"#a78bfa",
+  pink:"#ec4899",
+  red:"#ef4444",
+  gold:"#e9bd63"
+};
 
 let authToken = localStorage.getItem(TOKEN_KEY) || "";
 let currentUser = null;
@@ -447,60 +899,100 @@ let activeOrder = null;
 
 const $ = id => document.getElementById(id);
 
-function showMessage(id, message, type = "") {
+/* THEMES */
+
+function applyTheme(name, save = true){
+  if(!THEMES[name]) name = "gold";
+
+  document.documentElement.style.setProperty("--accent",THEMES[name]);
+
+  document.querySelectorAll(".theme-dot").forEach(button=>{
+    button.classList.toggle("active",button.dataset.theme === name);
+  });
+
+  if(save){
+    try{
+      localStorage.setItem(THEME_KEY,name);
+    }catch(error){
+      console.warn("Theme preference could not be saved.");
+    }
+  }
+
+  if(coinChartInstance && selectedChartCoin){
+    updateCoinChart();
+  }
+}
+
+document.querySelectorAll(".theme-dot").forEach(button=>{
+  button.addEventListener("click",()=>{
+    applyTheme(button.dataset.theme);
+  });
+});
+
+let savedTheme = "gold";
+
+try{
+  savedTheme = localStorage.getItem(THEME_KEY) || "gold";
+}catch(error){}
+
+applyTheme(savedTheme,false);
+
+/* GENERAL FUNCTIONS */
+
+function showMessage(id,message,type=""){
   const el = $(id);
   el.textContent = message || "";
   el.className = "message " + type;
 }
 
-async function api(path, options = {}) {
+async function api(path,options={}){
   const headers = {
-    "Content-Type": "application/json",
+    "Content-Type":"application/json",
     ...(options.headers || {})
   };
 
-  if (authToken) {
+  if(authToken){
     headers.Authorization = "Bearer " + authToken;
   }
 
-  const response = await fetch(API_BASE + path, {
+  const response = await fetch(API_BASE + path,{
     ...options,
     headers
   });
 
   let data;
 
-  try {
+  try{
     data = await response.json();
-  } catch {
+  }catch{
     throw new Error("The server returned an invalid response.");
   }
 
-  if (!response.ok || data.success === false || data.error) {
+  if(!response.ok || data.success === false || data.error){
     throw new Error(data.error || data.message || "Request failed.");
   }
 
   return data;
 }
 
-function readablePlan(plan) {
+function readablePlan(plan){
   const names = {
-    "7days": "7 Days",
-    "1month": "1 Month",
-    "6months": "6 Months",
-    "1year": "1 Year",
-    "Free": "Free"
+    "7days":"7 Days",
+    "1month":"1 Month",
+    "6months":"6 Months",
+    "1year":"1 Year",
+    "Free":"Free"
   };
 
   return names[plan] || plan || "Free";
 }
 
-function formatExpiry(raw) {
-  if (!raw) return "—";
+function formatExpiry(raw){
+  if(!raw) return "—";
 
   const num = Number(raw);
 
-  if (Number.isFinite(num) && num > 0) {
+  if(Number.isFinite(num) && num > 0){
     const ms = num > 1e12 ? num : num * 1000;
     return new Date(ms).toLocaleString();
   }
@@ -512,7 +1004,9 @@ function formatExpiry(raw) {
     : date.toLocaleString();
 }
 
-function setLoggedIn(user) {
+/* LOGIN STATE */
+
+function setLoggedIn(user){
   currentUser = user || {};
 
   $("authSection").classList.add("hidden");
@@ -544,7 +1038,7 @@ function setLoggedIn(user) {
   loadAlerts();
 }
 
-function setLoggedOut() {
+function setLoggedOut(){
   authToken = "";
   currentUser = null;
   activeOrder = null;
@@ -560,190 +1054,202 @@ function setLoggedOut() {
   closeCoinChart();
 }
 
-function showTab(tabId) {
-  document.querySelectorAll(".tab-content").forEach(section => {
-    section.classList.toggle(
-      "hidden",
-      section.id !== tabId
-    );
+/* TABS */
+
+function showTab(tabId){
+  document.querySelectorAll(".tab-content").forEach(section=>{
+    section.classList.toggle("hidden",section.id !== tabId);
   });
 
-  document.querySelectorAll(".tab-btn").forEach(button => {
-    button.classList.toggle(
-      "active",
-      button.dataset.tab === tabId
-    );
+  document.querySelectorAll(".tab-btn").forEach(button=>{
+    button.classList.toggle("active",button.dataset.tab === tabId);
   });
 
-  if (tabId === "alertsTab") {
+  if(tabId === "alertsTab"){
     loadAlerts();
   }
 }
 
-document.querySelectorAll(".tab-btn").forEach(button => {
-  button.addEventListener("click", () => {
+document.querySelectorAll(".tab-btn").forEach(button=>{
+  button.addEventListener("click",()=>{
     showTab(button.dataset.tab);
   });
 });
 
-$("showSignup").addEventListener("click", () => {
+/* UPGRADE BUTTON */
+
+$("upgradeTopBtn").addEventListener("click",()=>{
+  showTab("premiumTab");
+  $("premiumTab").scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+});
+
+/* AUTH FORMS */
+
+$("showSignup").addEventListener("click",()=>{
   $("loginForm").classList.add("hidden");
   $("signupForm").classList.remove("hidden");
 });
 
-$("showLogin").addEventListener("click", () => {
+$("showLogin").addEventListener("click",()=>{
   $("signupForm").classList.add("hidden");
   $("loginForm").classList.remove("hidden");
 });
 
-$("signupBtn").addEventListener("click", async () => {
+$("signupBtn").addEventListener("click",async()=>{
   const email = $("signupEmail").value.trim();
   const password = $("signupPassword").value;
 
-  showMessage("signupMessage", "");
+  showMessage("signupMessage","");
 
-  if (!email || !password) {
-    showMessage("signupMessage", "Enter your email and password.", "error");
+  if(!email || !password){
+    showMessage("signupMessage","Enter your email and password.","error");
     return;
   }
 
-  if (password.length < 8) {
-    showMessage("signupMessage", "Password must be at least 8 characters.", "error");
+  if(password.length < 8){
+    showMessage("signupMessage","Password must be at least 8 characters.","error");
     return;
   }
 
   $("signupBtn").disabled = true;
 
-  try {
-    const result = await api("/api/signup", {
-      method: "POST",
-      body: JSON.stringify({ email, password })
+  try{
+    const result = await api("/api/signup",{
+      method:"POST",
+      body:JSON.stringify({email,password})
     });
 
-    if (result.token) {
+    if(result.token){
       authToken = result.token;
-      localStorage.setItem(TOKEN_KEY, authToken);
-      setLoggedIn(result.user || { email });
-    } else {
-      showMessage("signupMessage", "Account created. Please log in.", "success");
+      localStorage.setItem(TOKEN_KEY,authToken);
+      setLoggedIn(result.user || {email});
+    }else{
+      showMessage("signupMessage","Account created. Please log in.","success");
       $("signupForm").classList.add("hidden");
       $("loginForm").classList.remove("hidden");
       $("loginEmail").value = email;
     }
-  } catch (error) {
-    showMessage("signupMessage", error.message, "error");
-  } finally {
+  }catch(error){
+    showMessage("signupMessage",error.message,"error");
+  }finally{
     $("signupBtn").disabled = false;
   }
 });
 
-$("loginBtn").addEventListener("click", async () => {
+$("loginBtn").addEventListener("click",async()=>{
   const email = $("loginEmail").value.trim();
   const password = $("loginPassword").value;
 
-  showMessage("loginMessage", "");
+  showMessage("loginMessage","");
 
-  if (!email || !password) {
-    showMessage("loginMessage", "Enter your email and password.", "error");
+  if(!email || !password){
+    showMessage("loginMessage","Enter your email and password.","error");
     return;
   }
 
   $("loginBtn").disabled = true;
 
-  try {
-    const result = await api("/api/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password })
+  try{
+    const result = await api("/api/login",{
+      method:"POST",
+      body:JSON.stringify({email,password})
     });
 
-    if (!result.token) {
+    if(!result.token){
       throw new Error("Login response did not include a token.");
     }
 
     authToken = result.token;
-    localStorage.setItem(TOKEN_KEY, authToken);
+    localStorage.setItem(TOKEN_KEY,authToken);
 
-    let user = result.user || { email };
+    let user = result.user || {email};
 
-    try {
+    try{
       const me = await api("/api/me");
       user = me.user || me;
-    } catch {}
+    }catch{}
 
     setLoggedIn(user);
-  } catch (error) {
-    showMessage("loginMessage", error.message, "error");
-  } finally {
+  }catch(error){
+    showMessage("loginMessage",error.message,"error");
+  }finally{
     $("loginBtn").disabled = false;
   }
 });
 
-async function logout() {
-  try {
-    if (authToken) {
-      await api("/api/logout", {
-        method: "POST",
-        body: JSON.stringify({})
+async function logout(){
+  try{
+    if(authToken){
+      await api("/api/logout",{
+        method:"POST",
+        body:JSON.stringify({})
       });
     }
-  } catch {}
+  }catch{}
 
   setLoggedOut();
 }
 
-$("logoutBtn").addEventListener("click", logout);
-$("accountLogoutBtn").addEventListener("click", logout);
+$("logoutBtn").addEventListener("click",logout);
+$("accountLogoutBtn").addEventListener("click",logout);
 
-function formatPrice(value, currency) {
+/* PRICE FORMATTING */
+
+function formatPrice(value,currency){
   const number = Number(value);
 
-  if (!Number.isFinite(number)) return "—";
+  if(!Number.isFinite(number)) return "—";
 
-  if (currency === "usdt") {
+  if(currency === "usdt"){
     return "$" +
-      number.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: number < 1 ? 6 : 2
+      number.toLocaleString("en-US",{
+        minimumFractionDigits:2,
+        maximumFractionDigits:number < 1 ? 6 : 2
       }) +
       " USDT";
   }
 
-  try {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: currency.toUpperCase(),
-      maximumFractionDigits: number < 1 ? 6 : 2
+  try{
+    return new Intl.NumberFormat("en-US",{
+      style:"currency",
+      currency:currency.toUpperCase(),
+      maximumFractionDigits:number < 1 ? 6 : 2
     }).format(number);
-  } catch {
+  }catch{
     return number.toLocaleString("en-US") + " " + currency.toUpperCase();
   }
 }
 
 /* MARKET COINS */
 
-function renderCoins() {
+function renderCoins(){
   const query = $("coinSearch").value.trim().toLowerCase();
   const currency = $("currencySelect").value;
 
-  const filtered = marketCoins.filter(coin => {
+  const filtered = marketCoins.filter(coin=>{
     const name = String(coin.name || "").toLowerCase();
     const symbol = String(coin.symbol || "").toLowerCase();
     const id = String(coin.id || "").toLowerCase();
 
-    return name.includes(query) || symbol.includes(query) || id.includes(query);
+    return name.includes(query) ||
+      symbol.includes(query) ||
+      id.includes(query);
   });
 
   $("coinCount").textContent = marketCoins.length;
   $("currencyLabel").textContent = currency.toUpperCase();
 
-  if (!filtered.length) {
+  if(!filtered.length){
     $("coinList").textContent = "No coins found.";
     return;
   }
 
   const fragment = document.createDocumentFragment();
 
-  filtered.forEach(coin => {
+  filtered.forEach(coin=>{
     const row = document.createElement("div");
     row.className = "coin-row";
     row.title = "Open " + (coin.name || coin.symbol || "coin") + " chart";
@@ -758,11 +1264,14 @@ function renderCoins() {
     symbol.className = "coin-symbol";
     symbol.textContent = String(coin.symbol || "").toUpperCase();
 
-    nameBox.append(name, symbol);
+    nameBox.append(name,symbol);
 
     const price = document.createElement("div");
     price.className = "price";
-    price.textContent = formatPrice(coin.current_price ?? coin.price, currency);
+    price.textContent = formatPrice(
+      coin.current_price ?? coin.price,
+      currency
+    );
 
     const percent = Number(
       coin.price_change_percentage_24h ??
@@ -777,21 +1286,23 @@ function renderCoins() {
       ? (percent > 0 ? "+" : "") + percent.toFixed(2) + "%"
       : "—";
 
-    row.addEventListener("click", () => openCoinChart(coin));
+    row.addEventListener("click",()=>{
+      openCoinChart(coin);
+    });
 
-    row.append(nameBox, price, change);
+    row.append(nameBox,price,change);
     fragment.appendChild(row);
   });
 
   $("coinList").replaceChildren(fragment);
 }
 
-async function loadMarket() {
+async function loadMarket(){
   $("marketMessage").textContent = "Loading market data...";
 
   const currency = $("currencySelect").value;
 
-  try {
+  try{
     const result = await api(
       "/api/market/coins?currency=" + encodeURIComponent(currency)
     );
@@ -804,19 +1315,19 @@ async function loadMarket() {
 
     $("marketMessage").textContent =
       `Market data updated. ${marketCoins.length} coins loaded.`;
-  } catch (error) {
+  }catch(error){
     $("marketMessage").textContent = error.message;
 
-    if (!marketCoins.length) {
+    if(!marketCoins.length){
       $("coinList").textContent =
         "Could not load market data. Please try again.";
     }
   }
 }
 
-$("refreshBtn").addEventListener("click", loadMarket);
-$("currencySelect").addEventListener("change", loadMarket);
-$("coinSearch").addEventListener("input", renderCoins);
+$("refreshBtn").addEventListener("click",loadMarket);
+$("currencySelect").addEventListener("change",loadMarket);
+$("coinSearch").addEventListener("input",renderCoins);
 
 /* COINGECKO HISTORICAL CHART */
 
@@ -826,30 +1337,26 @@ let coinChartInstance = null;
 let chartRequestNumber = 0;
 
 const chartDays = {
-  "1D": 1,
-  "7D": 7,
-  "1M": 30,
-  "12M": 365
+  "1D":1,
+  "7D":7,
+  "1M":30,
+  "12M":365
 };
 
-function destroyCoinChart() {
-  if (coinChartInstance) {
+function destroyCoinChart(){
+  if(coinChartInstance){
     coinChartInstance.destroy();
     coinChartInstance = null;
   }
 }
 
-function chartLoading(message) {
+function chartLoading(message){
   $("chartLoading").textContent = message;
   $("chartLoading").classList.remove("hidden");
 }
 
-function chartCurrencyLabel(currency) {
-  return currency === "afn" ? "AFN" : currency.toUpperCase();
-}
-
-function drawCoinChart(points, currency) {
-  if (typeof Chart === "undefined") {
+function drawCoinChart(points,currency){
+  if(typeof Chart === "undefined"){
     throw new Error("Chart library could not be loaded. Check your internet connection.");
   }
 
@@ -858,80 +1365,83 @@ function drawCoinChart(points, currency) {
 
   destroyCoinChart();
 
-  const labels = points.map(point => new Date(point[0]));
-  const values = points.map(point => Number(point[1]));
+  const labels = points.map(point=>new Date(point[0]));
+  const values = points.map(point=>Number(point[1]));
 
-  const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-  gradient.addColorStop(0, "rgba(233,189,99,0.28)");
-  gradient.addColorStop(1, "rgba(233,189,99,0.01)");
+  const accent = getComputedStyle(document.documentElement)
+    .getPropertyValue("--accent").trim() || "#e9bd63";
 
-  coinChartInstance = new Chart(ctx, {
-    type: "line",
-    data: {
+  const gradient = ctx.createLinearGradient(0,0,0,400);
+  gradient.addColorStop(0,accent + "48");
+  gradient.addColorStop(1,accent + "03");
+
+  coinChartInstance = new Chart(ctx,{
+    type:"line",
+    data:{
       labels,
-      datasets: [{
-        label: "Price",
-        data: values,
-        borderColor: "#e9bd63",
-        backgroundColor: gradient,
-        borderWidth: 2,
-        pointRadius: 0,
-        pointHoverRadius: 4,
-        pointHoverBackgroundColor: "#e9bd63",
-        fill: true,
-        tension: 0.22
+      datasets:[{
+        label:"Price",
+        data:values,
+        borderColor:accent,
+        backgroundColor:gradient,
+        borderWidth:2,
+        pointRadius:0,
+        pointHoverRadius:4,
+        pointHoverBackgroundColor:accent,
+        fill:true,
+        tension:.22
       }]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: false,
-      interaction: {
-        intersect: false,
-        mode: "index"
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      animation:false,
+      interaction:{
+        intersect:false,
+        mode:"index"
       },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          displayColors: false,
-          callbacks: {
-            title(items) {
-              if (!items.length) return "";
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          displayColors:false,
+          callbacks:{
+            title(items){
+              if(!items.length) return "";
               const date = new Date(items[0].parsed.x);
               return date.toLocaleString();
             },
-            label(context) {
-              return formatPrice(context.parsed.y, currency);
+            label(context){
+              return formatPrice(context.parsed.y,currency);
             }
           }
         }
       },
-      scales: {
-        x: {
-          type: "time",
-          time: {
-            displayFormats: {
-              hour: "HH:mm",
-              day: "MMM d",
-              week: "MMM d",
-              month: "MMM yyyy"
+      scales:{
+        x:{
+          type:"time",
+          time:{
+            displayFormats:{
+              hour:"HH:mm",
+              day:"MMM d",
+              week:"MMM d",
+              month:"MMM yyyy"
             }
           },
-          grid: { color: "rgba(139,146,158,0.08)" },
-          ticks: {
-            color: "#8b929e",
-            maxTicksLimit: 7,
-            maxRotation: 0
+          grid:{color:"rgba(139,146,158,0.08)"},
+          ticks:{
+            color:"#8b929e",
+            maxTicksLimit:7,
+            maxRotation:0
           }
         },
-        y: {
-          position: "right",
-          grid: { color: "rgba(139,146,158,0.10)" },
-          ticks: {
-            color: "#8b929e",
-            maxTicksLimit: 6,
-            callback(value) {
-              return formatPrice(value, currency);
+        y:{
+          position:"right",
+          grid:{color:"rgba(139,146,158,0.10)"},
+          ticks:{
+            color:"#8b929e",
+            maxTicksLimit:6,
+            callback(value){
+              return formatPrice(value,currency);
             }
           }
         }
@@ -940,13 +1450,13 @@ function drawCoinChart(points, currency) {
   });
 }
 
-async function updateCoinChart() {
-  if (!selectedChartCoin) return;
+async function updateCoinChart(){
+  if(!selectedChartCoin) return;
 
   const requestNumber = ++chartRequestNumber;
   const coinId = String(selectedChartCoin.id || "").trim();
 
-  if (!coinId) {
+  if(!coinId){
     chartLoading("This coin does not have a valid CoinGecko ID.");
     return;
   }
@@ -957,39 +1467,39 @@ async function updateCoinChart() {
   chartLoading("Loading historical price data...");
   destroyCoinChart();
 
-  try {
+  try{
     const query = new URLSearchParams({
-      coin_id: coinId,
+      coin_id:coinId,
       currency,
-      days: String(days)
+      days:String(days)
     });
 
     const result = await api("/api/market/chart?" + query.toString());
 
-    if (
+    if(
       requestNumber !== chartRequestNumber ||
       !selectedChartCoin ||
       $("chartOverlay").classList.contains("hidden")
-    ) {
+    ){
       return;
     }
 
-    if (!Array.isArray(result.prices) || !result.prices.length) {
+    if(!Array.isArray(result.prices) || !result.prices.length){
       throw new Error("Historical chart data is not available for this coin.");
     }
 
-    drawCoinChart(result.prices, currency);
+    drawCoinChart(result.prices,currency);
     $("chartLoading").classList.add("hidden");
 
-  } catch (error) {
-    if (requestNumber !== chartRequestNumber) return;
+  }catch(error){
+    if(requestNumber !== chartRequestNumber) return;
 
     destroyCoinChart();
     chartLoading(error.message || "Unable to load this chart.");
   }
 }
 
-function openCoinChart(coin) {
+function openCoinChart(coin){
   selectedChartCoin = coin;
   selectedChartPeriod = "1D";
 
@@ -1014,18 +1524,18 @@ function openCoinChart(coin) {
 
   const changeElement = $("chartCoinChange");
 
-  if (Number.isFinite(percent)) {
+  if(Number.isFinite(percent)){
     changeElement.textContent =
       (percent > 0 ? "+" : "") + percent.toFixed(2) + "% (24h)";
 
     changeElement.className =
       "small " + (percent >= 0 ? "up" : "down");
-  } else {
+  }else{
     changeElement.textContent = "24h change unavailable";
     changeElement.className = "small";
   }
 
-  document.querySelectorAll(".chart-period").forEach(button => {
+  document.querySelectorAll(".chart-period").forEach(button=>{
     button.classList.toggle(
       "active",
       button.dataset.period === selectedChartPeriod
@@ -1038,7 +1548,7 @@ function openCoinChart(coin) {
   updateCoinChart();
 }
 
-function closeCoinChart() {
+function closeCoinChart(){
   chartRequestNumber++;
   selectedChartCoin = null;
 
@@ -1048,28 +1558,27 @@ function closeCoinChart() {
   destroyCoinChart();
 }
 
-$("closeChartBtn").addEventListener("click", closeCoinChart);
+$("closeChartBtn").addEventListener("click",closeCoinChart);
 
-/* Intentionally no outside-overlay click close.
-   The chart closes only with X or Escape. */
+/* Chart closes only with X or Escape. */
 
-document.addEventListener("keydown", event => {
-  if (
+document.addEventListener("keydown",event=>{
+  if(
     event.key === "Escape" &&
     !$("chartOverlay").classList.contains("hidden")
-  ) {
+  ){
     closeCoinChart();
   }
 });
 
-document.querySelectorAll(".chart-period").forEach(button => {
-  button.addEventListener("click", () => {
-    if (!selectedChartCoin) return;
+document.querySelectorAll(".chart-period").forEach(button=>{
+  button.addEventListener("click",()=>{
+    if(!selectedChartCoin) return;
 
     selectedChartPeriod = button.dataset.period;
 
-    document.querySelectorAll(".chart-period").forEach(item => {
-      item.classList.toggle("active", item === button);
+    document.querySelectorAll(".chart-period").forEach(item=>{
+      item.classList.toggle("active",item === button);
     });
 
     updateCoinChart();
@@ -1078,12 +1587,12 @@ document.querySelectorAll(".chart-period").forEach(button => {
 
 /* PRICE ALERTS */
 
-async function loadAlerts() {
-  if (!authToken) return;
+async function loadAlerts(){
+  if(!authToken) return;
 
   $("alertsList").textContent = "Loading alerts...";
 
-  try {
+  try{
     const result = await api("/api/alerts");
 
     const alerts = Array.isArray(result)
@@ -1092,12 +1601,12 @@ async function loadAlerts() {
 
     $("alertsList").replaceChildren();
 
-    if (!alerts.length) {
+    if(!alerts.length){
       $("alertsList").textContent = "You have no alerts yet.";
       return;
     }
 
-    alerts.forEach(alert => {
+    alerts.forEach(alert=>{
       const item = document.createElement("div");
       item.className = "alert-item";
 
@@ -1114,65 +1623,65 @@ async function loadAlerts() {
       remove.style.float = "right";
       remove.textContent = "Delete";
 
-      remove.addEventListener("click", async () => {
+      remove.addEventListener("click",async()=>{
         remove.disabled = true;
 
-        try {
+        try{
           await api(
             "/api/alerts/" + encodeURIComponent(alert.id),
-            { method: "DELETE" }
+            {method:"DELETE"}
           );
 
           loadAlerts();
-        } catch (error) {
-          showMessage("alertMessage", error.message, "error");
+        }catch(error){
+          showMessage("alertMessage",error.message,"error");
           remove.disabled = false;
         }
       });
 
-      item.append(description, remove);
+      item.append(description,remove);
       $("alertsList").appendChild(item);
     });
-  } catch (error) {
+  }catch(error){
     $("alertsList").textContent = error.message;
   }
 }
 
-$("addAlertBtn").addEventListener("click", async () => {
+$("addAlertBtn").addEventListener("click",async()=>{
   const coin_id = $("alertCoin").value.trim().toLowerCase();
   const target_price = Number($("alertPrice").value);
   const direction = $("alertDirection").value;
 
-  showMessage("alertMessage", "");
+  showMessage("alertMessage","");
 
-  if (!coin_id || !Number.isFinite(target_price) || target_price <= 0) {
-    showMessage("alertMessage", "Enter a valid coin ID and target price.", "error");
+  if(!coin_id || !Number.isFinite(target_price) || target_price <= 0){
+    showMessage("alertMessage","Enter a valid coin ID and target price.","error");
     return;
   }
 
   $("addAlertBtn").disabled = true;
 
-  try {
-    await api("/api/alerts", {
-      method: "POST",
-      body: JSON.stringify({ coin_id, target_price, direction })
+  try{
+    await api("/api/alerts",{
+      method:"POST",
+      body:JSON.stringify({coin_id,target_price,direction})
     });
 
     $("alertCoin").value = "";
     $("alertPrice").value = "";
 
-    showMessage("alertMessage", "Alert created.", "success");
+    showMessage("alertMessage","Alert created.","success");
     loadAlerts();
-  } catch (error) {
-    showMessage("alertMessage", error.message, "error");
-  } finally {
+  }catch(error){
+    showMessage("alertMessage",error.message,"error");
+  }finally{
     $("addAlertBtn").disabled = false;
   }
 });
 
 /* PREMIUM PAYMENT */
 
-function showPaymentInvoice(invoice) {
+function showPaymentInvoice(invoice){
   activeOrder = invoice;
 
   $("paymentDetails").classList.remove("hidden");
@@ -1182,28 +1691,33 @@ function showPaymentInvoice(invoice) {
   $("paymentExpiry").textContent = formatExpiry(invoice.expires_at);
 
   $("transactionHash").value = "";
-  showMessage("verifyMessage", "");
+  showMessage("verifyMessage","");
 }
 
-document.querySelectorAll("[data-plan]").forEach(button => {
-  button.addEventListener("click", async () => {
+document.querySelectorAll("[data-plan]").forEach(button=>{
+  button.addEventListener("click",async()=>{
     const plan = button.dataset.plan;
     const asset = $("paymentAsset").value;
 
-    document.querySelectorAll("[data-plan]").forEach(b => {
+    document.querySelectorAll("[data-plan]").forEach(b=>{
       b.disabled = true;
     });
 
-    showMessage("paymentMessage", "Creating payment order...");
+    showMessage("paymentMessage","Creating payment order...");
     $("paymentDetails").classList.add("hidden");
 
-    try {
-      const invoice = await api("/api/payments/create", {
-        method: "POST",
-        body: JSON.stringify({ plan, asset })
+    try{
+      const invoice = await api("/api/payments/create",{
+        method:"POST",
+        body:JSON.stringify({plan,asset})
       });
 
-      if (!invoice.order_id || !invoice.wallet_address || !invoice.amount || !invoice.asset) {
+      if(
+        !invoice.order_id ||
+        !invoice.wallet_address ||
+        !invoice.amount ||
+        !invoice.asset
+      ){
         throw new Error("The server returned an incomplete payment order.");
       }
 
@@ -1214,20 +1728,20 @@ document.querySelectorAll("[data-plan]").forEach(button => {
         "Payment order created. Check the amount and wallet carefully.",
         "success"
       );
-    } catch (error) {
-      showMessage("paymentMessage", error.message, "error");
-    } finally {
-      document.querySelectorAll("[data-plan]").forEach(b => {
+    }catch(error){
+      showMessage("paymentMessage",error.message,"error");
+    }finally{
+      document.querySelectorAll("[data-plan]").forEach(b=>{
         b.disabled = false;
       });
     }
   });
 });
 
-async function copyText(value) {
-  if (!value) throw new Error("Nothing to copy.");
+async function copyText(value){
+  if(!value) throw new Error("Nothing to copy.");
 
-  if (navigator.clipboard && window.isSecureContext) {
+  if(navigator.clipboard && window.isSecureContext){
     await navigator.clipboard.writeText(value);
     return;
   }
@@ -1243,50 +1757,50 @@ async function copyText(value) {
   const ok = document.execCommand("copy");
   area.remove();
 
-  if (!ok) {
+  if(!ok){
     throw new Error("Copy failed. Please copy it manually.");
   }
 }
 
-$("copyWalletBtn").addEventListener("click", async () => {
-  try {
+$("copyWalletBtn").addEventListener("click",async()=>{
+  try{
     await copyText(activeOrder?.wallet_address);
-    showMessage("verifyMessage", "Wallet address copied.", "success");
-  } catch (error) {
-    showMessage("verifyMessage", error.message, "error");
+    showMessage("verifyMessage","Wallet address copied.","success");
+  }catch(error){
+    showMessage("verifyMessage",error.message,"error");
   }
 });
 
-$("copyAmountBtn").addEventListener("click", async () => {
-  try {
+$("copyAmountBtn").addEventListener("click",async()=>{
+  try{
     await copyText(activeOrder?.amount);
-    showMessage("verifyMessage", "Exact amount copied.", "success");
-  } catch (error) {
-    showMessage("verifyMessage", error.message, "error");
+    showMessage("verifyMessage","Exact amount copied.","success");
+  }catch(error){
+    showMessage("verifyMessage",error.message,"error");
   }
 });
 
-$("verifyPaymentBtn").addEventListener("click", async () => {
-  if (!activeOrder?.order_id) {
-    showMessage("verifyMessage", "Create a payment order first.", "error");
+$("verifyPaymentBtn").addEventListener("click",async()=>{
+  if(!activeOrder?.order_id){
+    showMessage("verifyMessage","Create a payment order first.","error");
     return;
   }
 
   const tx_hash = $("transactionHash").value.trim();
 
-  if (!tx_hash) {
-    showMessage("verifyMessage", "Paste your transaction hash.", "error");
+  if(!tx_hash){
+    showMessage("verifyMessage","Paste your transaction hash.","error");
     return;
   }
 
   $("verifyPaymentBtn").disabled = true;
-  showMessage("verifyMessage", "Checking the blockchain transaction...");
+  showMessage("verifyMessage","Checking the blockchain transaction...");
 
-  try {
-    const result = await api("/api/payments/verify", {
-      method: "POST",
-      body: JSON.stringify({
-        order_id: activeOrder.order_id,
+  try{
+    const result = await api("/api/payments/verify",{
+      method:"POST",
+      body:JSON.stringify({
+        order_id:activeOrder.order_id,
         tx_hash
       })
     });
@@ -1302,25 +1816,25 @@ $("verifyPaymentBtn").addEventListener("click", async () => {
 
     $("paymentDetails").classList.add("hidden");
     activeOrder = null;
-  } catch (error) {
-    showMessage("verifyMessage", error.message, "error");
-  } finally {
+  }catch(error){
+    showMessage("verifyMessage",error.message,"error");
+  }finally{
     $("verifyPaymentBtn").disabled = false;
   }
 });
 
 /* DAILY MARKET ANALYSIS */
 
-$("analysisBtn").addEventListener("click", async () => {
+$("analysisBtn").addEventListener("click",async()=>{
   $("analysisBtn").disabled = true;
   $("analysisResult").textContent = "";
 
-  showMessage("analysisMessage", "Generating market overview...");
+  showMessage("analysisMessage","Generating market overview...");
 
-  try {
-    const result = await api("/api/analysis/daily", {
-      method: "POST",
-      body: JSON.stringify({})
+  try{
+    const result = await api("/api/analysis/daily",{
+      method:"POST",
+      body:JSON.stringify({})
     });
 
     const analysis =
@@ -1331,31 +1845,32 @@ $("analysisBtn").addEventListener("click", async () => {
       "No analysis returned.";
 
     $("analysisResult").textContent = analysis;
-    showMessage("analysisMessage", "Analysis completed.", "success");
-  } catch (error) {
-    showMessage("analysisMessage", error.message, "error");
-  } finally {
+    showMessage("analysisMessage","Analysis completed.","success");
+  }catch(error){
+    showMessage("analysisMessage",error.message,"error");
+  }finally{
     $("analysisBtn").disabled = false;
   }
 });
 
 /* RESTORE SESSION */
 
-async function restoreSession() {
-  if (!authToken) {
+async function restoreSession(){
+  if(!authToken){
     setLoggedOut();
     return;
   }
 
-  try {
+  try{
     const result = await api("/api/me");
     setLoggedIn(result.user || result);
-  } catch {
+  }catch{
     setLoggedOut();
   }
 }
 
 restoreSession();
 </script>
+
 </body>
 </html>
