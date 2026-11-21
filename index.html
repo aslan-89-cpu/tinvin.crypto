@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -168,6 +169,7 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
         <input id="coinSearch" placeholder="Search coins...">
         <select id="currencySelect">
           <option value="usd">USD</option>
+          <option value="usdt">USDT</option>
           <option value="afn">AFN</option>
         </select>
         <button id="refreshBtn" class="small-btn">Refresh</button>
@@ -175,7 +177,7 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
       <div id="marketMessage" class="message muted"></div>
       <div id="coinList"><p class="muted">Loading market data...</p></div>
     </div>
-    <p class="small">Market prices are provided by external market data services and may be delayed.</p>
+    <p class="small">Market prices are provided by external market data services and may be delayed. The market list displays up to 250 leading coins.</p>
   </section>
 
   <section id="alertsTab" class="tab-content hidden">
@@ -276,12 +278,12 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
   <section id="aiTab" class="tab-content hidden">
     <div class="card">
       <h2>AI Daily Market Analysis</h2>
-      <p class="muted">Request an AI-generated market overview.</p>
+      <p class="muted">Request a daily market overview.</p>
       <button id="analysisBtn" class="main-btn">Generate analysis</button>
       <div id="analysisMessage" class="message"></div>
       <div id="analysisResult" style="white-space:pre-wrap;line-height:1.7;margin-top:15px"></div>
     </div>
-    <p class="small">AI analysis is informational only, not financial advice. It cannot guarantee future prices or profits.</p>
+    <p class="small">Market analysis is informational only, not financial advice. It cannot guarantee future prices or profits.</p>
   </section>
 
   <section id="accountTab" class="tab-content hidden">
@@ -311,19 +313,21 @@ let activeOrder = null;
 
 const $ = id => document.getElementById(id);
 
-function showMessage(id, message, type="") {
+function showMessage(id, message, type = "") {
   const el = $(id);
   el.textContent = message || "";
   el.className = "message " + type;
 }
 
-async function api(path, options={}) {
+async function api(path, options = {}) {
   const headers = {
     "Content-Type": "application/json",
     ...(options.headers || {})
   };
 
-  if (authToken) headers.Authorization = "Bearer " + authToken;
+  if (authToken) {
+    headers.Authorization = "Bearer " + authToken;
+  }
 
   const response = await fetch(API_BASE + path, {
     ...options,
@@ -331,6 +335,7 @@ async function api(path, options={}) {
   });
 
   let data;
+
   try {
     data = await response.json();
   } catch {
@@ -346,41 +351,59 @@ async function api(path, options={}) {
 
 function readablePlan(plan) {
   const names = {
-    "7days":"7 Days",
-    "1month":"1 Month",
-    "6months":"6 Months",
-    "1year":"1 Year",
-    "Free":"Free"
+    "7days": "7 Days",
+    "1month": "1 Month",
+    "6months": "6 Months",
+    "1year": "1 Year",
+    "Free": "Free"
   };
+
   return names[plan] || plan || "Free";
 }
 
 function formatExpiry(raw) {
   if (!raw) return "—";
+
   const num = Number(raw);
+
   if (Number.isFinite(num) && num > 0) {
     const ms = num > 1e12 ? num : num * 1000;
     return new Date(ms).toLocaleString();
   }
-  const d = new Date(raw);
-  return Number.isNaN(d.getTime()) ? String(raw) : d.toLocaleString();
+
+  const date = new Date(raw);
+
+  return Number.isNaN(date.getTime())
+    ? String(raw)
+    : date.toLocaleString();
 }
 
 function setLoggedIn(user) {
   currentUser = user || {};
+
   $("authSection").classList.add("hidden");
   $("appSection").classList.remove("hidden");
   $("logoutBtn").classList.remove("hidden");
 
   const email = currentUser.email || "";
+
   $("userLabel").textContent = email;
   $("accountEmail").textContent = email;
 
-  const plan = readablePlan(currentUser.plan || currentUser.subscription?.plan || "Free");
+  const plan = readablePlan(
+    currentUser.plan ||
+    currentUser.subscription?.plan ||
+    "Free"
+  );
+
   $("accountStatus").textContent = plan;
   $("accountPlan").textContent = plan;
 
-  const expiry = currentUser.expires_at || currentUser.subscription?.expires_at || "";
+  const expiry =
+    currentUser.expires_at ||
+    currentUser.subscription?.expires_at ||
+    "";
+
   $("accountExpiry").textContent = formatExpiry(expiry);
 
   loadMarket();
@@ -391,7 +414,9 @@ function setLoggedOut() {
   authToken = "";
   currentUser = null;
   activeOrder = null;
+
   localStorage.removeItem(TOKEN_KEY);
+
   $("authSection").classList.remove("hidden");
   $("appSection").classList.add("hidden");
   $("logoutBtn").classList.add("hidden");
@@ -401,16 +426,28 @@ function setLoggedOut() {
 
 function showTab(tabId) {
   document.querySelectorAll(".tab-content").forEach(section => {
-    section.classList.toggle("hidden", section.id !== tabId);
+    section.classList.toggle(
+      "hidden",
+      section.id !== tabId
+    );
   });
+
   document.querySelectorAll(".tab-btn").forEach(button => {
-    button.classList.toggle("active", button.dataset.tab === tabId);
+    button.classList.toggle(
+      "active",
+      button.dataset.tab === tabId
+    );
   });
-  if (tabId === "alertsTab") loadAlerts();
+
+  if (tabId === "alertsTab") {
+    loadAlerts();
+  }
 }
 
 document.querySelectorAll(".tab-btn").forEach(button => {
-  button.addEventListener("click", () => showTab(button.dataset.tab));
+  button.addEventListener("click", () => {
+    showTab(button.dataset.tab);
+  });
 });
 
 $("showSignup").addEventListener("click", () => {
@@ -426,36 +463,52 @@ $("showLogin").addEventListener("click", () => {
 $("signupBtn").addEventListener("click", async () => {
   const email = $("signupEmail").value.trim();
   const password = $("signupPassword").value;
+
   showMessage("signupMessage", "");
 
   if (!email || !password) {
-    showMessage("signupMessage", "Enter your email and password.", "error");
+    showMessage(
+      "signupMessage",
+      "Enter your email and password.",
+      "error"
+    );
     return;
   }
+
   if (password.length < 8) {
-    showMessage("signupMessage", "Password must be at least 8 characters.", "error");
+    showMessage(
+      "signupMessage",
+      "Password must be at least 8 characters.",
+      "error"
+    );
     return;
   }
 
   $("signupBtn").disabled = true;
+
   try {
     const result = await api("/api/signup", {
-      method:"POST",
-      body:JSON.stringify({email,password})
+      method: "POST",
+      body: JSON.stringify({ email, password })
     });
 
     if (result.token) {
       authToken = result.token;
       localStorage.setItem(TOKEN_KEY, authToken);
-      setLoggedIn(result.user || {email});
+      setLoggedIn(result.user || { email });
     } else {
-      showMessage("signupMessage", "Account created. Please log in.", "success");
+      showMessage(
+        "signupMessage",
+        "Account created. Please log in.",
+        "success"
+      );
+
       $("signupForm").classList.add("hidden");
       $("loginForm").classList.remove("hidden");
       $("loginEmail").value = email;
     }
-  } catch (e) {
-    showMessage("signupMessage", e.message, "error");
+  } catch (error) {
+    showMessage("signupMessage", error.message, "error");
   } finally {
     $("signupBtn").disabled = false;
   }
@@ -464,34 +517,43 @@ $("signupBtn").addEventListener("click", async () => {
 $("loginBtn").addEventListener("click", async () => {
   const email = $("loginEmail").value.trim();
   const password = $("loginPassword").value;
+
   showMessage("loginMessage", "");
 
   if (!email || !password) {
-    showMessage("loginMessage", "Enter your email and password.", "error");
+    showMessage(
+      "loginMessage",
+      "Enter your email and password.",
+      "error"
+    );
     return;
   }
 
   $("loginBtn").disabled = true;
+
   try {
     const result = await api("/api/login", {
-      method:"POST",
-      body:JSON.stringify({email,password})
+      method: "POST",
+      body: JSON.stringify({ email, password })
     });
 
-    if (!result.token) throw new Error("Login response did not include a token.");
+    if (!result.token) {
+      throw new Error("Login response did not include a token.");
+    }
 
     authToken = result.token;
     localStorage.setItem(TOKEN_KEY, authToken);
 
-    let user = result.user || {email};
+    let user = result.user || { email };
+
     try {
       const me = await api("/api/me");
       user = me.user || me;
     } catch {}
 
     setLoggedIn(user);
-  } catch (e) {
-    showMessage("loginMessage", e.message, "error");
+  } catch (error) {
+    showMessage("loginMessage", error.message, "error");
   } finally {
     $("loginBtn").disabled = false;
   }
@@ -499,11 +561,14 @@ $("loginBtn").addEventListener("click", async () => {
 
 async function logout() {
   try {
-    if (authToken) await api("/api/logout", {
-      method:"POST",
-      body:JSON.stringify({})
-    });
+    if (authToken) {
+      await api("/api/logout", {
+        method: "POST",
+        body: JSON.stringify({})
+      });
+    }
   } catch {}
+
   setLoggedOut();
 }
 
@@ -512,15 +577,28 @@ $("accountLogoutBtn").addEventListener("click", logout);
 
 function formatPrice(value, currency) {
   const number = Number(value);
+
   if (!Number.isFinite(number)) return "—";
+
+  if (currency === "usdt") {
+    return "$" +
+      number.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: number < 1 ? 6 : 2
+      }) +
+      " USDT";
+  }
+
   try {
     return new Intl.NumberFormat("en-US", {
-      style:"currency",
-      currency:currency.toUpperCase(),
-      maximumFractionDigits:number < 1 ? 6 : 2
+      style: "currency",
+      currency: currency.toUpperCase(),
+      maximumFractionDigits: number < 1 ? 6 : 2
     }).format(number);
   } catch {
-    return number.toLocaleString("en-US") + " " + currency.toUpperCase();
+    return number.toLocaleString("en-US") +
+      " " +
+      currency.toUpperCase();
   }
 }
 
@@ -532,7 +610,12 @@ function renderCoins() {
     const name = String(coin.name || "").toLowerCase();
     const symbol = String(coin.symbol || "").toLowerCase();
     const id = String(coin.id || "").toLowerCase();
-    return name.includes(query) || symbol.includes(query) || id.includes(query);
+
+    return (
+      name.includes(query) ||
+      symbol.includes(query) ||
+      id.includes(query)
+    );
   });
 
   $("coinCount").textContent = marketCoins.length;
@@ -550,6 +633,7 @@ function renderCoins() {
     row.className = "coin-row";
 
     const nameBox = document.createElement("div");
+
     const name = document.createElement("div");
     name.className = "coin-name";
     name.textContent = coin.name || coin.id || "Unknown";
@@ -562,11 +646,21 @@ function renderCoins() {
 
     const price = document.createElement("div");
     price.className = "price";
-    price.textContent = formatPrice(coin.current_price ?? coin.price, currency);
+    price.textContent = formatPrice(
+      coin.current_price ?? coin.price,
+      currency
+    );
 
-    const percent = Number(coin.price_change_percentage_24h ?? coin.change_24h ?? coin.change);
+    const percent = Number(
+      coin.price_change_percentage_24h ??
+      coin.change_24h ??
+      coin.change
+    );
+
     const change = document.createElement("div");
-    change.className = "change " + (percent >= 0 ? "up" : "down");
+    change.className = "change " +
+      (percent >= 0 ? "up" : "down");
+
     change.textContent = Number.isFinite(percent)
       ? (percent > 0 ? "+" : "") + percent.toFixed(2) + "%"
       : "—";
@@ -580,16 +674,30 @@ function renderCoins() {
 
 async function loadMarket() {
   $("marketMessage").textContent = "Loading market data...";
+
   const currency = $("currencySelect").value;
 
   try {
-    const result = await api("/api/market/coins?currency=" + encodeURIComponent(currency));
-    marketCoins = Array.isArray(result) ? result : (result.coins || result.data || []);
+    const result = await api(
+      "/api/market/coins?currency=" +
+      encodeURIComponent(currency)
+    );
+
+    marketCoins = Array.isArray(result)
+      ? result
+      : (result.coins || result.data || []);
+
     renderCoins();
-    $("marketMessage").textContent = "Market data updated.";
-  } catch (e) {
-    $("marketMessage").textContent = e.message;
-    if (!marketCoins.length) $("coinList").textContent = "Could not load market data.";
+
+    $("marketMessage").textContent =
+      `Market data updated. ${marketCoins.length} coins loaded.`;
+  } catch (error) {
+    $("marketMessage").textContent = error.message;
+
+    if (!marketCoins.length) {
+      $("coinList").textContent =
+        "Could not load market data. Please try again.";
+    }
   }
 }
 
@@ -599,15 +707,21 @@ $("coinSearch").addEventListener("input", renderCoins);
 
 async function loadAlerts() {
   if (!authToken) return;
+
   $("alertsList").textContent = "Loading alerts...";
 
   try {
     const result = await api("/api/alerts");
-    const alerts = Array.isArray(result) ? result : (result.alerts || result.data || []);
+
+    const alerts = Array.isArray(result)
+      ? result
+      : (result.alerts || result.data || []);
+
     $("alertsList").replaceChildren();
 
     if (!alerts.length) {
-      $("alertsList").textContent = "You have no alerts yet.";
+      $("alertsList").textContent =
+        "You have no alerts yet.";
       return;
     }
 
@@ -616,8 +730,12 @@ async function loadAlerts() {
       item.className = "alert-item";
 
       const description = document.createElement("span");
+
       description.textContent =
-        `${alert.coin_id || "Coin"} · ${alert.direction || "above"} · ${alert.target_price ?? ""}`;
+        `${alert.coin_id || "Coin"} · ` +
+        `${alert.direction || "above"} · ` +
+        `${alert.target_price ?? ""}` +
+        (alert.triggered ? " · Triggered" : "");
 
       const remove = document.createElement("button");
       remove.className = "small-btn";
@@ -625,19 +743,30 @@ async function loadAlerts() {
       remove.textContent = "Delete";
 
       remove.addEventListener("click", async () => {
+        remove.disabled = true;
+
         try {
-          await api("/api/alerts/" + encodeURIComponent(alert.id), {method:"DELETE"});
+          await api(
+            "/api/alerts/" + encodeURIComponent(alert.id),
+            { method: "DELETE" }
+          );
+
           loadAlerts();
-        } catch (e) {
-          showMessage("alertMessage", e.message, "error");
+        } catch (error) {
+          showMessage(
+            "alertMessage",
+            error.message,
+            "error"
+          );
+          remove.disabled = false;
         }
       });
 
       item.append(description, remove);
       $("alertsList").appendChild(item);
     });
-  } catch (e) {
-    $("alertsList").textContent = e.message;
+  } catch (error) {
+    $("alertsList").textContent = error.message;
   }
 }
 
@@ -648,37 +777,67 @@ $("addAlertBtn").addEventListener("click", async () => {
 
   showMessage("alertMessage", "");
 
-  if (!coin_id || !Number.isFinite(target_price) || target_price <= 0) {
-    showMessage("alertMessage", "Enter a valid coin ID and target price.", "error");
+  if (
+    !coin_id ||
+    !Number.isFinite(target_price) ||
+    target_price <= 0
+  ) {
+    showMessage(
+      "alertMessage",
+      "Enter a valid coin ID and target price.",
+      "error"
+    );
     return;
   }
 
   $("addAlertBtn").disabled = true;
+
   try {
     await api("/api/alerts", {
-      method:"POST",
-      body:JSON.stringify({coin_id,target_price,direction})
+      method: "POST",
+      body: JSON.stringify({
+        coin_id,
+        target_price,
+        direction
+      })
     });
+
     $("alertCoin").value = "";
     $("alertPrice").value = "";
-    showMessage("alertMessage", "Alert created.", "success");
+
+    showMessage(
+      "alertMessage",
+      "Alert created.",
+      "success"
+    );
+
     loadAlerts();
-  } catch (e) {
-    showMessage("alertMessage", e.message, "error");
+  } catch (error) {
+    showMessage(
+      "alertMessage",
+      error.message,
+      "error"
+    );
   } finally {
     $("addAlertBtn").disabled = false;
   }
 });
 
-/* Premium payment */
+/* PREMIUM PAYMENT */
+
 function showPaymentInvoice(invoice) {
   activeOrder = invoice;
+
   $("paymentDetails").classList.remove("hidden");
   $("paymentOrder").textContent = invoice.order_id;
-  $("paymentAmount").textContent = invoice.amount + " " + invoice.asset;
+  $("paymentAmount").textContent =
+    invoice.amount + " " + invoice.asset;
   $("paymentWallet").textContent = invoice.wallet_address;
-  $("paymentExpiry").textContent = formatExpiry(invoice.expires_at);
+  $("paymentExpiry").textContent =
+    formatExpiry(invoice.expires_at);
+
   $("transactionHash").value = "";
+
   showMessage("verifyMessage", "");
 }
 
@@ -687,31 +846,59 @@ document.querySelectorAll("[data-plan]").forEach(button => {
     const plan = button.dataset.plan;
     const asset = $("paymentAsset").value;
 
-    document.querySelectorAll("[data-plan]").forEach(b => b.disabled = true);
-    showMessage("paymentMessage", "Creating payment order...");
+    document.querySelectorAll("[data-plan]").forEach(b => {
+      b.disabled = true;
+    });
+
+    showMessage(
+      "paymentMessage",
+      "Creating payment order..."
+    );
+
+    $("paymentDetails").classList.add("hidden");
 
     try {
       const invoice = await api("/api/payments/create", {
-        method:"POST",
-        body:JSON.stringify({plan,asset})
+        method: "POST",
+        body: JSON.stringify({ plan, asset })
       });
 
-      if (!invoice.order_id || !invoice.wallet_address || !invoice.amount) {
-        throw new Error("The server returned an incomplete payment order.");
+      if (
+        !invoice.order_id ||
+        !invoice.wallet_address ||
+        !invoice.amount ||
+        !invoice.asset
+      ) {
+        throw new Error(
+          "The server returned an incomplete payment order."
+        );
       }
 
       showPaymentInvoice(invoice);
-      showMessage("paymentMessage", "Payment order created. Check the amount and wallet carefully.", "success");
-    } catch (e) {
-      showMessage("paymentMessage", e.message, "error");
+
+      showMessage(
+        "paymentMessage",
+        "Payment order created. Check the amount and wallet carefully.",
+        "success"
+      );
+    } catch (error) {
+      showMessage(
+        "paymentMessage",
+        error.message,
+        "error"
+      );
     } finally {
-      document.querySelectorAll("[data-plan]").forEach(b => b.disabled = false);
+      document.querySelectorAll("[data-plan]").forEach(b => {
+        b.disabled = false;
+      });
     }
   });
 });
 
 async function copyText(value) {
-  if (!value) throw new Error("Nothing to copy.");
+  if (!value) {
+    throw new Error("Nothing to copy.");
+  }
 
   if (navigator.clipboard && window.isSecureContext) {
     await navigator.clipboard.writeText(value);
@@ -722,95 +909,159 @@ async function copyText(value) {
   area.value = value;
   area.style.position = "fixed";
   area.style.opacity = "0";
+
   document.body.appendChild(area);
   area.select();
 
   const ok = document.execCommand("copy");
   area.remove();
 
-  if (!ok) throw new Error("Copy failed. Please copy it manually.");
+  if (!ok) {
+    throw new Error(
+      "Copy failed. Please copy it manually."
+    );
+  }
 }
 
 $("copyWalletBtn").addEventListener("click", async () => {
   try {
     await copyText(activeOrder?.wallet_address);
-    showMessage("verifyMessage", "Wallet address copied.", "success");
-  } catch (e) {
-    showMessage("verifyMessage", e.message, "error");
+
+    showMessage(
+      "verifyMessage",
+      "Wallet address copied.",
+      "success"
+    );
+  } catch (error) {
+    showMessage(
+      "verifyMessage",
+      error.message,
+      "error"
+    );
   }
 });
 
 $("copyAmountBtn").addEventListener("click", async () => {
   try {
     await copyText(activeOrder?.amount);
-    showMessage("verifyMessage", "Exact amount copied.", "success");
-  } catch (e) {
-    showMessage("verifyMessage", e.message, "error");
+
+    showMessage(
+      "verifyMessage",
+      "Exact amount copied.",
+      "success"
+    );
+  } catch (error) {
+    showMessage(
+      "verifyMessage",
+      error.message,
+      "error"
+    );
   }
 });
 
 $("verifyPaymentBtn").addEventListener("click", async () => {
   if (!activeOrder?.order_id) {
-    showMessage("verifyMessage", "Create a payment order first.", "error");
+    showMessage(
+      "verifyMessage",
+      "Create a payment order first.",
+      "error"
+    );
     return;
   }
 
   const tx_hash = $("transactionHash").value.trim();
 
   if (!tx_hash) {
-    showMessage("verifyMessage", "Paste your transaction hash.", "error");
+    showMessage(
+      "verifyMessage",
+      "Paste your transaction hash.",
+      "error"
+    );
     return;
   }
 
   $("verifyPaymentBtn").disabled = true;
-  showMessage("verifyMessage", "Checking the blockchain transaction...");
+
+  showMessage(
+    "verifyMessage",
+    "Checking the blockchain transaction..."
+  );
 
   try {
     const result = await api("/api/payments/verify", {
-      method:"POST",
-      body:JSON.stringify({
-        order_id:activeOrder.order_id,
+      method: "POST",
+      body: JSON.stringify({
+        order_id: activeOrder.order_id,
         tx_hash
       })
     });
 
-    showMessage("verifyMessage", result.message || "Payment verified.", "success");
+    showMessage(
+      "verifyMessage",
+      result.message || "Payment verified.",
+      "success"
+    );
 
     const me = await api("/api/me");
     setLoggedIn(me.user || me);
 
     $("paymentDetails").classList.add("hidden");
     activeOrder = null;
-  } catch (e) {
-    showMessage("verifyMessage", e.message, "error");
+  } catch (error) {
+    showMessage(
+      "verifyMessage",
+      error.message,
+      "error"
+    );
   } finally {
     $("verifyPaymentBtn").disabled = false;
   }
 });
 
-/* AI analysis */
+/* DAILY MARKET ANALYSIS */
+
 $("analysisBtn").addEventListener("click", async () => {
   $("analysisBtn").disabled = true;
   $("analysisResult").textContent = "";
-  showMessage("analysisMessage", "Generating analysis...");
+
+  showMessage(
+    "analysisMessage",
+    "Generating market overview..."
+  );
 
   try {
     const result = await api("/api/analysis/daily", {
-      method:"POST",
-      body:JSON.stringify({})
+      method: "POST",
+      body: JSON.stringify({})
     });
 
-    const analysis = result.analysis || result.text || result.result || result.message || "No analysis returned.";
+    const analysis =
+      result.analysis ||
+      result.text ||
+      result.result ||
+      result.message ||
+      "No analysis returned.";
+
     $("analysisResult").textContent = analysis;
-    showMessage("analysisMessage", "Analysis completed.", "success");
-  } catch (e) {
-    showMessage("analysisMessage", e.message, "error");
+
+    showMessage(
+      "analysisMessage",
+      "Analysis completed.",
+      "success"
+    );
+  } catch (error) {
+    showMessage(
+      "analysisMessage",
+      error.message,
+      "error"
+    );
   } finally {
     $("analysisBtn").disabled = false;
   }
 });
 
-/* Restore session */
+/* RESTORE SESSION */
+
 async function restoreSession() {
   if (!authToken) {
     setLoggedOut();
