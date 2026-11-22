@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080d1c">
 <title>TinVin Crypto</title>
-
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 :root{
   --bg:#080d1c;
@@ -683,9 +683,9 @@ function setLoggedIn(user){
   $("appSection").classList.remove("hidden");
   $("logoutBtn").classList.remove("hidden");
 
-  const email=currentUser.email||"";
-  $("userLabel").textContent=email;
-  $("accountEmail").textContent=email;
+ const label=currentUser.display_name || (currentUser.email?.endsWith("@telegram.local") ? "Telegram User" : currentUser.email) || "";
+  $("userLabel").textContent=label;
+  $("accountEmail").textContent=label;
 
   const plan=readablePlan(
     currentUser.plan||currentUser.subscription?.plan||"Free"
