@@ -100,13 +100,6 @@ input:focus,select:focus{
 }
 select option{background:#171b23;color:#e8eaed}
 .full{width:100%;padding:13px}
-.pw{position:relative}
-.pw input{padding-right:48px}
-.eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);
-  background:none;border:0;color:var(--mut);padding:9px 11px;font-size:18px}
-.auth-switch{text-align:center;margin-top:17px;font-size:13px;color:var(--mut)}
-.link{color:var(--accent);cursor:pointer}
-.link:hover{text-decoration:underline}
 .message{font-size:13px;margin-top:12px;line-height:1.5;overflow-wrap:anywhere}
 .error{color:#ff7777}
 .success{color:var(--up)}
@@ -177,8 +170,6 @@ select option{background:#171b23;color:#e8eaed}
 }
 .copy-btn{margin-top:5px}
 footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
-
-/* THEME PICKER (now inside Account tab) */
 .theme-area{
   display:flex;align-items:center;gap:11px;flex-wrap:wrap;
   margin-top:16px;padding:11px 13px;width:max-content;max-width:100%;
@@ -195,8 +186,6 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
 }
 .theme-dot:hover{transform:scale(1.15)}
 .theme-dot.active{outline:2px solid var(--fg);outline-offset:3px;transform:scale(1.08)}
-
-/* UPGRADE BUTTON */
 .upgrade-btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:11px 16px;
@@ -210,8 +199,6 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
   background:color-mix(in srgb,var(--accent) 18%,transparent);
   transform:translateY(-2px);
 }
-
-/* COIN CHART */
 .chart-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:20;
   display:flex;align-items:center;justify-content:center;padding:14px;
@@ -275,7 +262,6 @@ body.chart-open{overflow:hidden}
 }
 </style>
 </head>
-
 <body>
 <header>
   <div class="logo">TinVin <span>Crypto</span></div>
@@ -286,68 +272,17 @@ body.chart-open{overflow:hidden}
 </header>
 
 <main>
+<!-- TELEGRAM LOGIN ONLY - NO EMAIL / NO PASSWORD -->
 <section id="authSection" class="auth-wrap">
   <div class="logo">TinVin <span>Crypto</span></div>
-  <div class="card">
-    <div id="loginForm">
-      <h1>Welcome back</h1>
-      <p class="muted">Sign in to your TinVin Crypto account.</p>
-      <div class="field">
-        <label>Email</label>
-        <input id="loginEmail" type="email" autocomplete="email" placeholder="Your email">
-      </div>
-      <div class="field">
-        <label>Password</label>
-        <div class="pw"><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password"><button type="button" class="eye" data-eye="loginPassword" aria-label="Show password">👁</button></div>
-      </div>
-      <button id="loginBtn" class="main-btn full">Login</button>
-      <div id="loginMessage" class="message"></div>
-      <div class="auth-switch"><span class="link" id="showForgot">Forgot password?</span></div>
-      <div class="auth-switch">Don't have an account?
-        <span class="link" id="showSignup">Create account</span>
-      </div>
-    </div>
-
-    <div id="signupForm" class="hidden">
-      <h1>Create account</h1>
-      <p class="muted">Join TinVin Crypto.</p>
-      <div class="field">
-        <label>Email</label>
-        <input id="signupEmail" type="email" autocomplete="email" placeholder="Your email">
-      </div>
-      <div class="field">
-        <label>Password</label>
-        <div class="pw"><input id="signupPassword" type="password" autocomplete="new-password" placeholder="At least 8 characters"><button type="button" class="eye" data-eye="signupPassword" aria-label="Show password">👁</button></div>
-      </div>
-      <button id="signupBtn" class="main-btn full">Create account</button>
-      <div id="signupMessage" class="message"></div>
-      <div class="auth-switch">Already registered?
-        <span class="link" id="showLogin">Login</span>
-      </div>
-    </div>
-
-    <div id="forgotForm" class="hidden">
-      <h1>Forgot password</h1>
-      <p class="muted">Enter your email and we will send you a link to reset your password.</p>
-      <div class="field">
-        <label>Email</label>
-        <input id="forgotEmail" type="email" autocomplete="email" placeholder="Your email">
-      </div>
-      <button id="forgotBtn" class="main-btn full">Send reset link</button>
-      <div id="forgotMessage" class="message"></div>
-      <div class="auth-switch"><span class="link" id="backToLogin">Back to login</span></div>
-    </div>
-
-    <div id="resetForm" class="hidden">
-      <h1>Choose a new password</h1>
-      <p class="muted">Enter your new password below.</p>
-      <div class="field">
-        <label>New password</label>
-        <div class="pw"><input id="resetPassword" type="password" autocomplete="new-password" placeholder="At least 8 characters"><button type="button" class="eye" data-eye="resetPassword" aria-label="Show password">👁</button></div>
-      </div>
-      <button id="resetBtn" class="main-btn full">Update password</button>
-      <div id="resetMessage" class="message"></div>
-    </div>
+  <div class="card" style="text-align:center">
+    <h1>Welcome to TinVin Crypto</h1>
+    <p class="muted" id="tgStatus">Connecting with Telegram...</p>
+    <div id="tgLoading" style="margin:20px 0;font-size:32px">⏳</div>
+    <p class="small" id="tgUserInfo"></p>
+    <button id="tgLoginBtn" class="main-btn full hidden">Login with Telegram</button>
+    <div id="loginMessage" class="message"></div>
+    <p class="small" style="margin-top:15px">No email, no password needed.<br>You login automatically with your Telegram ID.</p>
   </div>
 </section>
 
@@ -508,10 +443,10 @@ body.chart-open{overflow:hidden}
   <section id="accountTab" class="tab-content hidden">
     <div class="card">
       <h2>Account information</h2>
-      <p>Email: <strong id="accountEmail">—</strong></p>
+      <p>Telegram: <strong id="accountEmail">—</strong></p>
+      <p>Telegram ID: <strong id="accountId">—</strong></p>
       <p>Plan: <strong id="accountPlan">Free</strong></p>
       <p>Subscription expiry: <strong id="accountExpiry">—</strong></p>
-
       <div class="theme-area">
         <span class="theme-label">Dashboard theme</span>
         <div class="theme-options">
@@ -522,7 +457,6 @@ body.chart-open{overflow:hidden}
           <button class="theme-dot" data-theme="gold" title="Gold" aria-label="Gold"></button>
         </div>
       </div>
-
       <div style="margin-top:18px">
         <button id="accountLogoutBtn" class="small-btn">Logout</button>
       </div>
@@ -565,148 +499,135 @@ body.chart-open{overflow:hidden}
 
 <script>
 "use strict";
-
 const API_BASE = "https://tinvin-crypto-api.aslan89aslan1.workers.dev";
 const TOKEN_KEY = "tinvin_crypto_token";
 const THEME_KEY = "tinvin_crypto_theme";
-
-const THEMES = {
-  blue:"#38bdf8",
-  purple:"#a78bfa",
-  pink:"#f472b6",
-  red:"#fb7185",
-  gold:"#fbbf24"
-};
-
+const THEMES = { blue:"#38bdf8", purple:"#a78bfa", pink:"#f472b6", red:"#fb7185", gold:"#fbbf24" };
 let authToken = localStorage.getItem(TOKEN_KEY) || "";
 let currentUser = null;
 let marketCoins = [];
 let activeOrder = null;
-
-/* CHART VARIABLES MUST BE DECLARED BEFORE applyTheme() */
 let selectedChartCoin = null;
 let selectedChartPeriod = "1D";
 let coinChartInstance = null;
 let chartRequestNumber = 0;
-
 const $ = id => document.getElementById(id);
 
 /* THEMES */
-
 function applyTheme(name,save=true){
   if(!THEMES[name]) name="gold";
-
   document.documentElement.style.setProperty("--accent",THEMES[name]);
-
-  document.querySelectorAll(".theme-dot").forEach(button=>{
-    button.classList.toggle("active",button.dataset.theme===name);
-  });
-
-  if(save){
-    try{localStorage.setItem(THEME_KEY,name)}
-    catch(error){console.warn("Theme preference could not be saved.")}
-  }
+  document.querySelectorAll(".theme-dot").forEach(b=>b.classList.toggle("active",b.dataset.theme===name));
+  if(save){ try{localStorage.setItem(THEME_KEY,name)}catch(e){} }
 }
-
-document.querySelectorAll(".theme-dot").forEach(button=>{
-  button.style.background=THEMES[button.dataset.theme];
-  button.addEventListener("click",()=>applyTheme(button.dataset.theme));
+document.querySelectorAll(".theme-dot").forEach(b=>{
+  b.style.background=THEMES[b.dataset.theme];
+  b.addEventListener("click",()=>applyTheme(b.dataset.theme));
 });
-
 let savedTheme="gold";
-try{savedTheme=localStorage.getItem(THEME_KEY)||"gold"}catch(error){}
+try{savedTheme=localStorage.getItem(THEME_KEY)||"gold"}catch(e){}
 applyTheme(savedTheme,false);
 
-/* GENERAL FUNCTIONS */
-
+/* GENERAL */
 function showMessage(id,message,type=""){
   const el=$(id);
   el.textContent=message||"";
   el.className="message "+type;
 }
-
 async function api(path,options={}){
-  const headers={
-    "Content-Type":"application/json",
-    ...(options.headers||{})
-  };
-
+  const headers={ "Content-Type":"application/json", ...(options.headers||{}) };
   if(authToken) headers.Authorization="Bearer "+authToken;
-
-  const response=await fetch(API_BASE+path,{
-    ...options,
-    headers
-  });
-
+  const response=await fetch(API_BASE+path,{...options, headers});
   let data;
-  try{data=await response.json()}
-  catch{throw new Error("The server returned an invalid response.")}
-
-  if(!response.ok||data.success===false||data.error){
-    throw new Error(data.error||data.message||"Request failed.");
-  }
+  try{data=await response.json()}catch{throw new Error("The server returned an invalid response.")}
+  if(!response.ok||data.success===false||data.error){ throw new Error(data.error||data.message||"Request failed."); }
   return data;
 }
-
 function readablePlan(plan){
-  const names={
-    "7days":"7 Days",
-    "1month":"1 Month",
-    "6months":"6 Months",
-    "1year":"1 Year",
-    "Free":"Free"
-  };
+  const names={ "7days":"7 Days", "1month":"1 Month", "6months":"6 Months", "1year":"1 Year", "Free":"Free" };
   return names[plan]||plan||"Free";
 }
-
 function formatExpiry(raw){
   if(!raw)return "—";
   const num=Number(raw);
-  if(Number.isFinite(num)&&num>0){
-    const ms=num>1e12?num:num*1000;
-    return new Date(ms).toLocaleString();
-  }
+  if(Number.isFinite(num)&&num>0){ const ms=num>1e12?num:num*1000; return new Date(ms).toLocaleString(); }
   const date=new Date(raw);
   return Number.isNaN(date.getTime())?String(raw):date.toLocaleString();
 }
+function isPremium(){ return !!(currentUser&&currentUser.plan&&currentUser.plan!=="Free"&&Number(currentUser.expires_at)>Date.now()/1000); }
 
-function isPremium(){
-  return !!(currentUser&&currentUser.plan&&currentUser.plan!=="Free"&&
-    Number(currentUser.expires_at)>Date.now()/1000);
+/* === TELEGRAM LOGIN ONLY - NO EMAIL / NO PASSWORD === */
+let tg = window.Telegram?.WebApp;
+if(tg){ try{ tg.ready(); tg.expand(); }catch(e){} }
+
+async function telegramLogin(){
+  const user = tg?.initDataUnsafe?.user;
+  // La Telegram: ID-i rast. La browser-i asai: test ID
+  const telegram_id = user?.id || Number(localStorage.getItem("tg_test_id") || 123456789);
+  const first_name = user?.first_name || "Telegram User";
+  const username = user?.username || "";
+  const photo_url = user?.photo_url || "";
+
+  if(user){
+    $("tgUserInfo").textContent = `Hi ${first_name} (@${username || "no username"}) - ID: ${telegram_id}`;
+    localStorage.setItem("tg_test_id", String(telegram_id));
+  } else {
+    $("tgUserInfo").textContent = `Test Mode - ID: ${telegram_id} (Open in Telegram to use real ID)`;
+  }
+
+  try{
+    $("tgStatus").textContent = "Logging in with Telegram ID...";
+    const res = await fetch(API_BASE + "/api/auth/telegram", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ initData: tg?.initData || "", telegram_id, first_name, username, photo_url })
+    });
+    const data = await res.json();
+    if(!res.ok || data.error) throw new Error(data.error || "Telegram login failed");
+
+    if(data.token){
+      authToken = data.token;
+      localStorage.setItem(TOKEN_KEY, authToken);
+      setLoggedIn(data.user || { telegram_id, first_name, username, display_name: first_name });
+    } else {
+      // Agar server token nadâ, direct login ba ID (fallback bo test)
+      setLoggedIn({ telegram_id, first_name, username, display_name: first_name, plan:"Free" });
+    }
+  }catch(e){
+    console.warn("Telegram login fallback:", e.message);
+    // Fallback: la browser test bka, bê server
+    if(!user){
+      setLoggedIn({ telegram_id, first_name, username, display_name: first_name, plan:"Free" });
+      return;
+    }
+    $("tgStatus").textContent = "Login failed: " + e.message;
+    $("tgLoginBtn").classList.remove("hidden");
+    showMessage("loginMessage", e.message, "error");
+  }
 }
+if($("tgLoginBtn")) $("tgLoginBtn").addEventListener("click", telegramLogin);
 
 /* LOGIN STATE */
-
 function setLoggedIn(user){
   currentUser=user||{};
   $("authSection").classList.add("hidden");
   $("appSection").classList.remove("hidden");
   $("logoutBtn").classList.remove("hidden");
-
- const label=currentUser.display_name || (currentUser.email?.endsWith("@telegram.local") ? "Telegram User" : currentUser.email) || "";
-  $("userLabel").textContent=label;
-  $("accountEmail").textContent=label;
-
-  const plan=readablePlan(
-    currentUser.plan||currentUser.subscription?.plan||"Free"
-  );
-  $("accountStatus").textContent=plan;
-  $("accountPlan").textContent=plan;
-
-  const expiry=currentUser.expires_at||
-    currentUser.subscription?.expires_at||"";
-  $("accountExpiry").textContent=formatExpiry(expiry);
-
+  const label = currentUser.display_name || currentUser.first_name || ("ID: " + currentUser.telegram_id) || "Telegram User";
+  $("userLabel").textContent = label;
+  $("accountEmail").textContent = currentUser.username ? "@"+currentUser.username : label;
+  $("accountId").textContent = currentUser.telegram_id || currentUser.id || "—";
+  const plan = readablePlan(currentUser.plan||currentUser.subscription?.plan||"Free");
+  $("accountStatus").textContent = plan;
+  $("accountPlan").textContent = plan;
+  const expiry = currentUser.expires_at || currentUser.subscription?.expires_at || "";
+  $("accountExpiry").textContent = formatExpiry(expiry);
   loadMarket();
   loadAlerts();
 }
-
 function setLoggedOut(){
-  authToken="";
-  currentUser=null;
-  activeOrder=null;
+  authToken=""; currentUser=null; activeOrder=null;
   localStorage.removeItem(TOKEN_KEY);
-
   $("authSection").classList.remove("hidden");
   $("appSection").classList.add("hidden");
   $("logoutBtn").classList.add("hidden");
@@ -714,740 +635,207 @@ function setLoggedOut(){
   $("paymentDetails").classList.add("hidden");
   closeCoinChart();
 }
-
-/* TABS */
-
-function showTab(tabId){
-  document.querySelectorAll(".tab-content").forEach(section=>{
-    section.classList.toggle("hidden",section.id!==tabId);
-  });
-  document.querySelectorAll(".tab-btn").forEach(button=>{
-    button.classList.toggle("active",button.dataset.tab===tabId);
-  });
-  if(tabId==="alertsTab")loadAlerts();
-}
-
-document.querySelectorAll(".tab-btn").forEach(button=>{
-  button.addEventListener("click",()=>showTab(button.dataset.tab));
-});
-
-$("upgradeTopBtn").addEventListener("click",()=>{
-  showTab("premiumTab");
-  $("premiumTab").scrollIntoView({behavior:"smooth",block:"start"});
-});
-
-/* AUTH FORMS */
-
-$("showSignup").addEventListener("click",()=>{
-  $("loginForm").classList.add("hidden");
-  $("signupForm").classList.remove("hidden");
-});
-
-$("showLogin").addEventListener("click",()=>{
-  $("signupForm").classList.add("hidden");
-  $("loginForm").classList.remove("hidden");
-});
-
-$("signupBtn").addEventListener("click",async()=>{
-  const email=$("signupEmail").value.trim();
-  const password=$("signupPassword").value;
-  showMessage("signupMessage","");
-
-  if(!email||!password){
-    showMessage("signupMessage","Enter your email and password.","error");
-    return;
-  }
-  if(password.length<8){
-    showMessage("signupMessage","Password must be at least 8 characters.","error");
-    return;
-  }
-
-  $("signupBtn").disabled=true;
-  try{
-    const result=await api("/api/signup",{
-      method:"POST",
-      body:JSON.stringify({email,password})
-    });
-
-    if(result.token){
-      authToken=result.token;
-      localStorage.setItem(TOKEN_KEY,authToken);
-      setLoggedIn(result.user||{email});
-    }else{
-      showMessage("signupMessage","Account created. Please log in.","success");
-      $("signupForm").classList.add("hidden");
-      $("loginForm").classList.remove("hidden");
-      $("loginEmail").value=email;
-    }
-  }catch(error){
-    showMessage("signupMessage",error.message,"error");
-  }finally{
-    $("signupBtn").disabled=false;
-  }
-});
-
-$("loginBtn").addEventListener("click",async()=>{
-  const email=$("loginEmail").value.trim();
-  const password=$("loginPassword").value;
-  showMessage("loginMessage","");
-
-  if(!email||!password){
-    showMessage("loginMessage","Enter your email and password.","error");
-    return;
-  }
-
-  $("loginBtn").disabled=true;
-  try{
-    const result=await api("/api/login",{
-      method:"POST",
-      body:JSON.stringify({email,password})
-    });
-
-    if(!result.token)throw new Error("Login response did not include a token.");
-
-    authToken=result.token;
-    localStorage.setItem(TOKEN_KEY,authToken);
-
-    let user=result.user||{email};
-    try{
-      const me=await api("/api/me");
-      user=me.user||me;
-    }catch(error){}
-
-    setLoggedIn(user);
-  }catch(error){
-    showMessage("loginMessage",error.message,"error");
-  }finally{
-    $("loginBtn").disabled=false;
-  }
-});
-
 async function logout(){
-  try{
-    if(authToken){
-      await api("/api/logout",{
-        method:"POST",
-        body:JSON.stringify({})
-      });
-    }
-  }catch(error){}
+  try{ if(authToken){ await api("/api/logout",{method:"POST", body:JSON.stringify({})}); } }catch(e){}
   setLoggedOut();
+  // Dubara telegram login bka
+  telegramLogin();
 }
-
 $("logoutBtn").addEventListener("click",logout);
 $("accountLogoutBtn").addEventListener("click",logout);
 
-/* SHOW / HIDE PASSWORD */
-
-document.querySelectorAll("[data-eye]").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    const input=$(btn.dataset.eye);
-    const show=input.type==="password";
-    input.type=show?"text":"password";
-    btn.textContent=show?"🙈":"👁";
-    btn.setAttribute("aria-label",show?"Hide password":"Show password");
-  });
-});
-
-/* FORGOT / RESET PASSWORD */
-
-function showAuthForm(id){
-  ["loginForm","signupForm","forgotForm","resetForm"].forEach(f=>{
-    $(f).classList.toggle("hidden",f!==id);
-  });
+/* TABS */
+function showTab(tabId){
+  document.querySelectorAll(".tab-content").forEach(s=>s.classList.toggle("hidden",s.id!==tabId));
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active",b.dataset.tab===tabId));
+  if(tabId==="alertsTab") loadAlerts();
 }
-
-$("showForgot").addEventListener("click",()=>{
-  $("forgotEmail").value=$("loginEmail").value;
-  showMessage("forgotMessage","");
-  showAuthForm("forgotForm");
-});
-
-$("backToLogin").addEventListener("click",()=>showAuthForm("loginForm"));
-
-$("forgotBtn").addEventListener("click",async()=>{
-  const email=$("forgotEmail").value.trim();
-  showMessage("forgotMessage","");
-
-  if(!email){
-    showMessage("forgotMessage","Enter your email.","error");
-    return;
-  }
-
-  $("forgotBtn").disabled=true;
-  try{
-    const result=await api("/api/forgot",{
-      method:"POST",
-      body:JSON.stringify({email})
-    });
-    showMessage("forgotMessage",
-      (result.message||"Reset link sent.")+" Check your inbox and spam folder.",
-      "success");
-  }catch(error){
-    showMessage("forgotMessage",error.message,"error");
-  }finally{
-    $("forgotBtn").disabled=false;
-  }
-});
-
-$("resetBtn").addEventListener("click",async()=>{
-  const password=$("resetPassword").value;
-  const token=new URLSearchParams(location.search).get("reset")||"";
-  showMessage("resetMessage","");
-
-  if(password.length<8){
-    showMessage("resetMessage","Password must be at least 8 characters.","error");
-    return;
-  }
-
-  $("resetBtn").disabled=true;
-  try{
-    const result=await api("/api/reset",{
-      method:"POST",
-      body:JSON.stringify({token,password})
-    });
-    history.replaceState(null,"",location.pathname);
-    $("resetPassword").value="";
-    showAuthForm("loginForm");
-    showMessage("loginMessage",result.message||"Password updated.","success");
-  }catch(error){
-    showMessage("resetMessage",error.message,"error");
-  }finally{
-    $("resetBtn").disabled=false;
-  }
-});
+document.querySelectorAll(".tab-btn").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+$("upgradeTopBtn").addEventListener("click",()=>{ showTab("premiumTab"); $("premiumTab").scrollIntoView({behavior:"smooth",block:"start"}); });
 
 /* PRICE FORMATTING */
-
 function formatPrice(value,currency){
   const number=Number(value);
   if(!Number.isFinite(number))return "—";
-
-  if(currency==="usdt"){
-    return "$"+number.toLocaleString("en-US",{
-      minimumFractionDigits:2,
-      maximumFractionDigits:number<1?6:2
-    })+" USDT";
-  }
-
-  try{
-    return new Intl.NumberFormat("en-US",{
-      style:"currency",
-      currency:currency.toUpperCase(),
-      maximumFractionDigits:
-        ["btc","eth"].includes(String(currency).toLowerCase())?8:(number<1?6:2)
-    }).format(number);
-  }catch{
-    return number.toLocaleString("en-US")+" "+currency.toUpperCase();
-  }
+  if(currency==="usdt"){ return "$"+number.toLocaleString("en-US",{minimumFractionDigits:2, maximumFractionDigits:number<1?6:2})+" USDT"; }
+  try{ return new Intl.NumberFormat("en-US",{style:"currency",currency:currency.toUpperCase(),maximumFractionDigits:["btc","eth"].includes(String(currency).toLowerCase())?8:(number<1?6:2)}).format(number); }catch{ return number.toLocaleString("en-US")+" "+currency.toUpperCase(); }
 }
 
-/* MARKET COINS */
-
+/* MARKET */
 function renderCoins(){
   const query=$("coinSearch").value.trim().toLowerCase();
   const currency=$("currencySelect").value;
-
   const filtered=marketCoins.filter(coin=>{
     const name=String(coin.name||"").toLowerCase();
     const symbol=String(coin.symbol||"").toLowerCase();
     const id=String(coin.id||"").toLowerCase();
     return name.includes(query)||symbol.includes(query)||id.includes(query);
   });
-
   $("coinCount").textContent=marketCoins.length;
   $("currencyLabel").textContent=currency.toUpperCase();
-
-  if(!filtered.length){
-    $("coinList").textContent="No coins found.";
-    return;
-  }
-
+  if(!filtered.length){ $("coinList").textContent="No coins found."; return; }
   const fragment=document.createDocumentFragment();
-
   filtered.forEach(coin=>{
     const row=document.createElement("div");
     row.className="coin-row";
     row.title="Open "+(coin.name||coin.symbol||"coin")+" chart";
-
     const nameBox=document.createElement("div");
     const name=document.createElement("div");
-    name.className="coin-name";
-    name.textContent=coin.name||coin.id||"Unknown";
-
+    name.className="coin-name"; name.textContent=coin.name||coin.id||"Unknown";
     const symbol=document.createElement("div");
-    symbol.className="coin-symbol";
-    symbol.textContent=String(coin.symbol||"").toUpperCase();
+    symbol.className="coin-symbol"; symbol.textContent=String(coin.symbol||"").toUpperCase();
     nameBox.append(name,symbol);
-
     const price=document.createElement("div");
-    price.className="price";
-    price.textContent=formatPrice(coin.current_price??coin.price,currency);
-
-    const percent=Number(
-      coin.price_change_percentage_24h??coin.change_24h??coin.change
-    );
-
+    price.className="price"; price.textContent=formatPrice(coin.current_price??coin.price,currency);
+    const percent=Number(coin.price_change_percentage_24h??coin.change_24h??coin.change);
     const change=document.createElement("div");
     change.className="change "+(percent>=0?"up":"down");
-    change.textContent=Number.isFinite(percent)
-      ?(percent>0?"+":"")+percent.toFixed(2)+"%"
-      :"—";
-
+    change.textContent=Number.isFinite(percent)?(percent>0?"+":"")+percent.toFixed(2)+"%":"—";
     row.addEventListener("click",()=>openCoinChart(coin));
     row.append(nameBox,price,change);
     fragment.appendChild(row);
   });
-
   $("coinList").replaceChildren(fragment);
 }
-
 async function loadMarket(){
   $("marketMessage").textContent="Loading market data...";
   const currency=$("currencySelect").value;
-
   try{
-    const result=await api(
-      "/api/market/coins?currency="+encodeURIComponent(currency)
-    );
-
-    marketCoins=Array.isArray(result)
-      ?result
-      :(result.coins||result.data||[]);
-
+    const result=await api("/api/market/coins?currency="+encodeURIComponent(currency));
+    marketCoins=Array.isArray(result)?result:(result.coins||result.data||[]);
     renderCoins();
-    $("marketMessage").textContent=
-      `Market data updated. ${marketCoins.length} coins loaded.`;
+    $("marketMessage").textContent=`Market data updated. ${marketCoins.length} coins loaded.`;
   }catch(error){
     $("marketMessage").textContent=error.message;
-    if(!marketCoins.length){
-      $("coinList").textContent="Could not load market data. Please try again.";
-    }
+    if(!marketCoins.length){ $("coinList").textContent="Could not load market data. Please try again."; }
   }
 }
-
 $("refreshBtn").addEventListener("click",loadMarket);
 $("currencySelect").addEventListener("change",loadMarket);
 $("coinSearch").addEventListener("input",renderCoins);
 
-/* SIGNALS: COINS EXPECTED TO GO UP / DOWN (PREMIUM) */
-
+/* SIGNALS */
 function signalList(title,arr,cls){
   const box=document.createElement("div");
-  const h=document.createElement("h3");
-  h.className=cls;
-  h.textContent=title;
-  box.appendChild(h);
-
+  const h=document.createElement("h3"); h.className=cls; h.textContent=title; box.appendChild(h);
   arr.forEach(s=>{
-    const row=document.createElement("div");
-    row.className="coin-row";
-
-    const n=document.createElement("div");
-    n.className="coin-name";
-    n.textContent=s.name+" ("+s.symbol+")";
-
-    const p=document.createElement("div");
-    p.className="price";
-    p.textContent=formatPrice(s.price,"usd");
-
-    const c=document.createElement("div");
-    c.className="change "+(s.change_24h>=0?"up":"down");
-    c.textContent=(s.change_24h>0?"+":"")+Number(s.change_24h).toFixed(2)+"%";
-
+    const row=document.createElement("div"); row.className="coin-row";
+    const n=document.createElement("div"); n.className="coin-name"; n.textContent=s.name+" ("+s.symbol+")";
+    const p=document.createElement("div"); p.className="price"; p.textContent=formatPrice(s.price,"usd");
+    const c=document.createElement("div"); c.className="change "+(s.change_24h>=0?"up":"down"); c.textContent=(s.change_24h>0?"+":"")+Number(s.change_24h).toFixed(2)+"%";
     row.append(n,p,c);
-    row.addEventListener("click",()=>openCoinChart({
-      id:s.id,
-      name:s.name,
-      symbol:s.symbol,
-      current_price:s.price,
-      price_change_percentage_24h:s.change_24h
-    }));
+    row.addEventListener("click",()=>openCoinChart({id:s.id,name:s.name,symbol:s.symbol,current_price:s.price,price_change_percentage_24h:s.change_24h}));
     box.appendChild(row);
   });
-
   return box;
 }
-
 $("signalsBtn").addEventListener("click",async()=>{
-  if(!isPremium()){
-    showMessage("signalsMessage","Premium subscription required.","error");
-    showTab("premiumTab");
-    return;
-  }
-
-  $("signalsBtn").disabled=true;
-  showMessage("signalsMessage","Analyzing...");
-
+  if(!isPremium()){ showMessage("signalsMessage","Premium subscription required.","error"); showTab("premiumTab"); return; }
+  $("signalsBtn").disabled=true; showMessage("signalsMessage","Analyzing...");
   try{
     const d=await api("/api/market/signals");
-    $("signalsResult").replaceChildren(
-      signalList("📈 Likely to go UP",d.rising||[],"up"),
-      signalList("📉 Likely to go DOWN",d.falling||[],"down")
-    );
-    showMessage(
-      "signalsMessage",
-      `Analyzed ${d.analyzed} coins. Not financial advice.`,
-      "success"
-    );
-  }catch(error){
-    showMessage("signalsMessage",error.message,"error");
-  }finally{
-    $("signalsBtn").disabled=false;
-  }
+    $("signalsResult").replaceChildren(signalList("📈 Likely to go UP",d.rising||[],"up"), signalList("📉 Likely to go DOWN",d.falling||[],"down"));
+    showMessage("signalsMessage",`Analyzed ${d.analyzed} coins. Not financial advice.`,"success");
+  }catch(error){ showMessage("signalsMessage",error.message,"error"); }finally{ $("signalsBtn").disabled=false; }
 });
 
-/* PREDICTION INSIDE THE CHART WINDOW (PREMIUM) */
-
+/* PREDICTION */
 async function loadPrediction(){
-  const box=$("predBox");
-  const coin=selectedChartCoin;
-  if(!coin)return;
-
-  if(!isPremium()){
-    box.textContent="♛ Premium: upgrade to see if this coin is expected to go up or down.";
-    return;
-  }
-
+  const box=$("predBox"); const coin=selectedChartCoin; if(!coin)return;
+  if(!isPremium()){ box.textContent="♛ Premium: upgrade to see if this coin is expected to go up or down."; return; }
   box.textContent="Calculating prediction...";
-
   try{
-    const d=await api(
-      "/api/market/predict?coin_id="+encodeURIComponent(coin.id)+
-      "&currency=usd&days=1"
-    );
+    const d=await api("/api/market/predict?coin_id="+encodeURIComponent(coin.id)+"&currency=usd&days=1");
     if(selectedChartCoin!==coin)return;
-
-    const p=d.prediction;
-    const up=p.change_pct>=0;
-
-    const title=document.createElement("div");
-    title.className=d.signal==="neutral"?"":(up?"up":"down");
-    title.style.fontWeight="800";
-    title.style.fontSize="15px";
-    title.textContent=
-      (d.signal==="neutral"?"➡️ Sideways":up?"📈 Likely UP":"📉 Likely DOWN")+
-      " tomorrow ("+(up?"+":"")+p.change_pct+"%)";
-
-    const detail=document.createElement("div");
-    detail.className="small";
-    detail.textContent=
-      `Expected $${p.expected} · Range $${p.low} – $${p.high} · `+
-      `Chance of rising ${p.probability_up_estimate_pct}%. Not financial advice.`;
-
+    const p=d.prediction; const up=p.change_pct>=0;
+    const title=document.createElement("div"); title.className=d.signal==="neutral"?"":(up?"up":"down"); title.style.fontWeight="800"; title.style.fontSize="15px";
+    title.textContent=(d.signal==="neutral"?"➡️ Sideways":up?"📈 Likely UP":"📉 Likely DOWN")+" tomorrow ("+(up?"+":"")+p.change_pct+"%)";
+    const detail=document.createElement("div"); detail.className="small";
+    detail.textContent=`Expected $${p.expected} · Range $${p.low} – $${p.high} · Chance of rising ${p.probability_up_estimate_pct}%. Not financial advice.`;
     box.replaceChildren(title,detail);
-  }catch(error){
-    if(selectedChartCoin===coin)box.textContent=error.message;
-  }
+  }catch(error){ if(selectedChartCoin===coin)box.textContent=error.message; }
 }
 
-/* COIN CHART */
-
+/* CHART */
 const chartDays={"1D":1,"7D":7,"1M":30,"12M":365};
-
-function destroyCoinChart(){
-  if(coinChartInstance){
-    coinChartInstance.destroy();
-    coinChartInstance=null;
-  }
-}
-
-function chartLoading(message){
-  $("chartLoading").textContent=message;
-  $("chartLoading").classList.remove("hidden");
-}
-
+function destroyCoinChart(){ if(coinChartInstance){ coinChartInstance.destroy(); coinChartInstance=null; } }
+function chartLoading(message){ $("chartLoading").textContent=message; $("chartLoading").classList.remove("hidden"); }
 function drawCoinChart(points,currency){
-  if(typeof Chart==="undefined"){
-    throw new Error("Chart library could not be loaded. Check your internet connection.");
-  }
-
-  const canvas=$("coinChartCanvas");
-  const ctx=canvas.getContext("2d");
-  destroyCoinChart();
-
-  const labels=points.map(point=>{
-    const date=new Date(point[0]);
-    return date.toLocaleString([],{
-      month:"short",day:"numeric",
-      hour:"2-digit",minute:"2-digit"
-    });
-  });
+  if(typeof Chart==="undefined"){ throw new Error("Chart library could not be loaded. Check your internet connection."); }
+  const canvas=$("coinChartCanvas"); const ctx=canvas.getContext("2d"); destroyCoinChart();
+  const labels=points.map(point=>{ const date=new Date(point[0]); return date.toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}); });
   const values=points.map(point=>Number(point[1]));
-
-  /* GREEN when price rose over the period, RED when it fell */
   const lineColor=values[values.length-1]>=values[0]?"#22c55e":"#ef4444";
-
-  const gradient=ctx.createLinearGradient(0,0,0,400);
-  gradient.addColorStop(0,lineColor+"55");
-  gradient.addColorStop(1,lineColor+"05");
-
-  coinChartInstance=new Chart(ctx,{
-    type:"line",
-    data:{
-      labels,
-      datasets:[{
-        label:"Price",
-        data:values,
-        borderColor:lineColor,
-        backgroundColor:gradient,
-        borderWidth:2,
-        pointRadius:0,
-        pointHoverRadius:4,
-        pointHoverBackgroundColor:lineColor,
-        fill:true,
-        tension:.22
-      }]
-    },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      animation:false,
-      interaction:{intersect:false,mode:"index"},
-      plugins:{
-        legend:{display:false},
-        tooltip:{
-          displayColors:false,
-          callbacks:{
-            title(items){
-              return items.length?items[0].label:"";
-            },
-            label(context){
-              return formatPrice(context.parsed.y,currency);
-            }
-          }
-        }
-      },
-      scales:{
-        x:{
-          type:"category",
-          grid:{color:"rgba(139,146,158,0.08)"},
-          ticks:{
-            color:"#8b929e",
-            maxTicksLimit:7,
-            maxRotation:0,
-            autoSkip:true
-          }
-        },
-        y:{
-          position:"right",
-          grid:{color:"rgba(139,146,158,0.10)"},
-          ticks:{
-            color:"#8b929e",
-            maxTicksLimit:6,
-            callback(value){return formatPrice(value,currency)}
-          }
-        }
-      }
-    }
-  });
+  const gradient=ctx.createLinearGradient(0,0,0,400); gradient.addColorStop(0,lineColor+"55"); gradient.addColorStop(1,lineColor+"05");
+  coinChartInstance=new Chart(ctx,{ type:"line", data:{ labels, datasets:[{ label:"Price", data:values, borderColor:lineColor, backgroundColor:gradient, borderWidth:2, pointRadius:0, pointHoverRadius:4, pointHoverBackgroundColor:lineColor, fill:true, tension:.22 }] }, options:{ responsive:true, maintainAspectRatio:false, animation:false, interaction:{intersect:false,mode:"index"}, plugins:{ legend:{display:false}, tooltip:{ displayColors:false, callbacks:{ title(items){ return items.length?items[0].label:""; }, label(context){ return formatPrice(context.parsed.y,currency); } } } }, scales:{ x:{ type:"category", grid:{color:"rgba(139,146,158,0.08)"}, ticks:{ color:"#8b929e", maxTicksLimit:7, maxRotation:0, autoSkip:true } }, y:{ position:"right", grid:{color:"rgba(139,146,158,0.10)"}, ticks:{ color:"#8b929e", maxTicksLimit:6, callback(value){return formatPrice(value,currency)} } } } } });
 }
-
 async function updateCoinChart(){
   if(!selectedChartCoin)return;
-
   const requestNumber=++chartRequestNumber;
   const coinId=String(selectedChartCoin.id||"").trim();
-
-  if(!coinId){
-    chartLoading("This coin does not have a valid CoinGecko ID.");
-    return;
-  }
-
+  if(!coinId){ chartLoading("This coin does not have a valid CoinGecko ID."); return; }
   const currency=$("currencySelect").value;
   const days=chartDays[selectedChartPeriod]||1;
-
-  chartLoading("Loading historical price data...");
-  destroyCoinChart();
-
+  chartLoading("Loading historical price data..."); destroyCoinChart();
   try{
-    /* USDT is priced like USD, so request the chart in USD */
-    const query=new URLSearchParams({
-      coin_id:coinId,
-      currency:currency==="usdt"?"usd":currency,
-      days:String(days)
-    });
-
+    const query=new URLSearchParams({ coin_id:coinId, currency:currency==="usdt"?"usd":currency, days:String(days) });
     const result=await api("/api/market/chart?"+query.toString());
-
-    if(
-      requestNumber!==chartRequestNumber||
-      !selectedChartCoin||
-      $("chartOverlay").classList.contains("hidden")
-    )return;
-
-    if(!Array.isArray(result.prices)||!result.prices.length){
-      throw new Error("Historical chart data is not available for this coin.");
-    }
-
+    if(requestNumber!==chartRequestNumber||!selectedChartCoin||$("chartOverlay").classList.contains("hidden"))return;
+    if(!Array.isArray(result.prices)||!result.prices.length){ throw new Error("Historical chart data is not available for this coin."); }
     drawCoinChart(result.prices,currency);
     $("chartLoading").classList.add("hidden");
-  }catch(error){
-    if(requestNumber!==chartRequestNumber)return;
-    destroyCoinChart();
-    chartLoading(error.message||"Unable to load this chart.");
-  }
+  }catch(error){ if(requestNumber!==chartRequestNumber)return; destroyCoinChart(); chartLoading(error.message||"Unable to load this chart."); }
 }
-
 function openCoinChart(coin){
-  selectedChartCoin=coin;
-  selectedChartPeriod="1D";
-
+  selectedChartCoin=coin; selectedChartPeriod="1D";
   const name=coin.name||coin.id||"Cryptocurrency";
   const symbol=String(coin.symbol||"").toUpperCase();
   const currency=$("currencySelect").value;
-
   $("chartCoinName").textContent=name;
-  $("chartCoinSymbol").textContent=symbol
-    ?symbol+" · Price chart"
-    :"Price chart";
-
-  $("chartCoinPrice").textContent=formatPrice(
-    coin.current_price??coin.price,currency
-  );
-
-  const percent=Number(
-    coin.price_change_percentage_24h??coin.change_24h??coin.change
-  );
-
+  $("chartCoinSymbol").textContent=symbol?symbol+" · Price chart":"Price chart";
+  $("chartCoinPrice").textContent=formatPrice(coin.current_price??coin.price,currency);
+  const percent=Number(coin.price_change_percentage_24h??coin.change_24h??coin.change);
   const changeElement=$("chartCoinChange");
-  if(Number.isFinite(percent)){
-    changeElement.textContent=
-      (percent>0?"+":"")+percent.toFixed(2)+"% (24h)";
-    changeElement.className="small "+(percent>=0?"up":"down");
-  }else{
-    changeElement.textContent="24h change unavailable";
-    changeElement.className="small";
-  }
-
-  document.querySelectorAll(".chart-period").forEach(button=>{
-    button.classList.toggle(
-      "active",button.dataset.period===selectedChartPeriod
-    );
-  });
-
-  $("chartOverlay").classList.remove("hidden");
-  document.body.classList.add("chart-open");
-  updateCoinChart();
-  loadPrediction();
+  if(Number.isFinite(percent)){ changeElement.textContent=(percent>0?"+":"")+percent.toFixed(2)+"% (24h)"; changeElement.className="small "+(percent>=0?"up":"down"); }else{ changeElement.textContent="24h change unavailable"; changeElement.className="small"; }
+  document.querySelectorAll(".chart-period").forEach(b=>b.classList.toggle("active",b.dataset.period===selectedChartPeriod));
+  $("chartOverlay").classList.remove("hidden"); document.body.classList.add("chart-open");
+  updateCoinChart(); loadPrediction();
 }
-
-function closeCoinChart(){
-  chartRequestNumber++;
-  selectedChartCoin=null;
-  $("chartOverlay").classList.add("hidden");
-  document.body.classList.remove("chart-open");
-  destroyCoinChart();
-}
-
+function closeCoinChart(){ chartRequestNumber++; selectedChartCoin=null; $("chartOverlay").classList.add("hidden"); document.body.classList.remove("chart-open"); destroyCoinChart(); }
 $("closeChartBtn").addEventListener("click",closeCoinChart);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("chartOverlay").classList.contains("hidden")) closeCoinChart(); });
+document.querySelectorAll(".chart-period").forEach(b=>b.addEventListener("click",()=>{ if(!selectedChartCoin)return; selectedChartPeriod=b.dataset.period; document.querySelectorAll(".chart-period").forEach(i=>i.classList.toggle("active",i===b)); updateCoinChart(); }));
 
-document.addEventListener("keydown",event=>{
-  if(event.key==="Escape"&&!$("chartOverlay").classList.contains("hidden")){
-    closeCoinChart();
-  }
-});
-
-document.querySelectorAll(".chart-period").forEach(button=>{
-  button.addEventListener("click",()=>{
-    if(!selectedChartCoin)return;
-    selectedChartPeriod=button.dataset.period;
-
-    document.querySelectorAll(".chart-period").forEach(item=>{
-      item.classList.toggle("active",item===button);
-    });
-    updateCoinChart();
-  });
-});
-
-/* PRICE ALERTS */
-
+/* ALERTS */
 async function loadAlerts(){
   if(!authToken)return;
   $("alertsList").textContent="Loading alerts...";
-
   try{
     const result=await api("/api/alerts");
-    const alerts=Array.isArray(result)
-      ?result
-      :(result.alerts||result.data||[]);
-
+    const alerts=Array.isArray(result)?result:(result.alerts||result.data||[]);
     $("alertsList").replaceChildren();
-
-    if(!alerts.length){
-      $("alertsList").textContent="You have no alerts yet.";
-      return;
-    }
-
+    if(!alerts.length){ $("alertsList").textContent="You have no alerts yet."; return; }
     alerts.forEach(alert=>{
-      const item=document.createElement("div");
-      item.className="alert-item";
-
+      const item=document.createElement("div"); item.className="alert-item";
       const description=document.createElement("span");
-      description.textContent=
-        `${alert.coin_id||"Coin"} · ${alert.direction||"above"} · `+
-        `${alert.target_price??""}`+
-        (alert.triggered?" · Triggered":"");
-
-      const remove=document.createElement("button");
-      remove.className="small-btn";
-      remove.style.float="right";
-      remove.textContent="Delete";
-
-      remove.addEventListener("click",async()=>{
-        remove.disabled=true;
-        try{
-          await api(
-            "/api/alerts/"+encodeURIComponent(alert.id),
-            {method:"DELETE"}
-          );
-          loadAlerts();
-        }catch(error){
-          showMessage("alertMessage",error.message,"error");
-          remove.disabled=false;
-        }
-      });
-
-      item.append(description,remove);
-      $("alertsList").appendChild(item);
+      description.textContent=`${alert.coin_id||"Coin"} · ${alert.direction||"above"} · ${alert.target_price??""}`+(alert.triggered?" · Triggered":"");
+      const remove=document.createElement("button"); remove.className="small-btn"; remove.style.float="right"; remove.textContent="Delete";
+      remove.addEventListener("click",async()=>{ remove.disabled=true; try{ await api("/api/alerts/"+encodeURIComponent(alert.id),{method:"DELETE"}); loadAlerts(); }catch(error){ showMessage("alertMessage",error.message,"error"); remove.disabled=false; } });
+      item.append(description,remove); $("alertsList").appendChild(item);
     });
-  }catch(error){
-    $("alertsList").textContent=error.message;
-  }
+  }catch(error){ $("alertsList").textContent=error.message; }
 }
-
 $("addAlertBtn").addEventListener("click",async()=>{
   const coin_id=$("alertCoin").value.trim().toLowerCase();
   const target_price=Number($("alertPrice").value);
   const direction=$("alertDirection").value;
-
   showMessage("alertMessage","");
-
-  if(!coin_id||!Number.isFinite(target_price)||target_price<=0){
-    showMessage("alertMessage","Enter a valid coin ID and target price.","error");
-    return;
-  }
-
+  if(!coin_id||!Number.isFinite(target_price)||target_price<=0){ showMessage("alertMessage","Enter a valid coin ID and target price.","error"); return; }
   $("addAlertBtn").disabled=true;
-  try{
-    await api("/api/alerts",{
-      method:"POST",
-      body:JSON.stringify({coin_id,target_price,direction})
-    });
-
-    $("alertCoin").value="";
-    $("alertPrice").value="";
-    showMessage("alertMessage","Alert created.","success");
-    loadAlerts();
-  }catch(error){
-    showMessage("alertMessage",error.message,"error");
-  }finally{
-    $("addAlertBtn").disabled=false;
-  }
+  try{ await api("/api/alerts",{method:"POST", body:JSON.stringify({coin_id,target_price,direction})}); $("alertCoin").value=""; $("alertPrice").value=""; showMessage("alertMessage","Alert created.","success"); loadAlerts(); }catch(error){ showMessage("alertMessage",error.message,"error"); }finally{ $("addAlertBtn").disabled=false; }
 });
 
-/* PREMIUM PAYMENT */
-
+/* PREMIUM */
 function showPaymentInvoice(invoice){
   activeOrder=invoice;
   $("paymentDetails").classList.remove("hidden");
@@ -1455,186 +843,53 @@ function showPaymentInvoice(invoice){
   $("paymentAmount").textContent=invoice.amount+" "+invoice.asset;
   $("paymentWallet").textContent=invoice.wallet_address;
   $("paymentExpiry").textContent=formatExpiry(invoice.expires_at);
-  $("transactionHash").value="";
-  showMessage("verifyMessage","");
+  $("transactionHash").value=""; showMessage("verifyMessage","");
 }
-
 document.querySelectorAll("[data-plan]").forEach(button=>{
   button.addEventListener("click",async()=>{
-    const plan=button.dataset.plan;
-    const asset=$("paymentAsset").value;
-
+    const plan=button.dataset.plan; const asset=$("paymentAsset").value;
     document.querySelectorAll("[data-plan]").forEach(b=>b.disabled=true);
-    showMessage("paymentMessage","Creating payment order...");
-    $("paymentDetails").classList.add("hidden");
-
+    showMessage("paymentMessage","Creating payment order..."); $("paymentDetails").classList.add("hidden");
     try{
-      const invoice=await api("/api/payments/create",{
-        method:"POST",
-        body:JSON.stringify({plan,asset})
-      });
-
-      if(
-        !invoice.order_id||
-        !invoice.wallet_address||
-        !invoice.amount||
-        !invoice.asset
-      ){
-        throw new Error("The server returned an incomplete payment order.");
-      }
-
-      showPaymentInvoice(invoice);
-      showMessage(
-        "paymentMessage",
-        "Payment order created. Check the amount and wallet carefully.",
-        "success"
-      );
-    }catch(error){
-      showMessage("paymentMessage",error.message,"error");
-    }finally{
-      document.querySelectorAll("[data-plan]").forEach(b=>b.disabled=false);
-    }
+      const invoice=await api("/api/payments/create",{method:"POST", body:JSON.stringify({plan,asset})});
+      if(!invoice.order_id||!invoice.wallet_address||!invoice.amount||!invoice.asset){ throw new Error("The server returned an incomplete payment order."); }
+      showPaymentInvoice(invoice); showMessage("paymentMessage","Payment order created. Check the amount and wallet carefully.","success");
+    }catch(error){ showMessage("paymentMessage",error.message,"error"); }finally{ document.querySelectorAll("[data-plan]").forEach(b=>b.disabled=false); }
   });
 });
-
 async function copyText(value){
   if(!value)throw new Error("Nothing to copy.");
-
-  if(navigator.clipboard&&window.isSecureContext){
-    await navigator.clipboard.writeText(String(value));
-    return;
-  }
-
-  const area=document.createElement("textarea");
-  area.value=String(value);
-  area.style.position="fixed";
-  area.style.opacity="0";
-  document.body.appendChild(area);
-  area.select();
-
-  const ok=document.execCommand("copy");
-  area.remove();
-
-  if(!ok)throw new Error("Copy failed. Please copy it manually.");
+  if(navigator.clipboard&&window.isSecureContext){ await navigator.clipboard.writeText(String(value)); return; }
+  const area=document.createElement("textarea"); area.value=String(value); area.style.position="fixed"; area.style.opacity="0"; document.body.appendChild(area); area.select(); const ok=document.execCommand("copy"); area.remove(); if(!ok)throw new Error("Copy failed. Please copy it manually.");
 }
-
-$("copyWalletBtn").addEventListener("click",async()=>{
-  try{
-    await copyText(activeOrder?.wallet_address);
-    showMessage("verifyMessage","Wallet address copied.","success");
-  }catch(error){
-    showMessage("verifyMessage",error.message,"error");
-  }
-});
-
-$("copyAmountBtn").addEventListener("click",async()=>{
-  try{
-    await copyText(activeOrder?.amount);
-    showMessage("verifyMessage","Exact amount copied.","success");
-  }catch(error){
-    showMessage("verifyMessage",error.message,"error");
-  }
-});
-
+$("copyWalletBtn").addEventListener("click",async()=>{ try{ await copyText(activeOrder?.wallet_address); showMessage("verifyMessage","Wallet address copied.","success"); }catch(error){ showMessage("verifyMessage",error.message,"error"); } });
+$("copyAmountBtn").addEventListener("click",async()=>{ try{ await copyText(activeOrder?.amount); showMessage("verifyMessage","Exact amount copied.","success"); }catch(error){ showMessage("verifyMessage",error.message,"error"); } });
 $("verifyPaymentBtn").addEventListener("click",async()=>{
-  if(!activeOrder?.order_id){
-    showMessage("verifyMessage","Create a payment order first.","error");
-    return;
-  }
-
+  if(!activeOrder?.order_id){ showMessage("verifyMessage","Create a payment order first.","error"); return; }
   const tx_hash=$("transactionHash").value.trim();
-  if(!tx_hash){
-    showMessage("verifyMessage","Paste your transaction hash.","error");
-    return;
-  }
-
-  $("verifyPaymentBtn").disabled=true;
-  showMessage("verifyMessage","Checking the blockchain transaction...");
-
+  if(!tx_hash){ showMessage("verifyMessage","Paste your transaction hash.","error"); return; }
+  $("verifyPaymentBtn").disabled=true; showMessage("verifyMessage","Checking the blockchain transaction...");
   try{
-    const result=await api("/api/payments/verify",{
-      method:"POST",
-      body:JSON.stringify({
-        order_id:activeOrder.order_id,
-        tx_hash
-      })
-    });
-
-    showMessage(
-      "verifyMessage",
-      result.message||"Payment verified.",
-      "success"
-    );
-
-    const me=await api("/api/me");
-    setLoggedIn(me.user||me);
-    $("paymentDetails").classList.add("hidden");
-    activeOrder=null;
-  }catch(error){
-    showMessage("verifyMessage",error.message,"error");
-  }finally{
-    $("verifyPaymentBtn").disabled=false;
-  }
+    const result=await api("/api/payments/verify",{method:"POST", body:JSON.stringify({order_id:activeOrder.order_id, tx_hash})});
+    showMessage("verifyMessage",result.message||"Payment verified.","success");
+    const me=await api("/api/me"); setLoggedIn(me.user||me); $("paymentDetails").classList.add("hidden"); activeOrder=null;
+  }catch(error){ showMessage("verifyMessage",error.message,"error"); }finally{ $("verifyPaymentBtn").disabled=false; }
 });
 
-/* DAILY MARKET ANALYSIS */
-
+/* AI ANALYSIS */
 $("analysisBtn").addEventListener("click",async()=>{
-  $("analysisBtn").disabled=true;
-  $("analysisResult").textContent="";
-  showMessage("analysisMessage","Generating market overview...");
-
+  $("analysisBtn").disabled=true; $("analysisResult").textContent=""; showMessage("analysisMessage","Generating market overview...");
   try{
-    const result=await api("/api/analysis/daily",{
-      method:"POST",
-      body:JSON.stringify({})
-    });
-
-    const a=result.analysis||{};
-    const lines=[a.title||"Market Overview",""];
-
-    (a.leaders||[]).forEach(c=>{
-      const ch=Number(c.change_24h)||0;
-      lines.push(
-        `${c.symbol}   $${Number(c.price).toLocaleString("en-US")}   `+
-        `${ch>=0?"+":""}${ch.toFixed(2)}%`
-      );
-    });
-
+    const result=await api("/api/analysis/daily",{method:"POST", body:JSON.stringify({})});
+    const a=result.analysis||{}; const lines=[a.title||"Market Overview",""];
+    (a.leaders||[]).forEach(c=>{ const ch=Number(c.change_24h)||0; lines.push(`${c.symbol}   $${Number(c.price).toLocaleString("en-US")}   ${ch>=0?"+":""}${ch.toFixed(2)}%`); });
     lines.push("",a.summary||"",a.disclaimer||"");
-    $("analysisResult").textContent=lines.join("\n");
-    showMessage("analysisMessage","Analysis completed.","success");
-  }catch(error){
-    showMessage("analysisMessage",error.message,"error");
-  }finally{
-    $("analysisBtn").disabled=false;
-  }
+    $("analysisResult").textContent=lines.join("\n"); showMessage("analysisMessage","Analysis completed.","success");
+  }catch(error){ showMessage("analysisMessage",error.message,"error"); }finally{ $("analysisBtn").disabled=false; }
 });
 
-/* RESTORE SESSION */
-
-async function restoreSession(){
-  if(!authToken){
-    setLoggedOut();
-    return;
-  }
-
-  try{
-    const result=await api("/api/me");
-    setLoggedIn(result.user||result);
-  }catch(error){
-    setLoggedOut();
-  }
-}
-
-const resetToken=new URLSearchParams(location.search).get("reset");
-
-if(resetToken&&/^[a-f0-9]{64}$/.test(resetToken)){
-  setLoggedOut();
-  showAuthForm("resetForm");
-}else{
-  restoreSession();
-}
+/* START - AUTO LOGIN WITH TELEGRAM ID */
+telegramLogin();
 </script>
 </body>
 </html>
