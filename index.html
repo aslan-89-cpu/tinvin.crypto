@@ -380,14 +380,14 @@ body.chart-open{overflow:hidden}
       <div class="toolbar">
         <input id="coinSearch" placeholder="Search coins...">
         <select id="currencySelect">
-          <option value="USD">USD</option>
-          <option value="EUR">EUR</option>
-          <option value="GBP">GBP</option>
-          <option value="AED">AED</option>
-          <option value="TRY">TRY</option>
-          <option value="BTC">BTC</option>
-          <option value="ETH">ETH</option>
-
+          <option value="usd">USD</option>
+          <option value="usdt">USDT</option>
+          <option value="eur">EUR</option>
+          <option value="gbp">GBP</option>
+          <option value="aed">AED</option>
+          <option value="try">TRY</option>
+          <option value="btc">BTC</option>
+          <option value="eth">ETH</option>
         </select>
         <button id="refreshBtn" class="small-btn">Refresh</button>
       </div>
@@ -934,7 +934,8 @@ function formatPrice(value,currency){
     return new Intl.NumberFormat("en-US",{
       style:"currency",
       currency:currency.toUpperCase(),
-      maximumFractionDigits:number<1?6:2
+      maximumFractionDigits:
+        ["btc","eth"].includes(String(currency).toLowerCase())?8:(number<1?6:2)
     }).format(number);
   }catch{
     return number.toLocaleString("en-US")+" "+currency.toUpperCase();
@@ -1260,9 +1261,10 @@ async function updateCoinChart(){
   destroyCoinChart();
 
   try{
+    /* USDT is priced like USD, so request the chart in USD */
     const query=new URLSearchParams({
       coin_id:coinId,
-      currency,
+      currency:currency==="usdt"?"usd":currency,
       days:String(days)
     });
 
